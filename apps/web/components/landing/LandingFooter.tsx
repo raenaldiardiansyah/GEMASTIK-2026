@@ -27,7 +27,7 @@ export function LandingFooter() {
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-3">
-              <div className="w-7 h-7 lg:w-8 lg:h-8 bg-gradient-to-br from-indigo-600 to-cyan-500 rounded-[10px] flex items-center justify-center text-white font-bold text-xs lg:text-sm">B</div>
+              <div className="w-7 h-7 lg:w-8 lg:h-8 bg-gradient-to-br from-indigo-600 to-cyan-500 rounded-[10px] flex items-center justify-center text-white font-bold text-xs lg:text-sm">G</div>
               <span className="font-semibold text-white text-sm tracking-[-0.01em]">GIZANTARA</span>
             </div>
             <p className="text-slate-500 text-xs lg:text-sm leading-relaxed">Platform end-to-end traceability untuk program makan bergizi gratis.</p>

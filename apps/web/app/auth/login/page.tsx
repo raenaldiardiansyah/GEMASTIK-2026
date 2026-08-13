@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Building2, Truck, School, Users, Briefcase } from "lucide-react";
+import { Building2, Truck, School, Users, Briefcase, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -76,9 +76,31 @@ function RoleSelectionList({
   const isExpanded = !!selectedRole;
   return (
     <div className="flex flex-col gap-4 p-5 md:p-6 h-full">
+      <style>{`
+        .login-logo-container {
+          position: relative;
+          background: transparent;
+          border-radius: 8px;
+          border: 1.5px solid transparent;
+        }
+        .login-logo-container::before {
+          content: "";
+          position: absolute;
+          inset: -1.5px;
+          border-radius: 8px;
+          padding: 1.5px;
+          background: linear-gradient(to bottom right, #4338ca, #06b6d4);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+      `}</style>
       <div className={cn("flex flex-col transition-all duration-500", isExpanded ? "items-start text-left" : "items-center text-center")}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-slate-900 text-white text-base font-bold mb-3 shadow-sm">
-          B
+        <div className="login-logo-container w-8 h-8 flex items-center justify-center font-bold text-base mb-3 shadow-sm">
+          <span className="bg-gradient-to-br from-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+            G
+          </span>
         </div>
         <h1 className="text-xl font-semibold tracking-tight text-slate-900">
           Selamat datang
@@ -96,10 +118,10 @@ function RoleSelectionList({
               key={role.id}
               onClick={() => onSelect(role)}
               className={cn(
-                "group flex items-center gap-3 p-3 rounded-xl border transition-all text-left w-full focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2",
+                "group flex items-center gap-3 p-3 rounded-xl border transition-all text-left w-full focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2",
                 isSelected
-                  ? "bg-slate-50 border-slate-900 shadow-sm ring-1 ring-slate-900"
-                  : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                  ? "bg-slate-50 border-slate-950 shadow-sm ring-1 ring-slate-950"
+                  : "bg-white border-slate-200 hover:border-slate-950 hover:bg-slate-50"
               )}
             >
               <div
@@ -166,6 +188,16 @@ export default function LoginPage() {
         }}
         transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
       >
+        {/* Back to Home Button inside the card */}
+        {!role && (
+          <Link
+            href="/"
+            className="absolute top-4 right-4 z-50 flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-bold text-slate-950 border border-slate-950 hover:bg-slate-50 rounded-lg transition-all bg-white group cursor-pointer shadow-2xs"
+          >
+            <ArrowLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
+            Beranda
+          </Link>
+        )}
         {/* Left Side: Roles */}
         <motion.div
           layout

@@ -85,19 +85,71 @@ export function LandingNavbar() {
 
   return (
     <>
+      <style>{`
+        .nav-signin-btn {
+          position: relative;
+          background: transparent;
+          border-radius: 10px;
+          border: 1.5px solid transparent;
+          transition: all 0.3s ease;
+        }
+        .nav-signin-btn::before {
+          content: "";
+          position: absolute;
+          inset: -1.5px;
+          border-radius: 10px;
+          padding: 1.5px;
+          background: linear-gradient(to right, #4338ca, #2563eb, #06b6d4);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+        }
+        .nav-signin-btn:hover {
+          transform: scale(1.03);
+          box-shadow: 0 4px 15px rgba(6, 182, 212, 0.15);
+        }
+        .nav-signin-btn:hover::before {
+          background: linear-gradient(to right, #4f46e5, #3b82f6, #22d3ee);
+        }
+        .nav-signin-btn:active {
+          transform: scale(0.98);
+        }
+        .logo-icon-container {
+          position: relative;
+          background: transparent;
+          border-radius: 10px;
+          border: 1.5px solid transparent;
+        }
+        .logo-icon-container::before {
+          content: "";
+          position: absolute;
+          inset: -1.5px;
+          border-radius: 10px;
+          padding: 1.5px;
+          background: linear-gradient(to bottom right, #4338ca, #06b6d4);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
+        }
+      `}</style>
       <nav
         className={[
-          "fixed top-0 left-0 right-0 z-50 h-[72px] transition-all duration-500",
+          "fixed top-0 left-0 right-0 z-50 h-[60px] transition-all duration-500",
           scrolled || portalHovered
             ? "bg-[#0F172A]/95 backdrop-blur-[24px] border-b border-slate-800/80 shadow-2xl"
             : "bg-black/10 backdrop-blur-[12px] border-b border-white/10",
         ].join(" ")}
       >
-        <div className="h-full max-w-[1400px] mx-auto px-6 lg:px-10 flex items-center justify-between">
+        <div className="h-full max-w-[1200px] mx-auto px-6 lg:px-10 flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-indigo-600 to-cyan-500 rounded-[10px] flex items-center justify-center text-white font-bold text-sm shadow-lg shadow-indigo-500/20">
-              B
+            <div className="logo-icon-container w-8 h-8 flex items-center justify-center font-bold text-sm shadow-lg shadow-indigo-500/10">
+              <span className="bg-gradient-to-br from-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+                G
+              </span>
             </div>
             <span className="font-bold text-sm tracking-tight text-white">
               GIZANTARA
@@ -113,7 +165,7 @@ export function LandingNavbar() {
                     key={link.label}
                     onMouseEnter={() => setPortalHovered(true)}
                     onMouseLeave={() => setPortalHovered(false)}
-                    className="relative py-6"
+                    className="relative py-4"
                   >
                     <button
                       className="flex items-center gap-1.5 text-sm font-bold text-white/90 hover:text-white transition-colors cursor-pointer"
@@ -138,13 +190,12 @@ export function LandingNavbar() {
 
           {/* CTA */}
           <div className="hidden md:block">
-            <PrimaryButton
+            <Link
               href="/auth/login"
-              className="py-2.5 px-5 text-sm"
-              icon={false}
+              className="nav-signin-btn inline-flex items-center justify-center py-1.5 px-4 text-sm font-bold text-white hover:text-cyan-400 transition-colors"
             >
               Masuk
-            </PrimaryButton>
+            </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -243,7 +294,7 @@ export function LandingNavbar() {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.25 }}
               onClick={() => setPortalHovered(false)}
-              className="fixed inset-0 top-[72px] bg-slate-950/40 backdrop-blur-xl z-40 pointer-events-auto"
+              className="fixed inset-0 top-[60px] bg-slate-950/40 backdrop-blur-xl z-40 pointer-events-auto"
             />
 
             {/* Full-Width Mega Menu Dropdown Container */}
@@ -254,7 +305,7 @@ export function LandingNavbar() {
               transition={{ duration: 0.25, ease: "easeOut" }}
               onMouseEnter={() => setPortalHovered(true)}
               onMouseLeave={() => setPortalHovered(false)}
-              className="fixed top-[72px] left-0 right-0 w-full bg-white border-b border-slate-200/90 shadow-2xl z-50 text-slate-900 overflow-hidden"
+              className="fixed top-[60px] left-0 right-0 w-full bg-white border-b border-slate-200/90 shadow-2xl z-50 text-slate-900 overflow-hidden"
             >
               <div className="max-w-[1340px] mx-auto px-6 lg:px-8 py-5 lg:py-6">
                 <div className="grid grid-cols-1 lg:grid-cols-[270px_1fr] gap-6 items-stretch">

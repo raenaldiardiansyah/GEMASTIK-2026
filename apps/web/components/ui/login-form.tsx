@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useMemo, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -55,16 +55,16 @@ function RoleSubChoice({
               type="button"
               onClick={() => onChange(opt.id)}
               className={cn(
-                "flex items-center gap-2 p-2.5 rounded-lg border text-left transition-all focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2",
+                "flex items-center gap-2 p-2.5 rounded-lg border text-left transition-all focus:outline-none focus:ring-2 focus:ring-slate-950 focus:ring-offset-2",
                 isActive
-                  ? "bg-slate-50 border-slate-900 shadow-sm ring-1 ring-slate-900"
-                  : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+                  ? "bg-slate-50 border-slate-950 shadow-sm ring-1 ring-slate-950"
+                  : "bg-white border-slate-200 hover:border-slate-950 hover:bg-slate-50"
               )}
             >
               <div
                 className={cn(
                   "flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors",
-                  isActive ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
+                  isActive ? "bg-slate-950 text-white" : "bg-slate-100 text-slate-600"
                 )}
               >
                 <opt.icon className="w-3.5 h-3.5" />
@@ -385,8 +385,10 @@ export function LoginForm({
         )}
 
         <div className="flex flex-col items-center gap-1 text-center">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-slate-900-foreground text-base font-bold mb-1 shadow-lg shadow-black/10">
-            B
+          <div className="login-logo-container w-8 h-8 flex items-center justify-center font-bold text-base mb-1 shadow-sm">
+            <span className="bg-gradient-to-br from-indigo-600 to-cyan-500 bg-clip-text text-transparent">
+              G
+            </span>
           </div>
 
           {role && (

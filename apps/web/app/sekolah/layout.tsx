@@ -106,7 +106,7 @@ export default function SekolahLayout({
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 content-center">
               <div className="col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-violet-700 font-bold text-sm shadow-md">B</div>
+                  <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-violet-700 font-bold text-sm shadow-md">G</div>
                   <span className="font-bold text-white text-base tracking-tight">GIZANTARA</span>
                 </div>
                 <p className="text-violet-100 text-xs lg:text-sm leading-relaxed max-w-xs">Portal Admin Sekolah untuk manajemen program makan bergizi gratis GIZANTARA.</p>

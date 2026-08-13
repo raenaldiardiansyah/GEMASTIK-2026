@@ -69,7 +69,7 @@ export default function BootOverlay() {
         ].join(" ")}
       >
         <div className="mx-auto inline-flex size-12 items-center justify-center rounded-2xl bg-white/10 ring-1 ring-white/15 backdrop-blur">
-          <span className="text-sm font-semibold tracking-tight">B</span>
+          <span className="text-sm font-semibold tracking-tight">G</span>
         </div>
 
         <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/65">

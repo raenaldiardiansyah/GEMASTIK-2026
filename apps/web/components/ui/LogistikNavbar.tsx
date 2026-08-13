@@ -117,7 +117,7 @@ export function LogistikNavbar({ onNavigate, activeTab = "Dashboard" }: Logistik
             {/* Mobile Header in Full Screen */}
             <div className="flex items-center justify-between px-8 py-6 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-400 flex items-center justify-center font-black text-[#0f2027]">B</div>
+                <div className="w-9 h-9 rounded-xl bg-emerald-400 flex items-center justify-center font-black text-[#0f2027]">G</div>
                 <span className="text-sm font-bold text-white tracking-widest uppercase">Navigation</span>
               </div>
               <button 

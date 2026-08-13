@@ -38,7 +38,7 @@ export default function Home() {
       <div className="min-h-screen bg-[#0F172A]">
         <div 
           className="relative z-10 bg-slate-900 rounded-b-[40px] overflow-hidden"
-          style={{ marginBottom: "calc(100vh - 72px)" }}
+          style={{ marginBottom: "calc(100vh - 60px)" }}
         >
           <LandingNavbar />
           <HeroSection />
@@ -49,7 +49,7 @@ export default function Home() {
         </div>
         
         <div 
-          className="fixed top-[72px] bottom-0 left-0 right-0 z-0 flex flex-col justify-center bg-[#0F172A]"
+          className="fixed top-[60px] bottom-0 left-0 right-0 z-0 flex flex-col justify-center bg-[#0F172A]"
         >
           <LandingFooter />
         </div>
