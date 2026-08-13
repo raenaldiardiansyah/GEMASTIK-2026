@@ -2,6 +2,8 @@ import Database from "better-sqlite3";
 import { betterAuth } from "better-auth";
 import { APIError, createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
+import fs from "fs";
+import path from "path";
 
 export type AppRole = "admin" | "sppg" | "logistik" | "sekolah" | "vendor";
 
@@ -17,12 +19,29 @@ function isAppRole(value: unknown): value is AppRole {
   );
 }
 
+let dbPath = process.env.BETTER_AUTH_DB_PATH ?? "better-auth.sqlite";
+
+if (process.env.VERCEL) {
+  const targetPath = "/tmp/better-auth.sqlite";
+  if (!fs.existsSync(targetPath)) {
+    const sourcePath = path.resolve(process.cwd(), "better-auth.sqlite");
+    if (fs.existsSync(sourcePath)) {
+      try {
+        fs.copyFileSync(sourcePath, targetPath);
+      } catch (err) {
+        console.error("Gagal menyalin database ke /tmp:", err);
+      }
+    }
+  }
+  dbPath = targetPath;
+}
+
 export const auth = betterAuth({
   secret:
     process.env.BETTER_AUTH_SECRET ||
     process.env.AUTH_SECRET ||
     "dev-only-insecure-secret-change-me",
-  database: new Database(process.env.BETTER_AUTH_DB_PATH ?? "better-auth.sqlite"),
+  database: new Database(dbPath),
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 8,
