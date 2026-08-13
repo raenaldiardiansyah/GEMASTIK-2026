@@ -13,6 +13,15 @@ import {
   Sparkles
 } from "lucide-react";
 
+// Deterministic progress increment to avoid Math.random() SSR issues
+const deterministicProgressStep = (stepIndex: number) => {
+  const seed = stepIndex * 7 + 7;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return ((t ^ (t >>> 14)) >>> 0) % 15;
+};
+
 interface DownloadProgressModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -22,6 +31,7 @@ interface DownloadProgressModalProps {
 export const DownloadProgressModal = ({ isOpen, onClose, fileName }: DownloadProgressModalProps) => {
   const [progress, setProgress] = useState(0);
   const [state, setState] = useState<"processing" | "generating" | "downloading" | "complete">("processing");
+  const [stepIndex, setStepIndex] = useState(0);
 
   useEffect(() => {
     if (!isOpen) {
@@ -35,12 +45,12 @@ export const DownloadProgressModal = ({ isOpen, onClose, fileName }: DownloadPro
         if (prev >= 100) {
           clearInterval(interval);
           setState("complete");
-          // Auto close after success? or stay open? 
-          // Let's stay open for 2s then close if it's auto
           return 100;
         }
         
-        const next = prev + Math.random() * 15;
+        const step = deterministicProgressStep(stepIndex);
+        const next = prev + step;
+        setStepIndex((prev) => prev + 1);
         if (next > 30 && next < 70) setState("generating");
         if (next >= 70 && next < 100) setState("downloading");
         

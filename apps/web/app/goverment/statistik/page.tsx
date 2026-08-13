@@ -6,14 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   PieChart, Medal, SlidersHorizontal, MapPin, TrendingUp,
   TrendingDown, Star, Download, CalendarRange, Loader2,
-  CheckCircle2, FileText, BarChart3, X, AlertCircle
+  CheckCircle2, FileText, BarChart3, X, AlertCircle, ShieldCheck
 } from "lucide-react";
 import {
-  RadarChart, Radar, PolarGrid, PolarAngleAxis,
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip,
   BarChart, Bar, Cell, CartesianGrid
 } from "recharts";
 import type { BarShapeProps } from "recharts/types/cartesian/Bar";
+import { PageHeader } from "@/components/ui/page-header";
 
 // ─── Types & Data ───────────────────────────────────────────────────────────
 
@@ -113,8 +113,6 @@ const VENDOR_RANKINGS: VendorRating[] = [
   },
 ];
 
-const MEDAL_COLORS = ["#f59e0b", "#94a3b8", "#b45309"];
-
 // ─── Export Modal ────────────────────────────────────────────────────────────
 
 function ExportModal({ onClose }: { onClose: () => void }) {
@@ -138,40 +136,40 @@ function ExportModal({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
     >
       <motion.div
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }}
-        className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+        className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden"
       >
-        <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="px-6 py-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div>
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Unduh Laporan Otomatis</p>
-            <h3 className="text-base font-black text-gray-900">Konfigurasi Laporan</h3>
+            <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Unduh Laporan Otomatis</p>
+            <h3 className="text-base font-black text-slate-900">Konfigurasi Laporan</h3>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100">
+          <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors">
             <X className="w-4 h-4" />
           </button>
         </div>
         <div className="p-6 space-y-5">
           {done ? (
             <div className="text-center py-6">
-              <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="w-8 h-8 text-emerald-600" />
+              <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4 border border-emerald-200">
+                <CheckCircle2 className="w-8 h-8 text-emerald-700" />
               </div>
-              <p className="text-sm font-black text-emerald-700">Laporan Berhasil Diunduh!</p>
+              <p className="text-sm font-black text-emerald-900">Laporan Berhasil Diunduh!</p>
             </div>
           ) : (
             <>
               {/* Rentang */}
               <div>
-                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2">
-                  <CalendarRange className="w-3 h-3 inline mr-1" /> Rentang Waktu
+                <label className="text-[10px] font-black text-slate-700 uppercase tracking-widest block mb-2">
+                  <CalendarRange className="w-3.5 h-3.5 inline mr-1" /> Rentang Waktu
                 </label>
                 <div className="flex gap-2">
                   {(["mingguan", "bulanan"] as const).map(r => (
                     <button key={r} onClick={() => setRentang(r)}
-                      className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider border-2 transition-all ${rentang === r ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-100 text-gray-400 hover:border-gray-200"}`}
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all ${rentang === r ? "border-[#213555] bg-[#213555] text-white shadow-xs" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
                     >{r}</button>
                   ))}
                 </div>
@@ -179,13 +177,13 @@ function ExportModal({ onClose }: { onClose: () => void }) {
 
               {/* Cakupan */}
               <div>
-                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2">
-                  <BarChart3 className="w-3 h-3 inline mr-1" /> Cakupan Data
+                <label className="text-[10px] font-black text-slate-700 uppercase tracking-widest block mb-2">
+                  <BarChart3 className="w-3.5 h-3.5 inline mr-1" /> Cakupan Data
                 </label>
                 <div className="flex gap-2">
                   {(["logistik", "anggaran", "keduanya"] as const).map(c => (
                     <button key={c} onClick={() => setCakupan(c)}
-                      className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider border-2 transition-all ${cakupan === c ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-100 text-gray-400"}`}
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all ${cakupan === c ? "border-[#213555] bg-[#213555] text-white shadow-xs" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
                     >{c}</button>
                   ))}
                 </div>
@@ -193,13 +191,13 @@ function ExportModal({ onClose }: { onClose: () => void }) {
 
               {/* Format */}
               <div>
-                <label className="text-[9px] font-black text-gray-400 uppercase tracking-widest block mb-2">
-                  <FileText className="w-3 h-3 inline mr-1" /> Format File
+                <label className="text-[10px] font-black text-slate-700 uppercase tracking-widest block mb-2">
+                  <FileText className="w-3.5 h-3.5 inline mr-1" /> Format File
                 </label>
                 <div className="flex gap-2">
                   {(["pdf", "csv"] as const).map(f => (
                     <button key={f} onClick={() => setFormat(f)}
-                      className={`flex-1 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider border-2 transition-all ${format === f ? "border-indigo-500 bg-indigo-50 text-indigo-700" : "border-gray-100 text-gray-400"}`}
+                      className={`flex-1 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border-2 transition-all ${format === f ? "border-[#213555] bg-[#213555] text-white shadow-xs" : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"}`}
                     >
                       {f === "pdf" ? "📄 PDF — Presentasi" : "📊 CSV — Analisis"}
                     </button>
@@ -208,18 +206,18 @@ function ExportModal({ onClose }: { onClose: () => void }) {
               </div>
 
               {/* Preview */}
-              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 text-xs text-gray-600 font-medium">
+              <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-700 font-bold leading-relaxed">
                 Laporan ini mencakup{" "}
-                <strong className="text-gray-900">{transaksiCount} transaksi</strong> dari{" "}
-                <strong className="text-gray-900">{dateRange}</strong>.
-                Cakupan: <strong className="text-gray-900">{cakupan}</strong>. Format:{" "}
-                <strong className="text-gray-900">{format.toUpperCase()}</strong>.
+                <strong className="text-slate-900 font-black">{transaksiCount} transaksi</strong> dari{" "}
+                <strong className="text-slate-900 font-black">{dateRange}</strong>.
+                Cakupan: <strong className="text-slate-900 font-black">{cakupan}</strong>. Format:{" "}
+                <strong className="text-slate-900 font-black">{format.toUpperCase()}</strong>.
               </div>
 
               <button
                 onClick={handleDownload}
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-70 text-white text-[10px] font-black uppercase tracking-widest flex items-center justify-center gap-2 transition-all"
+                className="w-full py-3 rounded-xl bg-[#213555] hover:bg-[#1b2b45] disabled:opacity-70 text-white text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-xs"
               >
                 {loading
                   ? <><Loader2 className="w-4 h-4 animate-spin" /> Menyiapkan...</>
@@ -234,106 +232,142 @@ function ExportModal({ onClose }: { onClose: () => void }) {
   );
 }
 
-// ─── Vendor Detail Panel ────────────────────────────────────────────────────
+// ─── Inline Vendor Detail Panel ─────────────────────────────────────────────
 
-function VendorDetailPanel({ vendor, onClose }: { vendor: VendorRating; onClose: () => void }) {
+function VendorDetailInline({ vendor, onClose }: { vendor: VendorRating; onClose: () => void }) {
   const router = useRouter();
   const delta = vendor.skor - vendor.previousSkor;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 40 }}
-      className="bg-white rounded-3xl border border-gray-100 shadow-xl overflow-hidden"
-    >
-      <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-        <div>
-          <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Profil Reputasi</p>
-          <h3 className="text-sm font-black text-gray-900">{vendor.nama}</h3>
+    <div className="bg-white rounded-3xl border border-[#213555]/30 p-6 space-y-6 shadow-sm">
+      {/* Header */}
+      <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-xl bg-[#213555] text-white flex items-center justify-center font-black text-xs">
+            #{vendor.id}
+          </div>
+          <div>
+            <h3 className="text-base font-black text-slate-900">{vendor.nama}</h3>
+            <p className="text-xs font-bold text-slate-600 mt-0.5">Detail Profil & Audit Reputasi Vendor · {vendor.kategori}</p>
+          </div>
         </div>
-        <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100">
+        <button
+          onClick={onClose}
+          type="button"
+          className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors border border-slate-200"
+        >
           <X className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="p-5 space-y-5">
-        {/* Indeks */}
-        <div className="flex items-center justify-between">
-          <div>
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Indeks Performa</p>
-            <p className="text-3xl font-semibold text-gray-900">
-              {vendor.skor}
-            </p>
+      {/* Row 1: Key Metrics Bar */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        {/* Skor Indeks */}
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Indeks Performa</p>
+          <div className="flex items-baseline justify-between mt-2">
+            <span className="text-3xl font-black text-slate-900 tabular-nums">{vendor.skor}</span>
+            <span className={`flex items-center gap-0.5 text-xs font-black tabular-nums ${delta >= 0 ? "text-emerald-700" : "text-red-700"}`}>
+              {delta >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+              {delta >= 0 ? "+" : ""}{delta.toFixed(1)}
+            </span>
           </div>
-          <div className={`flex items-center gap-1 text-sm font-black ${delta >= 0 ? "text-emerald-600" : "text-red-600"}`}>
-            {delta >= 0 ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
-            {delta >= 0 ? "+" : ""}{delta.toFixed(1)}
-          </div>
         </div>
 
-        {/* Horizontal Bar Chart for Dimensions */}
-        <div className="h-48">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={vendor.radarData} layout="vertical" margin={{ top: 0, right: 20, left: 0, bottom: 0 }}>
-              <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
-              <XAxis type="number" hide domain={[0, 100]} />
-              <YAxis dataKey="subject" type="category" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: "#64748b", fontWeight: 600 }} width={75} />
-              <Tooltip cursor={{ fill: "#f8faff" }} contentStyle={{ fontSize: 10, borderRadius: 8, border: "1px solid #e2e8f0" }} />
-              <Bar dataKey="value" fill="#475569" radius={[0, 4, 4, 0]} barSize={12} />
-            </BarChart>
-          </ResponsiveContainer>
+        {/* On Time Rate */}
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Ketepatan On-Time</p>
+          <p className="text-3xl font-black text-emerald-700 tabular-nums mt-2">{vendor.onTimeRate}%</p>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-2">
-          {[
-            { label: "On-Time", value: `${vendor.onTimeRate}%`, color: "text-emerald-600" },
-            { label: "Pengiriman", value: String(vendor.totalPengiriman), color: "text-indigo-600" },
-            { label: "Pelanggaran", value: String(vendor.pelanggaran), color: vendor.pelanggaran > 0 ? "text-red-600" : "text-emerald-600" },
-          ].map(s => (
-            <div key={s.label} className="text-center py-3 bg-gray-50 rounded-xl border border-gray-100">
-              <p className={`text-lg font-black ${s.color}`}>{s.value}</p>
-              <p className="text-[7px] font-black text-gray-400 uppercase">{s.label}</p>
-            </div>
-          ))}
+        {/* Total Pengiriman */}
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Total Pengiriman</p>
+          <p className="text-3xl font-black text-[#213555] tabular-nums mt-2">{vendor.totalPengiriman}</p>
         </div>
 
-        {/* Trend */}
-        <div>
-          <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Tren Indeks (4 Minggu)</p>
-          <div className="h-20">
+        {/* Pelanggaran */}
+        <div className="p-4 bg-slate-50 rounded-2xl border border-slate-200 flex flex-col justify-between">
+          <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Catatan Pelanggaran</p>
+          <p className={`text-3xl font-black tabular-nums mt-2 ${vendor.pelanggaran > 0 ? "text-red-700" : "text-emerald-700"}`}>
+            {vendor.pelanggaran}
+          </p>
+        </div>
+      </div>
+
+      {/* Row 2: 5 Dimensions Breakdown Cards */}
+      <div>
+        <p className="text-xs font-black text-slate-900 uppercase tracking-wider mb-3">Breakdown Dimensi Penilaian BGN</p>
+        <div className="grid grid-cols-1 sm:grid-cols-5 gap-3">
+          {vendor.radarData.map((d) => {
+            const ok = d.value >= 90;
+            const warn = d.value < 70;
+            const badgeBg = ok ? "bg-emerald-100 text-emerald-800 border-emerald-200" : warn ? "bg-red-100 text-red-800 border-red-200" : "bg-amber-100 text-amber-800 border-amber-200";
+            const barBg = ok ? "bg-emerald-600" : warn ? "bg-red-600" : "bg-amber-500";
+            return (
+              <div key={d.subject} className="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black text-slate-900">{d.subject}</span>
+                  <span className={`text-[10px] font-black px-2 py-0.5 rounded-md border tabular-nums ${badgeBg}`}>
+                    {d.value}%
+                  </span>
+                </div>
+                <div className="h-2 w-full bg-slate-200 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${d.value}%` }}
+                    transition={{ duration: 0.5, ease: "easeOut" }}
+                    className={`h-full rounded-full ${barBg}`}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Row 3: Tren & Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-end">
+        <div className="lg:col-span-2 space-y-2">
+          <p className="text-xs font-black text-slate-900 uppercase tracking-wider">Tren Indeks Reputasi (4 Minggu Terakhir)</p>
+          <div className="h-28 bg-slate-50 rounded-2xl border border-slate-200 p-2">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={vendor.trendData}>
+              <AreaChart data={vendor.trendData} margin={{ left: 10, right: 10, top: 10, bottom: 0 }}>
                 <defs>
-                  <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#475569" stopOpacity={0.15} />
-                    <stop offset="95%" stopColor="#475569" stopOpacity={0} />
+                  <linearGradient id="trendGradInline" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#213555" stopOpacity={0.25} />
+                    <stop offset="95%" stopColor="#213555" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="week" hide />
-                <Tooltip contentStyle={{ fontSize: 10, fontWeight: 700, borderRadius: 8, border: "1px solid #f1f5f9" }} />
-                <Area type="monotone" dataKey="skor" stroke="#475569" strokeWidth={2} fill="url(#trendGrad)" dot={false} />
+                <XAxis dataKey="week" tickLine={false} axisLine={false} tick={{ fontSize: 10, fill: "#475569", fontWeight: 700 }} />
+                <Tooltip contentStyle={{ fontSize: 11, fontWeight: 700, borderRadius: 10, border: "1px solid #cbd5e1" }} />
+                <Area type="monotone" dataKey="skor" stroke="#213555" strokeWidth={2.5} fill="url(#trendGradInline)" dot={{ r: 3, fill: "#213555" }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* MapPin Gateway */}
-        <button
-          onClick={() => router.push(`/goverment/pengawasan?vendor=${vendor.id}`)}
-          className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest transition-all"
-        >
-          <MapPin className="w-4 h-4" /> Lihat Armada Aktif Vendor Ini
-        </button>
-
-        {vendor.pelanggaran > 0 && (
+        <div className="space-y-3">
           <button
-            onClick={() => router.push("/goverment/verifikasi")}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-red-200 text-red-600 text-[10px] font-black uppercase tracking-wider hover:bg-red-50 transition-all"
+            type="button"
+            onClick={() => router.push(`/goverment/pengawasan?vendor=${vendor.id}`)}
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-[#213555] hover:bg-[#1b2b45] text-white text-xs font-black uppercase tracking-wider transition-all shadow-xs"
           >
-            <AlertCircle className="w-3.5 h-3.5" /> Lihat Catatan Pelanggaran
+            <MapPin className="w-4 h-4" /> Lihat Armada Aktif Vendor Ini
           </button>
-        )}
+
+          {vendor.pelanggaran > 0 && (
+            <button
+              type="button"
+              onClick={() => router.push("/goverment/verifikasi")}
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border border-red-200 text-red-700 bg-red-50/50 hover:bg-red-100 text-xs font-bold uppercase tracking-wider transition-all"
+            >
+              <AlertCircle className="w-3.5 h-3.5" /> Lihat Catatan Pelanggaran ({vendor.pelanggaran})
+            </button>
+          )}
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }
 
@@ -354,242 +388,249 @@ export default function StatistikPage() {
   const categories = ["SEMUA", ...Array.from(new Set(VENDOR_RANKINGS.map(v => v.kategori)))];
 
   return (
-    <div className="p-6 space-y-5 min-h-full bg-slate-50/50">
+    <div className="p-6 space-y-6 min-h-full bg-background text-foreground w-full">
 
-      {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-amber-500 to-orange-500">
-            <PieChart className="w-5 h-5 text-white" />
-          </div>
-          <div>
-            <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Statistik & Reputasi</h1>
-            <p className="text-xs text-gray-400">Papan peringkat vendor dan unduh laporan otomatis</p>
-          </div>
-        </div>
-        <button
-          onClick={() => setShowExport(true)}
-          className="flex items-center gap-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-indigo-500/20"
-        >
-          <Download className="w-4 h-4" /> Unduh Laporan
-        </button>
-      </div>
+      {/* Page Header */}
+      <PageHeader
+        title={
+          <span className="inline-flex items-center gap-2.5">
+            <span className="size-6 inline-flex items-center justify-center rounded-xl bg-[#213555] text-white shadow-xs">
+              <PieChart className="size-4" aria-hidden />
+            </span>
+            <span className="font-black text-xl sm:text-2xl tracking-tight text-slate-900">Statistik & Reputasi Vendor</span>
+          </span>
+        }
+        subtitle="Papan peringkat reputasi vendor, audit performa operasional, dan unduh laporan otomatis"
+        actions={
+          <button
+            type="button"
+            onClick={() => setShowExport(true)}
+            className="flex items-center gap-2 px-4.5 py-2.5 bg-[#213555] hover:bg-[#1b2b45] text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all shadow-xs"
+          >
+            <Download className="w-4 h-4" /> Unduh Laporan
+          </button>
+        }
+      />
 
-      {/* Filter */}
+      {/* Filter Kategori */}
       <div className="flex items-center gap-3">
-        <SlidersHorizontal className="w-4 h-4 text-gray-400" />
-        <div className="flex gap-1.5 bg-gray-100 p-1 rounded-xl">
+        <SlidersHorizontal className="w-4 h-4 text-slate-600" />
+        <div className="flex gap-1.5 bg-slate-200/60 p-1.5 rounded-2xl border border-slate-300/60">
           {categories.map(c => (
             <button
               key={c}
+              type="button"
               onClick={() => { setFilterKategori(c); setSelectedVendor(null); }}
-              className={`px-4 py-1.5 text-[9px] font-black rounded-lg transition-all uppercase tracking-wider ${
-                filterKategori === c ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+              className={`px-4 py-1.5 text-xs font-black rounded-xl transition-all uppercase tracking-wider ${
+                filterKategori === c ? "bg-[#213555] text-white shadow-xs" : "text-slate-700 hover:text-slate-900"
               }`}
             >
-              {c === "SEMUA" ? "Semua" : c}
+              {c === "SEMUA" ? "Semua Kategori" : c}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Main Layout: Leaderboard + Detail */}
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5">
-
-        {/* Leaderboard */}
-        <div className={`space-y-3 ${selectedVendor ? "lg:col-span-3" : "lg:col-span-5"}`}>
-          {/* Bar Chart Overview */}
-          {!selectedVendor && (
-            <div className="bg-white rounded-2xl border border-gray-100 shadow-sm p-5">
-              <div className="flex items-center justify-between mb-4">
-                <div>
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Indeks Performa Semua Vendor</p>
-                  <p className="text-[8px] text-gray-300 mt-0.5">Klik batang untuk melihat detail vendor</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span className="text-[8px] font-bold text-gray-400">≥ 90</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-amber-400" />
-                    <span className="text-[8px] font-bold text-gray-400">≥ 70</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <div className="w-2 h-2 rounded-full bg-red-400" />
-                    <span className="text-[8px] font-bold text-gray-400">&lt; 70</span>
-                  </div>
-                </div>
+      {/* Main Layout: Bar Chart Overview + Full-Width Leaderboard */}
+      <div className="space-y-6 w-full">
+        {/* Bar Chart Overview (bklit.com style) */}
+        <div className="bg-white rounded-3xl border border-slate-200 p-6 w-full">
+          <div className="flex items-center justify-between mb-4 flex-wrap gap-2">
+            <div>
+              <p className="text-xs font-black text-slate-900 uppercase tracking-wider">Indeks Performa Semua Vendor (Bklit Visualizer)</p>
+              <p className="text-xs font-bold text-slate-600 mt-0.5">Klik batang grafik atau kartu vendor untuk membuka detail profil</p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-emerald-600" />
+                <span className="text-xs font-bold text-slate-800">Sangat Baik (≥ 90)</span>
               </div>
-
-              <div className="h-52">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
-                    data={filteredVendors}
-                    margin={{ top: 8, right: 0, left: -20, bottom: 0 }}
-                    onClick={(d) =>
-                      d?.activePayload &&
-                      setSelectedVendor(
-                        filteredVendors.find((v) => v.nama === d?.activePayload?.[0]?.payload?.nama) || null
-                      )
-                    }
-                  >
-                    <defs>
-                      {filteredVendors.map((v) => {
-                        const color = v.skor >= 90 ? ["#10b981", "#6ee7b7"] : v.skor >= 70 ? ["#f59e0b", "#fde68a"] : ["#ef4444", "#fca5a5"];
-                        return (
-                          <linearGradient key={v.id} id={`grad-${v.id}`} x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor={color[0]} stopOpacity={0.9} />
-                            <stop offset="100%" stopColor={color[1]} stopOpacity={0.6} />
-                          </linearGradient>
-                        );
-                      })}
-                    </defs>
-                    <CartesianGrid vertical={false} stroke="#f1f5f9" />
-                    <XAxis
-                      dataKey="nama"
-                      tickLine={false}
-                      axisLine={false}
-                      tick={{ fontSize: 8, fontWeight: 700, fill: "#94a3b8" }}
-                      tickFormatter={(val: string) => val.split(" ").slice(-1)[0]}
-                      tickMargin={8}
-                    />
-                    <YAxis
-                      domain={[40, 100]}
-                      tickLine={false}
-                      axisLine={false}
-                      tick={{ fontSize: 8, fill: "#cbd5e1" }}
-                      tickCount={4}
-                    />
-                    <Tooltip
-                      cursor={{ fill: "#f8faff", radius: 8 }}
-                      content={({ active, payload }) => {
-                        if (!active || !payload?.length) return null;
-                        const v = payload[0].payload as typeof filteredVendors[0];
-                        const color = v.skor >= 90 ? "text-emerald-600" : v.skor >= 70 ? "text-amber-600" : "text-red-500";
-                        return (
-                          <div className="bg-white border border-gray-100 rounded-xl shadow-xl px-3 py-2 text-left">
-                            <p className="text-[9px] font-black text-gray-400 mb-1 max-w-[140px] truncate">{v.nama}</p>
-                            <p className={`text-lg font-black tabular-nums ${color}`}>{v.skor}</p>
-                            <p className="text-[8px] text-gray-400">{v.kategori}</p>
-                          </div>
-                        );
-                      }}
-                    />
-                    <Bar
-                      dataKey="skor"
-                      radius={[8, 8, 0, 0]}
-                      cursor="pointer"
-                      maxBarSize={56}
-                      shape={(props: BarShapeProps) => {
-                        const idx = filteredVendors.findIndex((v) => v.nama === (props as any).nama);
-                        const v = filteredVendors[idx];
-                        const isHighest = v?.skor === Math.max(...filteredVendors.map((fv) => fv.skor));
-                        const fillColor = v?.skor >= 90 ? "#10b981" : v?.skor >= 70 ? "#f59e0b" : "#ef4444";
-                        const { x, y, width, height } = props as any;
-                        return isHighest ? (
-                          <rect
-                            x={x} y={y} width={width} height={height}
-                            rx={8} ry={8}
-                            fill={`url(#grad-${v?.id})`}
-                            fillOpacity={0.85}
-                            stroke={fillColor}
-                            strokeWidth={2}
-                            strokeDasharray="5 3"
-                          />
-                        ) : (
-                          <rect
-                            x={x} y={y} width={width} height={height}
-                            rx={8} ry={8}
-                            fill={`url(#grad-${v?.id})`}
-                          />
-                        );
-                      }}
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+                <span className="text-xs font-bold text-slate-800">Cukup (≥ 70)</span>
               </div>
-
-              {/* Footer note */}
-              <div className="flex items-center gap-1.5 mt-3">
-                <TrendingUp className="w-3 h-3 text-indigo-400" />
-                <p className="text-[8px] text-gray-400 font-medium">
-                  Batang dengan garis putus-putus = skor tertinggi saat ini
-                </p>
+              <div className="flex items-center gap-1.5">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-600" />
+                <span className="text-xs font-bold text-slate-800">Perlu Evaluasi (&lt; 70)</span>
               </div>
             </div>
-          )}
+          </div>
 
-          {/* Rankings List */}
+          <div className="h-60">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={filteredVendors}
+                margin={{ top: 12, right: 10, left: -10, bottom: 5 }}
+                onClick={(d) => {
+                  const name = d?.activeLabel as string | undefined;
+                  if (name) setSelectedVendor(filteredVendors.find((v) => v.nama === name) || null);
+                }}
+              >
+                <defs>
+                  {filteredVendors.map((v) => {
+                    const color = v.skor >= 90 ? ["#059669", "#34d399"] : v.skor >= 70 ? ["#d97706", "#fcd34d"] : ["#dc2626", "#fca5a5"];
+                    return (
+                      <linearGradient key={v.id} id={`grad-${v.id}`} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor={color[0]} stopOpacity={0.95} />
+                        <stop offset="100%" stopColor={color[1]} stopOpacity={0.7} />
+                      </linearGradient>
+                    );
+                  })}
+                </defs>
+                <CartesianGrid vertical={false} stroke="#e2e8f0" strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="nama"
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fontWeight: 700, fill: "#1e293b" }}
+                  tickFormatter={(val: string) => val.split(" ").slice(-1)[0]}
+                  tickMargin={8}
+                />
+                <YAxis
+                  domain={[40, 100]}
+                  tickLine={false}
+                  axisLine={false}
+                  tick={{ fontSize: 11, fontWeight: 700, fill: "#475569" }}
+                  tickCount={4}
+                />
+                <Tooltip
+                  cursor={{ fill: "#f1f5f9", radius: 10 }}
+                  content={({ active, payload }) => {
+                    if (!active || !payload?.length) return null;
+                    const v = payload[0].payload as typeof filteredVendors[0];
+                    const color = v.skor >= 90 ? "text-emerald-700" : v.skor >= 70 ? "text-amber-700" : "text-red-700";
+                    return (
+                      <div className="bg-white border border-slate-300 rounded-2xl px-4 py-3 text-left">
+                        <p className="text-xs font-extrabold text-slate-900 mb-1 max-w-[160px] truncate">{v.nama}</p>
+                        <p className={`text-xl font-black tabular-nums ${color}`}>{v.skor}</p>
+                        <p className="text-[10px] font-bold text-slate-600">{v.kategori}</p>
+                      </div>
+                    );
+                  }}
+                />
+                <Bar
+                  dataKey="skor"
+                  radius={[10, 10, 0, 0]}
+                  cursor="pointer"
+                  maxBarSize={56}
+                  shape={(props: BarShapeProps) => {
+                    const idx = filteredVendors.findIndex((v) => v.nama === (props as any).nama);
+                    const v = filteredVendors[idx];
+                    const isHighest = v?.skor === Math.max(...filteredVendors.map((fv) => fv.skor));
+                    const fillColor = v?.skor >= 90 ? "#059669" : v?.skor >= 70 ? "#d97706" : "#dc2626";
+                    const { x, y, width, height } = props as any;
+                    return isHighest ? (
+                      <rect
+                        x={x} y={y} width={width} height={height}
+                        rx={10} ry={10}
+                        fill={`url(#grad-${v?.id})`}
+                        fillOpacity={0.9}
+                        stroke={fillColor}
+                        strokeWidth={2.5}
+                        strokeDasharray="6 4"
+                      />
+                    ) : (
+                      <rect
+                        x={x} y={y} width={width} height={height}
+                        rx={10} ry={10}
+                        fill={`url(#grad-${v?.id})`}
+                      />
+                    );
+                  }}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="flex items-center gap-2 mt-4 pt-3 border-t border-slate-100">
+            <ShieldCheck className="w-4 h-4 text-emerald-700" />
+            <p className="text-xs font-bold text-slate-700">
+              Batang dengan batas garis putus-putus mewakili skor tertinggi saat ini. Data bersumber dari audit ledger immutable BGN.
+            </p>
+          </div>
+        </div>
+
+        {/* Rankings List with Inline Expandable Detail Drawer */}
+        <div className="space-y-4 w-full">
           {filteredVendors.map((vendor, index) => {
             const rank = index + 1;
             const delta = vendor.skor - vendor.previousSkor;
-            const isTop3 = rank <= 3;
-            return (
-              <motion.button
-                key={vendor.id}
-                layoutId={`vendor-${vendor.id}`}
-                onClick={() => setSelectedVendor(selectedVendor?.id === vendor.id ? null : vendor)}
-                className={`w-full text-left bg-white rounded-2xl border shadow-sm px-5 py-4 flex items-center gap-4 hover:shadow-md transition-all ${
-                  selectedVendor?.id === vendor.id
-                    ? "border-indigo-200 ring-2 ring-indigo-500/10"
-                    : "border-gray-100"
-                }`}
-              >
-                {/* Initials */}
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 font-bold text-xs uppercase border border-slate-200">
-                  {vendor.nama.split(" ").slice(0, 2).map((n: string) => n[0]).join("")}
-                </div>
+            const isSelected = selectedVendor?.id === vendor.id;
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-sm font-black text-gray-900 truncate">{vendor.nama}</p>
-                    <span className="text-[8px] font-black px-2 py-0.5 bg-slate-100 text-slate-600 rounded-full flex-shrink-0">
-                      {vendor.kategori}
+            return (
+              <div key={vendor.id} className="space-y-3 w-full">
+                <button
+                  type="button"
+                  onClick={() => setSelectedVendor(isSelected ? null : vendor)}
+                  className={`w-full text-left bg-white rounded-2xl border px-5 py-4 flex items-center gap-4 hover:border-[#213555] hover:bg-slate-50/80 transition-all ${
+                    isSelected
+                      ? "border-[#213555] bg-slate-50/80 ring-2 ring-[#213555]/15"
+                      : "border-slate-200"
+                  }`}
+                >
+                  {/* Rank / Initials Badge */}
+                  <div className={`flex-shrink-0 w-11 h-11 rounded-2xl flex items-center justify-center font-black text-sm border shadow-xs ${
+                    rank === 1 ? "bg-amber-100 text-amber-900 border-amber-300" : rank === 2 ? "bg-slate-200 text-slate-900 border-slate-300" : rank === 3 ? "bg-amber-200/60 text-amber-900 border-amber-400" : "bg-slate-100 text-slate-800 border-slate-200"
+                  }`}>
+                    #{rank}
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <p className="text-sm font-black text-slate-900 truncate">{vendor.nama}</p>
+                      <span className="text-[10px] font-black px-2.5 py-0.5 bg-slate-100 text-slate-800 border border-slate-200 rounded-full flex-shrink-0">
+                        {vendor.kategori}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <span className="text-xs font-bold text-slate-700">{vendor.totalPengiriman} pengiriman</span>
+                      {vendor.pelanggaran > 0 && (
+                        <span className="text-xs font-extrabold text-red-700 flex items-center gap-1">
+                          <AlertCircle className="w-3.5 h-3.5" /> {vendor.pelanggaran} pelanggaran
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Score + Trend */}
+                  <div className="text-right flex-shrink-0">
+                    <p className="text-2xl font-black text-slate-900 tabular-nums">
+                      {vendor.skor}
+                    </p>
+                    <span className={`text-xs font-extrabold flex items-center gap-0.5 justify-end tabular-nums ${delta >= 0 ? "text-emerald-700" : "text-red-700"}`}>
+                      {delta >= 0 ? <TrendingUp className="w-3.5 h-3.5" /> : <TrendingDown className="w-3.5 h-3.5" />}
+                      {delta >= 0 ? "+" : ""}{delta.toFixed(1)}
                     </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[9px] text-gray-400 font-medium">{vendor.totalPengiriman} pengiriman</span>
-                    {vendor.pelanggaran > 0 && (
-                      <span className="text-[8px] font-black text-red-500 flex items-center gap-0.5">
-                        <AlertCircle className="w-2.5 h-2.5" /> {vendor.pelanggaran} pelanggaran
-                      </span>
-                    )}
+
+                  {/* MapPin */}
+                  <div
+                    onClick={e => { e.stopPropagation(); router.push(`/goverment/pengawasan?vendor=${vendor.id}`); }}
+                    className="flex-shrink-0 w-9 h-9 rounded-xl flex items-center justify-center text-slate-500 hover:text-[#213555] hover:bg-slate-200 border border-slate-200 transition-all"
+                    title="Lihat di peta"
+                  >
+                    <MapPin className="w-4 h-4" />
                   </div>
-                </div>
+                </button>
 
-                {/* Score + Trend */}
-                <div className="text-right flex-shrink-0">
-                  <p className="text-xl font-bold text-gray-900">
-                    {vendor.skor}
-                  </p>
-                  <span className={`text-[9px] font-black flex items-center gap-0.5 justify-end ${delta >= 0 ? "text-emerald-500" : "text-red-500"}`}>
-                    {delta >= 0 ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />}
-                    {delta >= 0 ? "+" : ""}{delta.toFixed(1)}
-                  </span>
-                </div>
-
-                {/* MapPin */}
-                <div
-                  onClick={e => { e.stopPropagation(); router.push(`/goverment/pengawasan?vendor=${vendor.id}`); }}
-                  className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center text-gray-300 hover:text-indigo-600 hover:bg-indigo-50 transition-all"
-                  title="Lihat di peta"
-                >
-                  <MapPin className="w-4 h-4" />
-                </div>
-              </motion.button>
+                {/* Inline Expandable Detail Drawer directly underneath the vendor item */}
+                <AnimatePresence>
+                  {isSelected && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0, y: -8 }}
+                      animate={{ opacity: 1, height: "auto", y: 0 }}
+                      exit={{ opacity: 0, height: 0, y: -8 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                      className="overflow-hidden w-full"
+                    >
+                      <VendorDetailInline vendor={vendor} onClose={() => setSelectedVendor(null)} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
         </div>
-
-        {/* Detail Panel */}
-        <AnimatePresence>
-          {selectedVendor && (
-            <div className="lg:col-span-2">
-              <VendorDetailPanel vendor={selectedVendor} onClose={() => setSelectedVendor(null)} />
-            </div>
-          )}
-        </AnimatePresence>
       </div>
 
       {/* Export Modal */}
@@ -599,3 +640,4 @@ export default function StatistikPage() {
     </div>
   );
 }
+

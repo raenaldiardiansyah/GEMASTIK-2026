@@ -401,7 +401,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
           key={`score-${type}-${entityId}`}
           className="md:col-span-4 bg-white rounded-[2.5rem] p-8 border border-slate-100 shadow-sm flex flex-col items-center justify-center text-center relative overflow-hidden"
         >
-          <div className={`absolute top-0 right-0 w-32 h-32 bg-indigo-50/50 blur-3xl rounded-full -mr-16 -mt-16`} />
+          <div className={`absolute top-0 right-0 w-32 h-32 bg-role-accent/60 blur-3xl rounded-full -mr-16 -mt-16`} />
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6">Skor Resmi Vendor</p>
           <div className="relative">
             <span className="text-7xl font-black text-slate-900 tracking-tighter">
@@ -441,7 +441,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
                       initial={{ width: 0 }}
                       animate={{ width: `${pct}%` }}
                       transition={{ duration: 1.2, ease: "circOut" }}
-                      className={`h-full rounded-full ${star >= 4 ? "bg-indigo-500" : star >= 3 ? "bg-amber-400" : "bg-rose-400"}`}
+                      className={`h-full rounded-full ${star >= 4 ? "bg-role-primary" : star >= 3 ? "bg-amber-400" : "bg-rose-400"}`}
                     />
                   </div>
                   <span className="text-[10px] font-black text-slate-400 w-10 text-right tabular-nums">{count}</span>
@@ -464,7 +464,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
               <h3 className="text-sm font-black text-slate-800">Analisis Metrik Audit</h3>
               <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Parameter Kualitas Standar Nasional</p>
             </div>
-            <div className={`p-2 rounded-xl bg-indigo-50 text-indigo-600`}>
+            <div className={`p-2 rounded-xl bg-role-accent text-role-primary`}>
               <Zap className="w-5 h-5" />
             </div>
           </div>
@@ -547,7 +547,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
                 disabled={logSubmitted}
                 className={`py-4 rounded-2xl text-[9px] font-black uppercase tracking-widest transition-all shadow-lg flex items-center justify-center gap-2 ${logSubmitted
                     ? "bg-emerald-500 text-white shadow-emerald-500/20"
-                    : "bg-indigo-500 hover:bg-indigo-600 text-white shadow-indigo-500/20"
+                    : "bg-role-primary hover:bg-role-primary-hover text-white shadow-lg"
                   }`}
               >
                 {logSubmitted ? <CheckCircle2 className="w-3 h-3" /> : <ClipboardList className="w-3 h-3" />}
@@ -571,7 +571,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
               <div className="flex bg-slate-100 p-1 rounded-xl">
                 <button
                   onClick={() => setFilter("all")}
-                  className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${filter === "all" ? "bg-white text-indigo-600 shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
+                  className={`px-4 py-1.5 rounded-lg text-[10px] font-black transition-all ${filter === "all" ? "bg-white text-role-primary shadow-sm" : "text-slate-400 hover:text-slate-600"}`}
                 >
                   Semua
                 </button>
@@ -584,7 +584,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-role-primary animate-pulse" />
               <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{filteredReviews.length} Entri Terbaru</span>
             </div>
           </div>
@@ -609,7 +609,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
                       <div className="flex justify-between items-start gap-6">
                         <div className="flex-1">
                           <div className="flex items-center gap-4 mb-3">
-                            <div className={`w-10 h-10 rounded-2xl ${isNeg ? "bg-rose-100 text-rose-600" : "bg-indigo-50 text-indigo-600"} flex items-center justify-center text-xs font-black shadow-sm`}>
+                            <div className={`w-10 h-10 rounded-2xl ${isNeg ? "bg-rose-100 text-rose-600" : "bg-role-accent text-role-primary"} flex items-center justify-center text-xs font-black shadow-sm`}>
                               {review.userName.slice(0, 1)}
                             </div>
                             <div>
@@ -639,7 +639,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
                             onClick={() => toggleFollowUp(review.id)}
                             className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl border text-[9px] font-black uppercase tracking-widest transition-all ${done
                                 ? "bg-emerald-500 text-white border-emerald-400 shadow-lg shadow-emerald-100"
-                                : "bg-white text-slate-400 border-slate-200 hover:border-indigo-400 hover:text-indigo-600 group"
+                                : "bg-white text-slate-400 border-slate-200 hover:border-[hsl(var(--role-primary))] hover:text-role-primary group"
                               }`}
                           >
                             {done ? <CheckCircle2 className="w-3 h-3" /> : null}

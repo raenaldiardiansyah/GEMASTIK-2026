@@ -130,7 +130,7 @@ export default function SppgAdminDashboard() {
                 <CardTitle className="text-lg font-bold" style={{ color: "#213555" }}>Menunggu Persetujuan</CardTitle>
                 <CardDescription style={{ color: "#3E5879" }}>Dokumen dan vendor yang butuh tanda tangan Anda.</CardDescription>
               </div>
-              <Link href="/sppg/admin/approvals" className="text-sm font-bold flex items-center gap-1 hover:underline" style={{ color: "#3E5879" }}>
+              <Link href="/sppg/admin/evaluation" className="text-sm font-bold flex items-center gap-1 hover:underline" style={{ color: "#3E5879" }}>
                 Lihat Semua <ArrowRight size={16} />
               </Link>
             </CardHeader>
@@ -177,7 +177,7 @@ export default function SppgAdminDashboard() {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <CheckCircle2 size={16} className="text-emerald-500" />
-                    <span className="text-sm font-semibold" style={{ color: "#213555" }}>Smart Contract</span>
+                    <span className="text-sm font-semibold" style={{ color: "#213555" }}>Audit Pembayaran</span>
                   </div>
                   <span className="text-xs font-bold text-emerald-500">Online</span>
                 </div>

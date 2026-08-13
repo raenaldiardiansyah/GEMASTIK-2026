@@ -7,6 +7,7 @@ import {
   Bell, BellOff, FileCheck, AlertCircle, Banknote,
   Truck, Settings, CheckCheck, Clock, ChevronRight, Filter
 } from "lucide-react";
+import { PageHeader } from "@/components/ui/page-header";
 
 // ─── Types & Data ─────────────────────────────────────────────────────────
 
@@ -32,7 +33,7 @@ const INITIAL_NOTIFS: Notif[] = [
   { id: "n6", kategori: "sistem", judul: "Filter HET Diperbarui", isi: "PIHPS Nasional memperbarui harga referensi komoditas beras menjadi Rp 16.000/kg.", waktu: "3 jam lalu", dibaca: true, urgent: false, href: "/goverment/pengajuan" },
   { id: "n7", kategori: "pengajuan", judul: "CV Berkah Logistik Jabar Mendaftar", isi: "Vendor baru mengajukan pendaftaran SBT untuk kategori Logistik.", waktu: "5 jam lalu", dibaca: true, urgent: false, href: "/goverment/pengajuan" },
   { id: "n8", kategori: "logistik", judul: "Armada 3 Berhenti Lama", isi: "Supir Armada 3 – Lembang tidak bergerak selama 45 menit. Periksa kondisi.", waktu: "6 jam lalu", dibaca: true, urgent: false, href: "/goverment/pengawasan" },
-  { id: "n9", kategori: "keuangan", judul: "Pencairan Dana Batch April", isi: "Pencairan batch hari ini: 4 berhasil, 1 gagal (CV Food Hub Jabar — Rp 6.900.000).", waktu: "8 jam lalu", dibaca: true, urgent: false, href: "/goverment/riwayat" },
+  { id: "n9", kategori: "keuangan", judul: "Verifikasi Pembayaran Batch April", isi: "Verifikasi batch hari ini: 4 berhasil, 1 gagal (CV Food Hub Jabar — Rp 6.900.000).", waktu: "8 jam lalu", dibaca: true, urgent: false, href: "/goverment/riwayat" },
   { id: "n10", kategori: "sistem", judul: "Laporan Mingguan Tersedia", isi: "Laporan distribusi Minggu ke-14 sudah bisa diunduh di modul Statistik.", waktu: "1 hari lalu", dibaca: true, urgent: false, href: "/goverment/statistik" },
 ];
 
@@ -70,35 +71,37 @@ export default function NotifikasiPage() {
   }, [notifs, activeTab, filterKategori]);
 
   return (
-    <div className="p-6 space-y-5 min-h-full bg-slate-50/50">
+    <div className="p-6 space-y-5 min-h-full bg-background text-foreground">
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-gray-200">
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-violet-500 to-indigo-600">
-              <Bell className="w-5 h-5 text-white" />
-            </div>
-            {unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[8px] font-black flex items-center justify-center">
-                {unreadCount}
+      <div className="pb-2 border-b border-gray-200">
+        <PageHeader
+          title={
+            <span className="inline-flex items-center gap-2">
+              <span className="w-9 h-9 inline-flex items-center justify-center rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 relative">
+                <Bell className="w-5 h-5 text-white" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-red-500 text-white text-[8px] font-black flex items-center justify-center">
+                    {unreadCount}
+                  </span>
+                )}
               </span>
-            )}
-          </div>
-          <div>
-            <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Notifikasi</h1>
-            <p className="text-xs text-gray-400">Pusat komando pasif — semua aktivitas sistem</p>
-          </div>
-        </div>
-        {unreadCount > 0 && (
-          <button
-            onClick={markAllRead}
-            className="flex items-center gap-2 px-4 py-2 text-[9px] font-black uppercase tracking-wider text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 rounded-xl transition-all"
-          >
-            <CheckCheck className="w-3.5 h-3.5" />
-            Tandai Semua Dibaca
-          </button>
-        )}
+              <span className="font-extrabold text-gray-900 tracking-tight">Notifikasi</span>
+            </span>
+          }
+          subtitle="Pusat komando pasif — semua aktivitas sistem"
+          actions={
+            unreadCount > 0 ? (
+              <button
+                onClick={markAllRead}
+                className="flex items-center gap-2 px-4 py-2 text-[9px] font-black uppercase tracking-wider text-indigo-600 bg-indigo-50 hover:bg-indigo-100 border border-indigo-100 rounded-xl transition-all"
+              >
+                <CheckCheck className="w-3.5 h-3.5" />
+                Tandai Semua Dibaca
+              </button>
+            ) : null
+          }
+        />
       </div>
 
       {/* Tabs */}

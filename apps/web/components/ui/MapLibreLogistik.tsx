@@ -65,7 +65,6 @@ export default function MapLibreLogistik() {
       zoom: 12,
       pitch: 0,
       bearing: 0,
-      antialias: true
     });
 
     map.current.on('load', () => {

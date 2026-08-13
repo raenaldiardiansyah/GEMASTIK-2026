@@ -1,21 +1,31 @@
 "use client";
 
-import { Sun } from "lucide-react";
+import { Bell } from "lucide-react";
 
-export const TopHeader = () => {
+export const TopHeader = ({ onNotificationClick }: { onNotificationClick?: () => void }) => {
   return (
     <div className="flex items-center justify-between px-6 pt-8 pb-4">
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-black text-lg relative shadow-md shadow-indigo-200">
+        <div className="w-10 h-10 rounded-full bg-violet-600 flex items-center justify-center text-white font-black text-lg relative shadow-md shadow-violet-200">
           R
-          <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full"></div>
+          <div className="absolute top-0 right-0 w-3 h-3 bg-emerald-400 border-2 border-white rounded-full" />
         </div>
-        <h1 className="text-xl font-black text-slate-800 tracking-tight">
-          B.O.G.A
-        </h1>
+        <div>
+          <h1 className="text-lg font-black text-slate-900 tracking-tight leading-none">
+            B.O.G.A
+          </h1>
+          <p className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
+            Portal Siswa
+          </p>
+        </div>
       </div>
-      <button className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-amber-500 hover:bg-slate-200 transition-colors" aria-label="Toggle Theme">
-        <Sun className="w-5 h-5" />
+      <button
+        onClick={onNotificationClick}
+        className="relative w-10 h-10 min-w-[44px] min-h-[44px] rounded-full bg-white border border-slate-200 flex items-center justify-center text-slate-500 hover:text-violet-600 hover:border-violet-200 transition-colors cursor-pointer"
+        aria-label="Notifikasi"
+      >
+        <Bell className="w-5 h-5" />
+        <div className="absolute top-2 right-2 w-2 h-2 bg-rose-500 rounded-full" />
       </button>
     </div>
   );

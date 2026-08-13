@@ -9,6 +9,7 @@ import {
   Filter, MapPin, Star, Clock, Building2, Download, User,
   Phone, Mail, CreditCard, Home, Calendar,
 } from "lucide-react";
+import { toast } from "sonner";
 import { VendorLocationMap } from "@/components/goverment/VendorLocationMap";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -266,7 +267,7 @@ function SertifikasiDocModal({
                 </div>
               </div>
               <button
-                onClick={() => alert(`Download: ${item.berkas}`)}
+                onClick={() => toast(`Download: ${item.berkas}`)}
                 className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-[10px] font-black uppercase tracking-widest transition-all shadow-md shadow-indigo-500/20"
               >
                 <Download className="w-4 h-4" />
@@ -518,7 +519,7 @@ export default function PengajuanPage() {
   };
 
   return (
-    <div className="p-6 space-y-5 min-h-full bg-slate-50/50">
+    <div className="p-6 space-y-5 min-h-full bg-background text-foreground">
 
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-gray-200">

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 import {
     User, Building2, FileText, CreditCard, CheckCircle2,
     ChevronRight, ChevronLeft, Upload, Loader2, Eye, EyeOff, MapPin,
@@ -177,7 +178,7 @@ function Step3({ data, set }: { data: FormData; set: (k: keyof FormData, v: stri
                     <FileText size={11} />
                 </div>
                 <p className="text-xs text-amber-700 leading-relaxed">
-                    Dokumen di-<strong>hash SHA-256</strong> & dicatat ke <strong>Blockchain B.O.G.A</strong>.
+                    Dokumen di-<strong>hash SHA-256</strong> & dicatat ke <strong>Ledger B.O.G.A</strong>.
                     Paste URL dari Cloudflare R2 atau isi nanti via dashboard.
                 </p>
             </div>
@@ -201,7 +202,7 @@ function Step4({ data, set }: { data: FormData; set: (k: keyof FormData, v: stri
                     <CreditCard size={11} />
                 </div>
                 <p className="text-xs leading-relaxed" style={{ color: G }}>
-                    Rekening ini menjadi tujuan <strong>pencairan Escrow DOKU</strong> setelah QC SPPG memvalidasi penerimaan barang.
+                    Rekening ini untuk menerima pembayaran setelah <strong>verifikasi OCR bukti transfer</strong> setelah QC SPPG memvalidasi penerimaan barang.
                 </p>
             </div>
             <FGroup label="Nama Bank" id="bank_name">
@@ -291,29 +292,18 @@ export default function VendorRegisterPage() {
     const [data, setData] = useState<FormData>(INITIAL);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [success, setSuccess] = useState<string | null>(null);
+    const router = useRouter();
 
     const set = (k: keyof FormData, v: string | number) => setData((p) => ({ ...p, [k]: v }));
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
         const t = toast.loading("Mendaftarkan vendor ke B.O.G.A...");
-        try {
-            const res = await fetch("http://localhost:3001/api/vendors/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ ...data, latitude: Number(data.latitude), longitude: Number(data.longitude) }),
-            });
-            const json = await res.json();
+        setTimeout(() => {
             toast.dismiss(t);
-            if (json.status === "success") { 
-                setSuccess(json.data.vendor_id); 
-                // Set pending status for new registrations
-                document.cookie = `boga_vendor_status=pending; path=/; max-age=31536000`;
-                toast.success("Pendaftaran berhasil!"); 
-            }
-            else toast.error(json.message || "Pendaftaran gagal.");
-        } catch { toast.dismiss(t); toast.error("Tidak dapat terhubung ke server B.O.G.A."); }
-        finally { setIsSubmitting(false); }
+            toast.success("Simulasi: Pendaftaran berhasil! Menunggu verifikasi AI OCR.");
+            router.push("/auth/login");
+        }, 1500);
     };
 
     /* ─── Success ─── */
@@ -401,7 +391,7 @@ export default function VendorRegisterPage() {
                         <div>
                             <h2 className="text-base font-extrabold text-slate-800 leading-none">{stepInfo.label}</h2>
                             <p className="text-xs text-slate-400 mt-0.5">
-                                {["Data perwakilan & akun login", "Profil perusahaan & lokasi usaha", "Upload dokumen legalitas", "Data rekening untuk pencairan dana", "Periksa kembali sebelum mengirim"][step - 1]}
+                                {["Data perwakilan & akun login", "Profil perusahaan & lokasi usaha", "Upload dokumen legalitas", "Data rekening untuk pembayaran", "Periksa kembali sebelum mengirim"][step - 1]}
                             </p>
                         </div>
                     </div>

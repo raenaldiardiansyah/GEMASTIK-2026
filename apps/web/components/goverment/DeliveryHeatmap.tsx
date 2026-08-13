@@ -43,16 +43,16 @@ export const DeliveryHeatmap = memo(function DeliveryHeatmap() {
     >
       <div className="flex items-start justify-between gap-4 mb-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-900">
             Pola Jam Pengiriman
           </p>
-          <p className="mt-0.5 text-sm font-semibold text-foreground">
+          <p className="mt-0.5 text-sm font-bold text-slate-800">
             Volume porsi per jam · 7 hari
           </p>
         </div>
 
         <div className="hidden sm:flex items-center gap-2" aria-label="Legenda intensitas">
-          <span className="text-xs text-muted-foreground font-semibold">Rendah</span>
+          <span className="text-xs text-slate-800 font-bold">Rendah</span>
           <div className="flex gap-0.5">
             {[0, 0.2, 0.4, 0.6, 0.8, 1].map((t) => (
               <div
@@ -63,7 +63,7 @@ export const DeliveryHeatmap = memo(function DeliveryHeatmap() {
               />
             ))}
           </div>
-          <span className="text-xs text-muted-foreground font-semibold">Tinggi</span>
+          <span className="text-xs text-slate-800 font-bold">Tinggi</span>
         </div>
       </div>
 
@@ -73,7 +73,7 @@ export const DeliveryHeatmap = memo(function DeliveryHeatmap() {
           {hourMarks.map((h) => (
             <span
               key={h}
-              className="absolute text-xs font-semibold text-muted-foreground -translate-x-1/2"
+              className="absolute text-xs font-bold text-slate-800 -translate-x-1/2"
               style={{ left: `${(h / 23) * 100}%` }}
             >
               {String(h).padStart(2, "0")}
@@ -92,7 +92,7 @@ export const DeliveryHeatmap = memo(function DeliveryHeatmap() {
           return (
             <div key={day} className="flex items-center gap-1">
               <span
-                className="w-9 shrink-0 text-xs font-semibold text-muted-foreground text-right pr-2"
+                className="w-9 shrink-0 text-xs font-bold text-slate-900 text-right pr-2"
                 aria-label={DAY_NAMES[day]}
               >
                 {DAY_NAMES[day]}

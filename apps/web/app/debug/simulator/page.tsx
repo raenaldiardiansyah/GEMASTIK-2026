@@ -9,9 +9,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { logger } from "@/lib/logger";
-
-/* ─── Constants ─── */
-const API = "http://localhost:3001";
+import { vendorList, getVendorCommodities } from "@/lib/mbgdummydata";
 const G = "#065F46";
 const G_LIGHT = "#D1FAE5";
 
@@ -50,27 +48,11 @@ export default function SimulatorPage() {
 
   /* ─── Data Fetching ─── */
   useEffect(() => {
-    // Load real vendors from API
-    const loadVendors = async () => {
-      try {
-        const res = await fetch(`${API}/api/vendors`);
-        const json = await res.json();
-        if (json.status === "success") {
-          setVendors(json.data || []);
-        }
-      } catch (e) {
-        logger.error('Simulator', 'Gagal memuat daftar vendor', e);
-      }
-    };
-    loadVendors();
+    setVendors(vendorList as any);
   }, []);
 
-  const fetchCommodities = useCallback(async (vId: string) => {
-    try {
-      const res = await fetch(`${API}/api/vendors/${vId}/commodities`);
-      const json = await res.json();
-      if (json.status === "success") setCommodities(json.data || []);
-    } catch (e) {}
+  const fetchCommodities = useCallback((vId: string) => {
+    setCommodities(getVendorCommodities(Number(vId) || 1) as any);
   }, []);
 
   useEffect(() => {
@@ -91,32 +73,21 @@ export default function SimulatorPage() {
       let pembeliId = "ACC-GOV-31710001"; // Jakarta
       if (selectedVendor.includes("3201")) pembeliId = "ACC-GOV-32010001"; // Bogor
 
-      const res = await fetch(`${API}/api/spk/create`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          vendorId: selectedVendor,
-          pembeliId: pembeliId, // Pass regional SPPG
-          items: [{ commodityId: selectedComm, quantity: qty, price: comm?.harga || 0 }]
-        })
-      });
-      const json = await res.json();
-      if (json.status === "success") {
+      setTimeout(() => {
+        const poId = "PO-SIM-" + Date.now();
         setCurrentPO({ 
-          id: json.data.poId, 
+          id: poId, 
           pembeliId, 
           vendorId: selectedVendor,
-          totalHarga: json.data.totalHarga,
+          totalHarga: ((comm as any)?.harga || (comm as any)?.price || 0) * qty,
           status: "PENDING" 
         });
         setStep(2);
-        toast.success(`Pesanan SPPG ${pembeliId.includes("3201") ? "Bogor" : "Pusat"} Berhasil Dibuat! 🚀`);
-        console.log("✅ Simulator: Pesanan Dibuat", { id: json.data.poId, data: json.data });
-        logger.info('Simulator', 'Test PO Created', { poId: json.data.poId, sppg: pembeliId });
-      }
+        toast.success(`Simulasi: Pesanan SPPG ${pembeliId.includes("3201") ? "Bogor" : "Pusat"} Berhasil Dibuat! 🚀`);
+        setLoading(false);
+      }, 500);
     } catch (error) {
       toast.error("Gagal buat pesanan.");
-    } finally {
       setLoading(false);
     }
   };
@@ -130,21 +101,13 @@ export default function SimulatorPage() {
       if (stage === "pickup") nextStatus = "PROCESSED";
       if (stage === "complete") nextStatus = "COMPLETED";
 
-      console.log(`🚀 Simulator: Mengupdate Tahap ${stage}...`, { id: currentPO?.id, status: nextStatus });
-      const res = await fetch(`${API}/api/spk/${currentPO?.id}/status`, {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: nextStatus })
-      });
-      
-      const json = await res.json();
-      if (json.status === "success") {
+      setTimeout(() => {
         setCurrentPO({ ...currentPO, status: nextStatus });
-        toast.success(`Tahap ${stage} Berhasil! ✅`);
-      }
+        toast.success(`Simulasi: Tahap ${stage} Berhasil! ✅`);
+        setLoading(false);
+      }, 500);
     } catch (e) {
       toast.error("Gagal update tahap.");
-    } finally {
       setLoading(false);
     }
   };
@@ -223,7 +186,7 @@ export default function SimulatorPage() {
                     <select value={selectedComm} onChange={e => setSelectedComm(e.target.value)}
                       className="w-full h-12 px-4 rounded-2xl border border-slate-100 bg-slate-50 text-sm font-bold text-slate-700 focus:ring-2 focus:ring-emerald-500/20 outline-none appearance-none">
                       <option value="">-- Pilih Barang --</option>
-                      {commodities.map(c => <option key={c.id} value={c.id}>{c.name} - Rp {c.harga.toLocaleString()}/{c.unit}</option>)}
+                      {commodities.map(c => <option key={c.id} value={c.id}>{c.name} - Rp {((c as any).harga || (c as any).price || 0).toLocaleString()}/{c.unit}</option>)}
                     </select>
                   </div>
 
@@ -341,7 +304,7 @@ export default function SimulatorPage() {
                       }
                     }}
                     className="w-full h-14 bg-purple-600 rounded-3xl text-white font-black text-sm shadow-xl shadow-purple-100 mt-4">
-                    Selesaikan Pesanan & Cairkan Escrow 💸
+                    Selesaikan Pesanan & Verifikasi Pembayaran ✅
                   </button>
                 </div>
               </motion.div>

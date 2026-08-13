@@ -22,7 +22,7 @@ const API_BASE_CANDIDATES = [
   process.env.NEXT_PUBLIC_AUTH_API_BASE_URL,
   process.env.NEXT_PUBLIC_API_BASE_URL,
   "",
-  "http://localhost:3000",
+  "",
 ].filter((value): value is string => value !== undefined);
 
 function toUrl(base: string, path: string) {

@@ -8,14 +8,11 @@ import { SectionHeader } from "./SectionHeader";
 import { PrimaryButton } from "./CustomButtons";
 
 function AnimatedNumber({ value }: { value: string }) {
-  const [displayValue, setDisplayValue] = useState("0");
+  const [displayValue, setDisplayValue] = useState(value);
 
   useEffect(() => {
     const numMatch = value.match(/[\d.,]+/);
-    if (!numMatch) {
-      setDisplayValue(value);
-      return;
-    }
+    if (!numMatch) return;
     
     const numStrWithCommas = numMatch[0];
     const suffix = value.substring(numMatch.index! + numStrWithCommas.length);
@@ -113,6 +110,63 @@ const roleThemes = {
   }
 };
 
+const rolePreviews: Record<string, { widgetTitle: string; badgeText: string; items: { label: string; val: string; highlight?: boolean }[] }> = {
+  Pemerintah: {
+    widgetTitle: "Supervisi & Whitelist Vendor",
+    badgeText: "SBT Active",
+    items: [
+      { label: "Status Whitelist", val: "1,240 Vendor Verifikasi", highlight: true },
+      { label: "Audit Kepatuhan", val: "98% Compliance Rate" },
+      { label: "Ledger Synced", val: "Real-time Block #4092" },
+    ]
+  },
+  Vendor: {
+    widgetTitle: "Pengadaan & Katalis HET",
+    badgeText: "OCR Ready",
+    items: [
+      { label: "Surat Jalan (PO-2026-0001)", val: "Verified by SPPG", highlight: true },
+      { label: "Bukti Transfer OCR", val: "MATCHED (Rp 15M)" },
+      { label: "Stok Logistik Pangan", val: "12.5 Ton Terdistribusi" },
+    ]
+  },
+  SPPG: {
+    widgetTitle: "Penjaminan Pangan & Gizi",
+    badgeText: "QC Approved",
+    items: [
+      { label: "Target Gizi Siswa", val: "3.2 Juta Porsi/Hari", highlight: true },
+      { label: "Status PO Aktif", val: "PO-2026-0001 (Goods Received)" },
+      { label: "Takaran Porsi Maksimal", val: "Valid / Anti-Overreport" },
+    ]
+  },
+  Logistik: {
+    widgetTitle: "Tracking Distribution & Geofence",
+    badgeText: "< 50m GPS Valid",
+    items: [
+      { label: "Titik Radius Geofence", val: "Verified <= 50m", highlight: true },
+      { label: "Status Armada", val: "452 Pengiriman Transit" },
+      { label: "QR Scan Handover", val: "Terautentikasi" },
+    ]
+  },
+  "Admin Sekolah": {
+    widgetTitle: "Verifikasi Menu & Pelaporan",
+    badgeText: "Daily Log",
+    items: [
+      { label: "Penerimaan Porsi", val: "1,205 Siswa Terlayani", highlight: true },
+      { label: "Kesesuaian Jadwal", val: "Tepat Waktu (07:30 WIB)" },
+      { label: "Foto & Laporan QC", val: "Tergugah ke System" },
+    ]
+  },
+  Siswa: {
+    widgetTitle: "Ulasan Gizi & Feedback",
+    badgeText: "NLP Classified",
+    items: [
+      { label: "Rating Menu Hari Ini", val: "4.9 / 5.0 (Sangat Layak)", highlight: true },
+      { label: "Kategori Ulasan NLP", val: "Rasa & Kebersihan Baik" },
+      { label: "Status Kehadiran", val: "5/5 Hari Aktif" },
+    ]
+  }
+};
+
 const roles = [
   { 
     name: "Pemerintah", 
@@ -121,7 +175,7 @@ const roles = [
     href: "/goverment/dashboard",
     status: "Aktif",
     desc: "Monitoring & evaluasi program pendidikan nasional secara real-time.",
-    stats: [{ value: "1,240", label: "Sekolah" }, { value: "98%", label: "Coverage" }],
+    stats: [{ value: "1,240", label: "Sekolah (Simulasi)" }, { value: "98%", label: "Coverage (Simulasi)" }],
     progress: "w-[92%]"
   },
   { 
@@ -131,7 +185,7 @@ const roles = [
     href: "/vendor/dashboard",
     status: "Proses",
     desc: "Pengelolaan pengadaan, distribusi, dan stok logistik pangan.",
-    stats: [{ value: "86", label: "Supplier" }, { value: "12.5T", label: "Distribusi" }],
+    stats: [{ value: "86", label: "Supplier (Simulasi)" }, { value: "12.5T", label: "Distribusi (Simulasi)" }],
     progress: "w-[78%]"
   },
   { 
@@ -141,7 +195,7 @@ const roles = [
     href: "/sppg/dashboard",
     status: "Aktif",
     desc: "Sistem Penjaminan Pangan Gizi untuk program makan bergizi gratis.",
-    stats: [{ value: "3.2M", label: "Siswa" }, { value: "85%", label: "Tercover" }],
+    stats: [{ value: "3.2M", label: "Siswa (Simulasi)" }, { value: "85%", label: "Tercover (Simulasi)" }],
     progress: "w-[85%]"
   },
   { 
@@ -151,7 +205,7 @@ const roles = [
     href: "/logistik/dashboard",
     status: "Transit",
     desc: "Tracking pengiriman, rute distribusi, dan manajemen gudang.",
-    stats: [{ value: "452", label: "Pengiriman" }, { value: "64%", label: "Terkirim" }],
+    stats: [{ value: "452", label: "Pengiriman (Simulasi)" }, { value: "64%", label: "Terkirim (Simulasi)" }],
     progress: "w-[64%]"
   },
   { 
@@ -161,7 +215,7 @@ const roles = [
     href: "/sekolah/admin",
     status: "Aktif",
     desc: "Verifikasi data siswa, pelaporan harian, dan koordinasi program.",
-    stats: [{ value: "48", label: "Kelas" }, { value: "1,205", label: "Siswa" }],
+    stats: [{ value: "48", label: "Kelas (Simulasi)" }, { value: "1,205", label: "Siswa (Simulasi)" }],
     progress: "w-[88%]"
   },
   { 
@@ -171,7 +225,7 @@ const roles = [
     href: "/sekolah/siswa",
     status: "Online",
     desc: "Akses jadwal makan, laporan gizi, dan informasi program.",
-    stats: [{ value: "5/5", label: "Hari Aktif" }, { value: "96%", label: "Kehadiran" }],
+    stats: [{ value: "5/5", label: "Hari Aktif (Simulasi)" }, { value: "96%", label: "Kehadiran (Simulasi)" }],
     progress: "w-[96%]"
   },
 ];
@@ -181,15 +235,39 @@ export function RoleGateways() {
   const activeRole = roles.find(r => r.name === activeRoleName) || roles[0];
 
   return (
-    <section id="roles" className="pt-[clamp(40px,6vh,80px)] pb-[clamp(100px,12vh,180px)] px-[clamp(1.5rem,5vw,4rem)] bg-[#FAFAF7]">
-      <div className="max-w-[1280px] mx-auto">
+    <section id="roles" className="relative pt-[clamp(60px,7vh,90px)] pb-[clamp(80px,10vh,140px)] px-[clamp(1.5rem,5vw,4rem)] bg-white overflow-hidden">
+      {/* Tailark Color Boundary Cut (PhaseTimeline #F8FAFC to RoleGateways #FFFFFF) */}
+      <div className="absolute top-0 left-0 right-0 h-7 pointer-events-none z-10 overflow-hidden">
+        <svg className="w-full h-full" viewBox="0 0 1200 28" preserveAspectRatio="none">
+          <path
+            d="M 0 24 C 80 24, 120 0, 240 0 L 1200 0 L 1200 0 L 0 0 Z"
+            fill="#F8FAFC"
+          />
+          <path
+            d="M 0 24 C 80 24, 120 0, 240 0 L 1200 0"
+            fill="none"
+            stroke="#cbd5e1"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </div>
+
+      <div className="max-w-[1280px] mx-auto relative z-10">
         <SectionHeader 
-          label="ROLE GATEWAYS" 
+          label="AKSES PERAN" 
           headline="Akses Tersegmentasi, Kolaborasi Tersinkronisasi." 
           centered 
-          className="mb-6 lg:mb-8 [&_h2]:text-[clamp(1.3rem,4vw,3.5rem)]" 
+          className="mb-6 lg:mb-8 [&_h2]:text-[clamp(1.5rem,4vw,3.5rem)] [&_h2]:text-slate-900" 
         />
-        <p className="hidden lg:block text-slate-500 text-lg leading-relaxed text-center max-w-[700px] mx-auto mb-8">Setiap peran memiliki ruang kerja spesifik yang dirancang untuk menjaga integritas data dan efisiensi alur operasional B.O.G.A secara menyeluruh.</p>
+        <p className="hidden lg:block text-slate-600 text-lg leading-relaxed text-center max-w-[700px] mx-auto mb-8 font-medium">Setiap peran memiliki ruang kerja spesifik yang dirancang untuk menjaga integritas data dan efisiensi alur operasional B.O.G.A secara menyeluruh.</p>
+        
+        {/* Tailark Architectural Guideline Connector with Node Points */}
+        <div className="relative w-full mb-8 hidden lg:block">
+          <div className="border-t border-dashed border-slate-300/80 w-full" />
+          <div className="absolute left-1/6 -top-1.5 w-3 h-3 rounded-full border border-slate-400 bg-white flex items-center justify-center text-[7px] text-slate-500 font-mono">+</div>
+          <div className="absolute left-1/2 -top-1.5 w-3 h-3 rounded-full border border-slate-400 bg-white flex items-center justify-center text-[7px] text-slate-500 font-mono">+</div>
+          <div className="absolute left-5/6 -top-1.5 w-3 h-3 rounded-full border border-slate-400 bg-white flex items-center justify-center text-[7px] text-slate-500 font-mono">+</div>
+        </div>
         
         {/* Tab Buttons */}
         <div className="flex flex-wrap gap-3 mb-8 pb-4 pt-2 justify-center">
@@ -199,14 +277,13 @@ export function RoleGateways() {
               <button
                 key={role.name}
                 onClick={() => setActiveRoleName(role.name)}
-                className={`flex items-center justify-center ${isActive ? 'gap-2.5 px-5' : 'px-4'} py-3.5 rounded-2xl transition-all duration-300 flex-shrink-0 border-2 ${
+                className={`flex items-center justify-center ${isActive ? 'gap-2.5 px-6 shadow-md' : 'px-5'} py-3.5 rounded-2xl transition-all duration-300 flex-shrink-0 border-2 ${
                   isActive 
-                    ? `${role.theme.iconBg} ${role.theme.activeBorder} shadow-sm` 
-                    : 'bg-white border-transparent text-slate-500 hover:bg-slate-50 hover:text-slate-800'
+                    ? `bg-[#0F172A] border-[#0F172A] text-white` 
+                    : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400'
                 }`}
-                style={!isActive ? { border: '2px solid transparent' } : undefined}
               >
-                <role.icon className={`w-5 h-5 ${isActive ? '' : role.theme.iconColor}`} />
+                <role.icon className={`w-5 h-5 ${isActive ? 'text-cyan-400' : 'text-slate-500'}`} />
                 <AnimatePresence mode="popLayout">
                   {isActive && (
                     <motion.span 
@@ -214,7 +291,7 @@ export function RoleGateways() {
                       animate={{ width: "auto", opacity: 1 }}
                       exit={{ width: 0, opacity: 0 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="font-semibold text-[15px] whitespace-nowrap text-slate-900 overflow-hidden origin-left"
+                      className="font-bold text-[15px] whitespace-nowrap text-white overflow-hidden origin-left"
                     >
                       {role.name}
                     </motion.span>
@@ -234,7 +311,7 @@ export function RoleGateways() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.4, ease: "easeOut" }}
-              className={`bg-white border rounded-[24px] sm:rounded-[32px] p-6 sm:p-8 lg:p-12 w-full transition-colors duration-500 ${activeRole.theme.cardStyle}`}
+              className="bg-white border-2 border-slate-300 shadow-xl rounded-[28px] p-6 sm:p-8 lg:p-12 w-full"
             >
               <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
                 {/* Left Column */}
@@ -253,43 +330,71 @@ export function RoleGateways() {
                   </p>
                 </div>
 
-                {/* Right Column */}
-                <div className="flex-1 flex flex-col justify-center">
-                  <div className="flex items-center gap-4 sm:gap-6 py-5 px-5 sm:py-6 sm:px-8 bg-slate-50 rounded-2xl sm:rounded-[24px] mb-6 sm:mb-8 border border-slate-100">
-                    <div className="flex flex-col flex-1">
-                      <span className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-none mb-1.5 sm:mb-2 tracking-tight">
-                        <AnimatedNumber value={activeRole.stats[0].value} />
+                {/* Right Column: KokonutUI Style Bento Widget */}
+                <div className="flex-1 flex flex-col justify-between">
+                  <div>
+                    {/* Live Widget Header */}
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2 h-2 rounded-full bg-[#16A34A] animate-pulse" />
+                        <span className="text-xs font-extrabold text-[#0F172A] uppercase tracking-wider">
+                          {rolePreviews[activeRole.name]?.widgetTitle || "Live Operasional"}
+                        </span>
+                      </div>
+                      <span className="inline-flex items-center rounded-full bg-slate-900 border border-slate-800 text-cyan-400 text-[10px] font-bold px-3 py-1">
+                        {rolePreviews[activeRole.name]?.badgeText || "Simulasi"}
                       </span>
-                      <span className="text-[11px] sm:text-[13px] text-slate-500 font-bold uppercase tracking-wider">{activeRole.stats[0].label}</span>
                     </div>
-                    <div className="w-px h-12 sm:h-16 bg-slate-200" />
-                    <div className="flex flex-col flex-1 pl-2 sm:pl-4">
-                      <span className="text-3xl md:text-4xl font-extrabold text-slate-900 leading-none mb-1.5 sm:mb-2 tracking-tight">
-                        <AnimatedNumber value={activeRole.stats[1].value} />
-                      </span>
-                      <span className="text-[11px] sm:text-[13px] text-slate-500 font-bold uppercase tracking-wider">{activeRole.stats[1].label}</span>
+
+                    {/* Bento Mini Feature List */}
+                    <div className="bg-slate-900 rounded-2xl p-4 sm:p-5 mb-6 border border-slate-800 shadow-lg text-white space-y-3">
+                      {rolePreviews[activeRole.name]?.items.map((item, idx) => (
+                        <div key={idx} className="flex items-center justify-between bg-slate-800/60 rounded-xl p-3 border border-slate-700/50">
+                          <span className="text-xs font-medium text-slate-300">{item.label}</span>
+                          <span className={`text-xs font-mono font-bold ${item.highlight ? 'text-[#16A34A]' : 'text-slate-100'}`}>
+                            {item.val}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Stats Summary */}
+                    <div className="flex items-center gap-4 sm:gap-6 py-4 px-5 bg-slate-50 rounded-2xl mb-6 border border-slate-200">
+                      <div className="flex flex-col flex-1">
+                        <span className="text-2xl md:text-3xl font-black text-slate-900 leading-none mb-1 tracking-tight">
+                          <AnimatedNumber value={activeRole.stats[0].value} />
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] text-slate-500 font-extrabold uppercase tracking-wider">{activeRole.stats[0].label}</span>
+                      </div>
+                      <div className="w-px h-10 bg-slate-200" />
+                      <div className="flex flex-col flex-1 pl-2 sm:pl-4">
+                        <span className="text-2xl md:text-3xl font-black text-slate-900 leading-none mb-1 tracking-tight">
+                          <AnimatedNumber value={activeRole.stats[1].value} />
+                        </span>
+                        <span className="text-[10px] sm:text-[11px] text-slate-500 font-extrabold uppercase tracking-wider">{activeRole.stats[1].label}</span>
+                      </div>
                     </div>
                   </div>
 
                   <div>
-                    <div className="flex justify-between items-end mb-2.5 sm:mb-3">
-                      <span className="text-[11px] sm:text-[13px] font-bold text-slate-400 uppercase tracking-wider">Capaian Operasional</span>
-                      <span className={`text-base sm:text-lg font-extrabold text-slate-900`}>
+                    <div className="flex justify-between items-end mb-2">
+                      <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider">Capaian Operasional</span>
+                      <span className="text-sm font-black text-slate-900">
                         <AnimatedNumber value={activeRole.progress.replace('w-[','').replace(']','')} />
                       </span>
                     </div>
-                    <div className="h-3 sm:h-3.5 rounded-full mb-6 sm:mb-8 overflow-hidden bg-slate-100 shadow-inner relative">
+                    <div className="h-3 rounded-full mb-6 overflow-hidden bg-slate-200 shadow-inner relative">
                       <motion.div 
                         key={`bar-${activeRole.name}`}
                         initial={{ width: 0 }}
                         animate={{ width: activeRole.progress.replace('w-[','').replace(']','') }}
-                        transition={{ duration: 1.5, ease: "easeOut" }}
-                        className={`h-full rounded-full ${activeRole.theme.progress} absolute top-0 left-0`} 
+                        transition={{ duration: 1.2, ease: "easeOut" }}
+                        className="h-full rounded-full bg-[#1E3A5F] absolute top-0 left-0" 
                       />
                     </div>
-                    <Link href={activeRole.href} className={`flex items-center justify-between px-5 py-4 sm:px-8 sm:py-5 rounded-2xl sm:rounded-[20px] text-[14px] sm:text-[15px] font-bold transition-all duration-300 group shadow-sm ${activeRole.theme.btn}`}>
-                      <span>Akses Dashboard</span>
-                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 transition-transform duration-300 group-hover:translate-x-1 sm:group-hover:translate-x-2" />
+                    <Link href={activeRole.href} className="flex items-center justify-between px-6 py-4 rounded-xl text-sm font-black transition-all duration-300 group shadow-md bg-[#0F172A] text-white hover:bg-[#1E3A5F]">
+                      <span>Masuk Modul {activeRole.name}</span>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
                     </Link>
                   </div>
                 </div>

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useMemo, useState, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Link from "next/link";
-import type { AuthMode, Role } from "@/app/auth/login/page";
+import type { AuthModeType as AuthMode, RoleType as Role } from "@/app/auth/login/page";
 import { useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import { authClient } from "@/lib/auth-browser-client";
 import dynamic from "next/dynamic";
+import { ClipboardList, ShieldCheck, GraduationCap } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 const LocationPickerMapLibre = dynamic(
   () => import("@/components/ui/LocationPickerMapLibre"),
   {
     ssr: false,
-    loading: () => <div className="h-[220px] w-full animate-pulse rounded-2xl bg-slate-100" />
+    loading: () => <div className="h-[220px] w-full animate-pulse rounded-xl bg-slate-100" />
   }
 );
 
@@ -26,6 +28,59 @@ interface LoginFormProps {
   role?: Role;
   onModeChange?: (mode: AuthMode) => void;
   onBack?: () => void;
+}
+
+function RoleSubChoice({
+  title,
+  options,
+  value,
+  onChange,
+}: {
+  title: string;
+  options: { id: string; label: string; desc: string; icon: LucideIcon }[];
+  value: string;
+  onChange: (id: string) => void;
+}) {
+  return (
+    <div className="w-full text-left mt-2">
+      <p className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1 mb-1.5">
+        {title}
+      </p>
+      <div className="grid grid-cols-2 gap-2">
+        {options.map((opt) => {
+          const isActive = value === opt.id;
+          return (
+            <button
+              key={opt.id}
+              type="button"
+              onClick={() => onChange(opt.id)}
+              className={cn(
+                "flex items-center gap-2 p-2.5 rounded-lg border text-left transition-all focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2",
+                isActive
+                  ? "bg-slate-50 border-slate-900 shadow-sm ring-1 ring-slate-900"
+                  : "bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50"
+              )}
+            >
+              <div
+                className={cn(
+                  "flex-shrink-0 w-7 h-7 rounded-md flex items-center justify-center transition-colors",
+                  isActive ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-600"
+                )}
+              >
+                <opt.icon className="w-3.5 h-3.5" />
+              </div>
+              <div className="min-w-0">
+                <p className={cn("text-[11px] font-bold truncate", isActive ? "text-slate-900" : "text-slate-700")}>
+                  {opt.label}
+                </p>
+                <p className="text-[9px] text-slate-500 truncate">{opt.desc}</p>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
 }
 
 function FileUploadField({ label, value, onChange }: { label: string, value: string, onChange: (v: string) => void }) {
@@ -46,15 +101,15 @@ function FileUploadField({ label, value, onChange }: { label: string, value: str
   };
 
   return (
-    <div className="grid gap-1.5">
-      <Label className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">{label}</Label>
+    <div className="grid gap-1">
+      <Label className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">{label}</Label>
       <input type="file" accept=".pdf" className="hidden" ref={fileInputRef} onChange={handleFileChange} />
       <button
         type="button"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
         className={cn(
-          "flex items-center justify-between px-3 h-10 rounded-xl border transition-all text-xs font-medium",
+          "flex items-center justify-between px-3 h-9 text-sm rounded-lg border transition-all text-xs font-medium",
           value
             ? "border-emerald-200 bg-emerald-50/50 text-emerald-700"
             : "border-slate-200 bg-white text-slate-500 hover:border-slate-300"
@@ -108,6 +163,12 @@ export function LoginForm({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const isDev = process.env.NODE_ENV === "development";
 
+  // SPPG sub-area selection (Portal vs Admin)
+  const [sppgArea, setSppgArea] = useState<"portal" | "admin">("portal");
+
+  // Sekolah sub-area selection (Admin vs Siswa)
+  const [sekolahArea, setSekolahArea] = useState<"admin" | "siswa">("admin");
+
   // Auth fields
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -126,6 +187,17 @@ export function LoginForm({
   const [businessName, setBusinessName] = useState("");
   const [businessAddress, setBusinessAddress] = useState("");
   const [nibNumber, setNibNumber] = useState("");
+  // Deterministic wallet address - seeded for consistent rendering across rerenders
+  const walletSeed = useRef(7);
+  const walletAddress = useMemo(() => {
+    walletSeed.current = walletSeed.current + 1;
+    let s = walletSeed.current >>> 0;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+    const hex = ((t ^ (t >>> 14)) >>> 0).toString(16).padStart(40, '0');
+    return "0x" + hex;
+  }, []);
+
   const [npwpNumber, setNpwpNumber] = useState("");
   // Documents
   const [aktaUrl, setAktaUrl] = useState("");
@@ -211,91 +283,64 @@ export function LoginForm({
 
     setIsSubmitting(true);
     const loadingToast = toast.loading(
-      isSignup ? "Mendaftarkan vendor ke B.O.G.A..." : "Sedang mengautentikasi..."
+      isSignup ? "Mendaftarkan ke B.O.G.A..." : "Sedang mengautentikasi (Simulasi)..."
     );
 
     try {
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+
       if (isSignup) {
         if (role.id === "vendor") {
-          // ── REGISTRASI VENDOR MANUAL ──
-          const res = await fetch("http://localhost:3001/api/v1/auth/register-vendor", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              nik,
-              nama: `${firstName} ${lastName}`,
-              email: emailSignup,
-              telepon: phone,
-              password: passwordSignup,
-              alamatWallet: "0x" + Math.random().toString(16).substring(2, 42),
-              
-              // Profil Bisnis
-              business_name: businessName,
-              business_email: emailSignup,
-              business_phone: phone,
-              business_address: businessAddress,
-              latitude: lat,
-              longitude: lng,
-              npwp_number: npwpNumber,
-              nib_number: nibNumber,
-              logo_url: "https://r2.boga.id/temp/default-logo.png",
-              
-              // Dokumen Legalitas (URL R2)
-              akta_document_url: aktaUrl,
-              sk_kemenkumham_url: skUrl,
-              npwp_document_url: npwpUrl,
-              nib_document_url: nibUrl,
-              sppg_readiness_document_url: sppgReadyUrl,
-              
-              // Bank
-              bank_name: bankName,
-              bank_account_number: bankAccountNumber,
-              bank_account_name: bankAccountName
-            }),
-          });
-          const json = await res.json();
           toast.dismiss(loadingToast);
-
-          if (json.status === "success") {
-            toast.success("Registrasi Berhasil! Silakan Login.");
-            onModeChange?.("login");
-            setVendorStep(1);
-            return;
-          } else {
-            throw new Error(json.message || "Pendaftaran gagal.");
-          }
+          toast.success("Registrasi Simulasi Berhasil! Silakan Login.");
+          onModeChange?.("login");
+          setVendorStep(1);
+          return;
         }
         toast.dismiss(loadingToast);
         toast.error("Registrasi untuk role ini belum tersedia secara manual.");
         return;
       }
 
-      // ── LOGIN MANUAL (JWT) ──
-      const res = await fetch("http://localhost:3001/api/v1/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const json = await res.json();
-      toast.dismiss(loadingToast);
-
-      if (json.status !== "success") {
-        throw new Error(json.message || "Email atau Password salah!");
+      // Ã¢â€â‚¬Ã¢â€â‚¬ LOGIN MANUAL (MOCK) Ã¢â€â‚¬Ã¢â€â‚¬
+      if (!email || !password) {
+        throw new Error("Email dan Password tidak boleh kosong!");
       }
 
-      const { token, user } = json.data;
+      const dummyToken = "dummy_jwt_token_" + Date.now();
+      const dummyUser = {
+        id: role.id === "vendor" ? "VND-" + Math.random().toString(36).substr(2, 6).toUpperCase() : "USR-" + Math.random().toString(36).substr(2, 6).toUpperCase(),
+        nama: "Pengguna Demo " + role.label,
+        email: email,
+        peran: role.id
+      };
+
+      toast.dismiss(loadingToast);
 
       // Simpan Ke LocalStorage & Cookie
-      localStorage.setItem("boga_token", token);
-      localStorage.setItem("boga_user", JSON.stringify(user));
-      document.cookie = `boga_token=${token}; path=/`;
-      document.cookie = `boga_user_role=${user.peran}; path=/`;
-      document.cookie = `boga_vendor_id=${user.id}; path=/`;
+      localStorage.setItem("boga_token", dummyToken);
+      localStorage.setItem("boga_user", JSON.stringify(dummyUser));
+      localStorage.setItem("boga_is_auth", "true");
+      localStorage.setItem("boga_user_role", dummyUser.peran);
+      document.cookie = `boga_token=${dummyToken}; path=/`;
+      document.cookie = `boga_is_auth=true; path=/`;
+      document.cookie = `boga_user_role=${dummyUser.peran}; path=/`;
+      document.cookie = `boga_vendor_id=${dummyUser.id}; path=/`;
 
-      toast.success(`Selamat datang kembali, ${user.nama}!`);
+      toast.success(`Selamat datang kembali, ${dummyUser.nama}! (Simulasi)`);
 
       // Redirect berdasarkan role
-      const target = redirectByRole[user.peran.toLowerCase()] || "/vendor/dashboard";
+      const target =
+        role.id === "sppg"
+          ? sppgArea === "admin"
+            ? "/sppg/admin/dashboard"
+            : "/sppg/dashboard"
+          : role.id === "sekolah"
+            ? sekolahArea === "siswa"
+              ? "/sekolah/siswa"
+              : "/sekolah/admin"
+            : redirectByRole[dummyUser.peran.toLowerCase()] || "/vendor/dashboard";
       window.location.href = target;
     } catch (error) {
       toast.dismiss(loadingToast);
@@ -313,7 +358,7 @@ export function LoginForm({
     <form
       onSubmit={handleSubmit}
       className={cn(
-        "flex flex-col h-[620px] p-5 md:p-7 bg-background w-full overflow-hidden",
+        "flex flex-col p-4 md:p-6 w-full overflow-hidden text-slate-900",
         className
       )}
     >
@@ -330,7 +375,7 @@ export function LoginForm({
                 onBack?.();
               }
             }}
-            className="inline-flex items-center gap-1.5 text-[11px] text-gray-400 hover:text-gray-600 transition-colors mb-2"
+            className="inline-flex items-center gap-1.5 text-[11px] text-slate-900 hover:text-gray-600 transition-colors mb-2"
           >
             <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
               <path d="M15 18l-6-6 6-6" />
@@ -340,7 +385,7 @@ export function LoginForm({
         )}
 
         <div className="flex flex-col items-center gap-1 text-center">
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-primary text-primary-foreground text-base font-bold mb-1 shadow-lg shadow-black/10">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center bg-primary text-slate-900-foreground text-base font-bold mb-1 shadow-lg shadow-black/10">
             B
           </div>
 
@@ -353,7 +398,31 @@ export function LoginForm({
             </div>
           )}
 
-          <h1 className="text-lg font-extrabold tracking-tight text-foreground">
+          {!isSignup && role?.id === "sppg" && (
+            <RoleSubChoice
+              title="Login sebagai apa?"
+              value={sppgArea}
+              onChange={(v) => setSppgArea(v as "portal" | "admin")}
+              options={[
+                { id: "portal", label: "Portal SPPG", desc: "E-Katalog & Bidding", icon: ClipboardList },
+                { id: "admin", label: "SPPG Admin", desc: "Kontrak & Penilaian", icon: ShieldCheck },
+              ]}
+            />
+          )}
+
+          {!isSignup && role?.id === "sekolah" && (
+            <RoleSubChoice
+              title="Login sebagai apa?"
+              value={sekolahArea}
+              onChange={(v) => setSekolahArea(v as "admin" | "siswa")}
+              options={[
+                { id: "admin", label: "Admin Sekolah", desc: "Kelola sekolah", icon: ShieldCheck },
+                { id: "siswa", label: "Siswa", desc: "Rating & menu", icon: GraduationCap },
+              ]}
+            />
+          )}
+
+          <h1 className="text-base font-extrabold tracking-tight text-slate-900">
             {isSignup ? "Buat Akun Baru" : "Masuk"}
           </h1>
 
@@ -374,19 +443,19 @@ export function LoginForm({
       </div>
 
       {/* --- CONTENT (Scrollable Middle) --- */}
-      <div className="flex-1 overflow-y-auto pr-1.5 custom-scrollbar min-h-0 space-y-4">
-        {/* ── LOGIN fields ── */}
+      <div className="flex-1 overflow-y-auto pr-1.5 custom-scrollbar min-h-0 space-y-3">
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ LOGIN fields Ã¢â€â‚¬Ã¢â€â‚¬ */}
         {!isSignup && (
-          <div className="grid gap-3">
-            <div className="grid gap-1.5">
-              <Label htmlFor="email" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">
+          <div className="grid gap-2">
+            <div className="grid gap-1">
+              <Label htmlFor="email" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">
                 Email Address
               </Label>
               <Input
                 id="email"
                 type="email"
                 placeholder={role?.id === "vendor" ? "vendor@usaha.id" : role?.id === "sekolah" ? "admin@sekolah.sch.id" : "akun@instansi.id"}
-                className="h-10 rounded-xl border-border/70 bg-muted/20 focus-visible:ring-ring focus-visible:bg-background transition-all"
+                className="h-9 text-sm rounded-lg border-slate-200 bg-white focus-visible:ring-slate-900 transition-all text-slate-900"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
@@ -394,19 +463,19 @@ export function LoginForm({
               />
             </div>
 
-            <div className="grid gap-1.5">
+            <div className="grid gap-1">
               <div className="flex items-center">
-                <Label htmlFor="password" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">
+                <Label htmlFor="password" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">
                   Password
                 </Label>
-                <Link href="#" onClick={(e) => e.preventDefault()} className="ml-auto text-xs font-bold text-primary hover:text-primary/80 transition-colors">
+                <Link href="#" onClick={(e) => e.preventDefault()} className="ml-auto text-xs font-bold text-slate-900 hover:text-slate-900/80 transition-colors">
                   Lupa password?
                 </Link>
               </div>
               <Input
                 id="password"
                 type="password"
-                className="h-10 rounded-xl border-border/70 bg-muted/20 focus-visible:ring-ring focus-visible:bg-background transition-all"
+                className="h-9 text-sm rounded-lg border-slate-200 bg-white focus-visible:ring-slate-900 transition-all text-slate-900"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 autoComplete="current-password"
@@ -417,73 +486,73 @@ export function LoginForm({
           </div>
         )}
 
-        {/* ── SIGNUP fields ── */}
+        {/* Ã¢â€â‚¬Ã¢â€â‚¬ SIGNUP fields Ã¢â€â‚¬Ã¢â€â‚¬ */}
         {isSignup && (
-          <div className="grid gap-2.5">
+          <div className="grid gap-2">
             {/* Vendor Multi-step Signup */}
             {role?.id === "vendor" ? (
               <>
                 {vendorStep === 1 && (
-                  <div className="grid gap-2.5 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="nik" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">NIK (16 Digit)</Label>
-                      <Input id="nik" placeholder="3273..." className="h-10 rounded-xl" value={nik} onChange={(e) => setNik(e.target.value)} />
+                  <div className="grid gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="grid gap-1">
+                      <Label htmlFor="nik" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">NIK (16 Digit)</Label>
+                      <Input id="nik" placeholder="3273..." className="h-9 text-sm rounded-lg" value={nik} onChange={(e) => setNik(e.target.value)} />
                     </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="firstName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Depan</Label>
-                        <Input id="firstName" placeholder="Budi" className="h-10 rounded-xl" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="grid gap-1">
+                        <Label htmlFor="firstName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Depan</Label>
+                        <Input id="firstName" placeholder="Budi" className="h-9 text-sm rounded-lg" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                       </div>
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="lastName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Belakang</Label>
-                        <Input id="lastName" placeholder="Santoso" className="h-10 rounded-xl" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                      <div className="grid gap-1">
+                        <Label htmlFor="lastName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Belakang</Label>
+                        <Input id="lastName" placeholder="Santoso" className="h-9 text-sm rounded-lg" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                       </div>
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="emailSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Email Instansi</Label>
-                      <Input id="emailSignup" type="email" placeholder="nama@instansi.id" className="h-10 rounded-xl" value={emailSignup} onChange={(e) => setEmailSignup(e.target.value)} />
+                    <div className="grid gap-1">
+                      <Label htmlFor="emailSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Email Instansi</Label>
+                      <Input id="emailSignup" type="email" placeholder="nama@instansi.id" className="h-9 text-sm rounded-lg" value={emailSignup} onChange={(e) => setEmailSignup(e.target.value)} />
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="phone" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">No. Telepon / WA</Label>
-                      <Input id="phone" type="tel" placeholder="+62 8xx..." className="h-10 rounded-xl" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                    <div className="grid gap-1">
+                      <Label htmlFor="phone" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">No. Telepon / WA</Label>
+                      <Input id="phone" type="tel" placeholder="+62 8xx..." className="h-9 text-sm rounded-lg" value={phone} onChange={(e) => setPhone(e.target.value)} />
                     </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="passwordSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Kata Sandi</Label>
-                        <Input id="passwordSignup" type="password" placeholder="Min 8" className="h-10 rounded-xl" value={passwordSignup} onChange={(e) => setPasswordSignup(e.target.value)} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="grid gap-1">
+                        <Label htmlFor="passwordSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Kata Sandi</Label>
+                        <Input id="passwordSignup" type="password" placeholder="Min 8" className="h-9 text-sm rounded-lg" value={passwordSignup} onChange={(e) => setPasswordSignup(e.target.value)} />
                       </div>
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="confirmPassword" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Ulangi</Label>
-                        <Input id="confirmPassword" type="password" className="h-10 rounded-xl" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                      <div className="grid gap-1">
+                        <Label htmlFor="confirmPassword" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Ulangi</Label>
+                        <Input id="confirmPassword" type="password" className="h-9 text-sm rounded-lg" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                       </div>
                     </div>
                   </div>
                 )}
 
                 {vendorStep === 2 && (
-                  <div className="grid gap-2.5 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="businessName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Perusahaan / Usaha</Label>
-                      <Input id="businessName" placeholder="PT. Pangan Nusantara" className="h-10 rounded-xl" value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
+                  <div className="grid gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="grid gap-1">
+                      <Label htmlFor="businessName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Perusahaan / Usaha</Label>
+                      <Input id="businessName" placeholder="PT. Pangan Nusantara" className="h-9 text-sm rounded-lg" value={businessName} onChange={(e) => setBusinessName(e.target.value)} />
                     </div>
-                    <div className="grid grid-cols-2 gap-2.5">
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="nibNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">No. NIB</Label>
-                        <Input id="nibNumber" placeholder="9120..." className="h-10 rounded-xl" value={nibNumber} onChange={(e) => setNibNumber(e.target.value)} />
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="grid gap-1">
+                        <Label htmlFor="nibNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">No. NIB</Label>
+                        <Input id="nibNumber" placeholder="9120..." className="h-9 text-sm rounded-lg" value={nibNumber} onChange={(e) => setNibNumber(e.target.value)} />
                       </div>
-                      <div className="grid gap-1.5">
-                        <Label htmlFor="npwpNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">No. NPWP</Label>
-                        <Input id="npwpNumber" placeholder="01.234..." className="h-10 rounded-xl" value={npwpNumber} onChange={(e) => setNpwpNumber(e.target.value)} />
+                      <div className="grid gap-1">
+                        <Label htmlFor="npwpNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">No. NPWP</Label>
+                        <Input id="npwpNumber" placeholder="01.234..." className="h-9 text-sm rounded-lg" value={npwpNumber} onChange={(e) => setNpwpNumber(e.target.value)} />
                       </div>
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="businessAddress" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Alamat Lengkap Usaha</Label>
-                      <Input id="businessAddress" placeholder="Jl. Soekarno Hatta..." className="h-10 rounded-xl" value={businessAddress} onChange={(e) => setBusinessAddress(e.target.value)} />
+                    <div className="grid gap-1">
+                      <Label htmlFor="businessAddress" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Alamat Lengkap Usaha</Label>
+                      <Input id="businessAddress" placeholder="Jl. Soekarno Hatta..." className="h-9 text-sm rounded-lg" value={businessAddress} onChange={(e) => setBusinessAddress(e.target.value)} />
                     </div>
 
-                    <div className="grid gap-1.5 mt-2">
-                      <Label className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Titik Lokasi (Map)</Label>
-                      <div className="h-[220px] rounded-2xl overflow-hidden border border-slate-200 shadow-inner">
+                    <div className="grid gap-1 mt-2">
+                      <Label className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Titik Lokasi (Map)</Label>
+                      <div className="h-[220px] rounded-xl overflow-hidden border border-slate-200 shadow-inner">
                         <LocationPickerMapLibre
                           initialLat={lat}
                           initialLng={lng}
@@ -501,13 +570,13 @@ export function LoginForm({
                 )}
 
                 {vendorStep === 3 && (
-                  <div className="grid gap-2.5 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <div className="rounded-xl border border-amber-100 bg-amber-50 p-2.5 flex gap-2.5">
+                  <div className="grid gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="rounded-lg border border-amber-100 bg-amber-50 p-2.5 flex gap-2">
                       <div className="mt-0.5 shrink-0 w-4 h-4 rounded-full bg-amber-200 flex items-center justify-center text-amber-700">
                         <svg width={10} height={10} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round"><path d="M12 8v4M12 16h.01" /></svg>
                       </div>
                       <p className="text-[10px] text-amber-700 leading-tight">
-                        Unggah dokumen legalitas dalam format <b>PDF (Maks. 5MB)</b>. Dokumen akan di-hash dan dicatat ke Blockchain B.O.G.A.
+                        Unggah dokumen legalitas dalam format <b>PDF (Maks. 5MB)</b>. Dokumen akan di-hash dan dicatat ke Ledger B.O.G.A.
                       </p>
                     </div>
 
@@ -520,42 +589,42 @@ export function LoginForm({
                 )}
 
                 {vendorStep === 4 && (
-                  <div className="grid gap-2.5 animate-in fade-in slide-in-from-right-4 duration-300">
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="bankName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Bank</Label>
+                  <div className="grid gap-2 animate-in fade-in slide-in-from-right-4 duration-300">
+                    <div className="grid gap-1">
+                      <Label htmlFor="bankName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Bank</Label>
                       <select
                         id="bankName"
                         value={bankName}
                         onChange={(e) => setBankName(e.target.value)}
-                        className="flex h-10 w-full rounded-xl border border-input bg-muted/20 px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        className="flex h-10 w-full rounded-lg border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
-                        <option value="">— Pilih Bank —</option>
+                        <option value="">Ã¢â‚¬â€ Pilih Bank Ã¢â‚¬â€</option>
                         {["Bank BJB", "Bank BRI", "Bank Mandiri", "Bank BNI", "Bank BCA", "Bank CIMB Niaga", "Bank Syariah Indonesia"].map(b => (
                           <option key={b} value={b}>{b}</option>
                         ))}
                       </select>
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="bankAccountNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nomor Rekening</Label>
-                      <Input id="bankAccountNumber" placeholder="1234567890" className="h-10 rounded-xl" value={bankAccountNumber} onChange={(e) => setBankAccountNumber(e.target.value)} />
+                    <div className="grid gap-1">
+                      <Label htmlFor="bankAccountNumber" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nomor Rekening</Label>
+                      <Input id="bankAccountNumber" placeholder="1234567890" className="h-9 text-sm rounded-lg" value={bankAccountNumber} onChange={(e) => setBankAccountNumber(e.target.value)} />
                     </div>
-                    <div className="grid gap-1.5">
-                      <Label htmlFor="bankAccountName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Atas Nama Rekening</Label>
-                      <Input id="bankAccountName" placeholder="Nama sesuai buku tabungan" className="h-10 rounded-xl" value={bankAccountName} onChange={(e) => setBankAccountName(e.target.value)} />
+                    <div className="grid gap-1">
+                      <Label htmlFor="bankAccountName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Atas Nama Rekening</Label>
+                      <Input id="bankAccountName" placeholder="Nama sesuai buku tabungan" className="h-9 text-sm rounded-lg" value={bankAccountName} onChange={(e) => setBankAccountName(e.target.value)} />
                     </div>
                   </div>
                 )}
 
                 {vendorStep === 5 && (
-                  <div className="grid gap-3.5 animate-in fade-in slide-in-from-right-4 duration-300 pb-4">
-                    <div className="rounded-xl border border-emerald-100 bg-emerald-50/50 p-3">
+                  <div className="grid gap-2 animate-in fade-in slide-in-from-right-4 duration-300 pb-4">
+                    <div className="rounded-lg border border-emerald-100 bg-emerald-50/50 p-3">
                       <p className="text-[10px] text-emerald-800 font-medium leading-relaxed">
-                        Konfirmasi pendaftaran vendor Anda di bawah ini. Pastikan data sudah sesuai sebelum dicatat ke Blockchain.
+                        Konfirmasi pendaftaran vendor Anda di bawah ini. Pastikan data sudah sesuai sebelum dicatat ke Ledger.
                       </p>
                     </div>
 
                     {/* --- Section 1: Identitas Perwakilan --- */}
-                    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-slate-100 bg-white shadow-sm overflow-hidden">
                       <div className="px-3.5 py-2 bg-slate-50 flex items-center justify-between border-b border-slate-100">
                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">1. Identitas Perwakilan</p>
                         {nik && firstName && lastName && emailSignup && phone ? (
@@ -589,7 +658,7 @@ export function LoginForm({
                     </div>
 
                     {/* --- Section 2: Data Perusahaan --- */}
-                    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-slate-100 bg-white shadow-sm overflow-hidden">
                       <div className="px-3.5 py-2 bg-slate-50 flex items-center justify-between border-b border-slate-100">
                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">2. Data Perusahaan</p>
                         {businessName && businessAddress && nibNumber && npwpNumber ? (
@@ -627,7 +696,7 @@ export function LoginForm({
                     </div>
 
                     {/* --- Section 3: Checklist Dokumen --- */}
-                    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-slate-100 bg-white shadow-sm overflow-hidden">
                       <div className="px-3.5 py-2 bg-slate-50 flex items-center justify-between border-b border-slate-100">
                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">3. Checklist Dokumen</p>
                         <span className="text-[9px] font-black text-slate-600 bg-slate-200 px-2 py-0.5 rounded-full">
@@ -657,7 +726,7 @@ export function LoginForm({
                     </div>
 
                     {/* --- Section 4: Data Rekening --- */}
-                    <div className="rounded-2xl border border-slate-100 bg-white shadow-sm overflow-hidden">
+                    <div className="rounded-xl border border-slate-100 bg-white shadow-sm overflow-hidden">
                       <div className="px-3.5 py-2 bg-slate-50 flex items-center justify-between border-b border-slate-100">
                         <p className="text-[9px] font-black uppercase text-slate-400 tracking-widest">4. Data Rekening</p>
                         {bankName && bankAccountNumber && bankAccountName ? (
@@ -689,31 +758,31 @@ export function LoginForm({
             ) : (
               // Default Signup for other roles
               <>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <div className="grid gap-1.5">
-                    <Label htmlFor="firstName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Depan</Label>
-                    <Input id="firstName" placeholder="Budi" className="h-10 rounded-xl" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+                <div className="grid grid-cols-2 gap-2">
+                  <div className="grid gap-1">
+                    <Label htmlFor="firstName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Depan</Label>
+                    <Input id="firstName" placeholder="Budi" className="h-9 text-sm rounded-lg" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                   </div>
-                  <div className="grid gap-1.5">
-                    <Label htmlFor="lastName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Nama Belakang</Label>
-                    <Input id="lastName" placeholder="Santoso" className="h-10 rounded-xl" value={lastName} onChange={(e) => setLastName(e.target.value)} />
+                  <div className="grid gap-1">
+                    <Label htmlFor="lastName" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Nama Belakang</Label>
+                    <Input id="lastName" placeholder="Santoso" className="h-9 text-sm rounded-lg" value={lastName} onChange={(e) => setLastName(e.target.value)} />
                   </div>
                 </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="emailSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Email Instansi</Label>
-                  <Input id="emailSignup" type="email" placeholder="nama@instansi.id" className="h-10 rounded-xl" value={emailSignup} onChange={(e) => setEmailSignup(e.target.value)} />
+                <div className="grid gap-1">
+                  <Label htmlFor="emailSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Email Instansi</Label>
+                  <Input id="emailSignup" type="email" placeholder="nama@instansi.id" className="h-9 text-sm rounded-lg" value={emailSignup} onChange={(e) => setEmailSignup(e.target.value)} />
                 </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="phone" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">No. Telepon</Label>
-                  <Input id="phone" type="tel" placeholder="+62 8xx..." className="h-10 rounded-xl" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <div className="grid gap-1">
+                  <Label htmlFor="phone" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">No. Telepon</Label>
+                  <Input id="phone" type="tel" placeholder="+62 8xx..." className="h-9 text-sm rounded-lg" value={phone} onChange={(e) => setPhone(e.target.value)} />
                 </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="passwordSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Kata Sandi</Label>
-                  <Input id="passwordSignup" type="password" placeholder="Min. 8 karakter" className="h-10 rounded-xl" value={passwordSignup} onChange={(e) => setPasswordSignup(e.target.value)} />
+                <div className="grid gap-1">
+                  <Label htmlFor="passwordSignup" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Kata Sandi</Label>
+                  <Input id="passwordSignup" type="password" placeholder="Min. 8 karakter" className="h-9 text-sm rounded-lg" value={passwordSignup} onChange={(e) => setPasswordSignup(e.target.value)} />
                 </div>
-                <div className="grid gap-1.5">
-                  <Label htmlFor="confirmPassword" className="font-bold text-[10px] uppercase tracking-[0.15em] text-gray-400 ml-1">Konfirmasi Sandi</Label>
-                  <Input id="confirmPassword" type="password" placeholder="Ulangi" className="h-10 rounded-xl" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                <div className="grid gap-1">
+                  <Label htmlFor="confirmPassword" className="font-bold text-[10px] uppercase tracking-[0.15em] text-slate-900 ml-1">Konfirmasi Sandi</Label>
+                  <Input id="confirmPassword" type="password" placeholder="Ulangi" className="h-9 text-sm rounded-lg" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
                 </div>
               </>
             )}
@@ -722,19 +791,19 @@ export function LoginForm({
       </div>
 
       {/* --- FOOTER (Fixed) --- */}
-      <div className="shrink-0 pt-4 border-t border-slate-100 bg-background/80 backdrop-blur-sm mt-auto">
+      <div className="shrink-0 pt-4 mt-auto">
         {isSignup && (
-          <label className="flex items-start gap-2 cursor-pointer mb-3 px-1">
+          <label className="flex items-start gap-2 cursor-pointer mb-2 px-1">
             <input type="checkbox" className="mt-0.5 rounded accent-[hsl(var(--primary))] cursor-pointer shrink-0" defaultChecked />
             <span className="text-[10px] text-gray-500 leading-tight">
-              Saya menyetujui <span className="font-bold text-primary">Syarat & Ketentuan</span> serta <span className="font-bold text-primary">Kebijakan Privasi</span> B.O.G.A
+              Saya menyetujui <span className="font-bold text-slate-900">Syarat & Ketentuan</span> serta <span className="font-bold text-slate-900">Kebijakan Privasi</span> B.O.G.A
             </span>
           </label>
         )}
 
         <Button
           type="submit"
-          className="w-full h-11 rounded-xl font-bold text-primary-foreground bg-primary shadow-lg shadow-black/10 hover:bg-primary/90 transition-all duration-300"
+          className="w-full h-10 rounded-lg font-bold text-white bg-slate-900 shadow-sm hover:bg-slate-800 transition-all duration-300"
           disabled={isSubmitting}
           style={isSignup && role?.id === "vendor" ? { background: "#065F46" } : undefined}
         >
@@ -746,7 +815,7 @@ export function LoginForm({
           <button
             type="button"
             onClick={() => onModeChange?.(isSignup ? "login" : "signup")}
-            className="font-bold text-primary hover:underline"
+            className="font-bold text-slate-900 hover:underline"
           >
             {isSignup ? "Masuk di sini" : "Daftar sekarang"}
           </button>

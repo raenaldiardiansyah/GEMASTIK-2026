@@ -81,10 +81,10 @@ export function AlertBanner({ alerts }: AlertBannerProps) {
                 <div className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", cfg.strip)} aria-hidden />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium leading-relaxed">
+                  <p className="text-sm font-bold text-slate-900 leading-relaxed">
                     {alert.message}
                     {alert.anchor ? (
-                      <span className="ml-1 opacity-80">— {alert.anchor}</span>
+                      <span className="ml-1 text-slate-700 font-semibold">— {alert.anchor}</span>
                     ) : null}
                   </p>
                 </div>

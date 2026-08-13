@@ -116,14 +116,14 @@ function CountdownBar({ hoursLeft, totalHours = 48 }: { hoursLeft: number; total
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between text-[9px] font-black uppercase tracking-wider">
-        <span className="flex items-center gap-1 text-gray-500">
+        <span className="flex items-center gap-1 text-slate-800 font-extrabold">
           <Timer className="w-3 h-3" /> Sisa Waktu BGN
         </span>
         <span style={{ color }} className={isUrgent ? "animate-pulse" : ""}>
           {hoursLeft}j tersisa
         </span>
       </div>
-      <div className="h-1.5 w-full bg-gray-100 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-slate-200 rounded-full overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
@@ -165,34 +165,34 @@ function RefundModal({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/30 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4"
     >
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
-        className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
+        className="w-full max-w-md bg-white rounded-3xl border border-slate-200 overflow-hidden"
       >
-        <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
+        <div className="px-6 py-5 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
           <div>
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-[0.2em]">Eksekusi Refund</p>
-            <h3 className="text-base font-black text-gray-900">{refund.id}</h3>
+            <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Eksekusi Refund</p>
+            <h3 className="text-base font-black text-slate-900">{refund.id}</h3>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100 transition-all">
+          <button onClick={onClose} className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-all">
             <X className="w-4 h-4" />
           </button>
         </div>
 
         <div className="p-6 space-y-4">
           {/* Summary */}
-          <div className="flex gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-100">
+          <div className="flex gap-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
             <div>
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Vendor</p>
-              <p className="text-sm font-black text-gray-900">{refund.vendorNama}</p>
+              <p className="text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1">Vendor</p>
+              <p className="text-sm font-black text-slate-900">{refund.vendorNama}</p>
             </div>
-            <div className="w-px bg-gray-200" />
+            <div className="w-px bg-slate-200" />
             <div>
-              <p className="text-[9px] font-black text-gray-400 uppercase tracking-wider mb-1">Nilai Refund</p>
-              <p className="text-sm font-black text-red-600">
+              <p className="text-[10px] font-black text-slate-700 uppercase tracking-wider mb-1">Nilai Refund</p>
+              <p className="text-sm font-black text-red-700">
                 Rp {refund.nilaiRp.toLocaleString("id-ID")}
               </p>
             </div>
@@ -204,11 +204,11 @@ function RefundModal({
               animate={{ opacity: 1, scale: 1 }}
               className="flex flex-col items-center py-6 gap-3"
             >
-              <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center">
-                <CheckCircle2 className="w-7 h-7 text-emerald-600" />
+              <div className="w-14 h-14 rounded-full bg-emerald-100 flex items-center justify-center border border-emerald-200">
+                <CheckCircle2 className="w-7 h-7 text-emerald-700" />
               </div>
-              <p className="text-sm font-black text-gray-900">Refund Berhasil Dieksekusi</p>
-              <div className="flex items-center gap-2 text-[10px] font-bold text-red-500">
+              <p className="text-sm font-black text-slate-900">Refund Berhasil Dieksekusi</p>
+              <div className="flex items-center gap-2 text-xs font-black text-red-700">
                 <TrendingDown className="w-3.5 h-3.5" />
                 Reputasi vendor turun -{refund.reputasiPenurunan} poin
               </div>
@@ -216,7 +216,7 @@ function RefundModal({
           ) : step === "input" ? (
             <>
               <div>
-                <label className="block text-[9px] font-black text-gray-500 uppercase tracking-widest mb-2">
+                <label className="block text-[10px] font-black text-slate-800 uppercase tracking-widest mb-2">
                   Alasan Eksekusi *
                 </label>
                 <textarea
@@ -224,13 +224,13 @@ function RefundModal({
                   onChange={e => setAlasan(e.target.value)}
                   placeholder="Tulis alasan eksekusi refund secara ringkas..."
                   rows={3}
-                  className="w-full rounded-xl border border-gray-200 px-4 py-3 text-xs font-medium text-gray-700 placeholder:text-gray-300 focus:ring-2 focus:ring-indigo-500/20 outline-none resize-none"
+                  className="w-full rounded-xl border border-slate-200 px-4 py-3 text-xs font-bold text-slate-900 placeholder:text-slate-400 focus:ring-2 focus:ring-[#213555]/20 outline-none resize-none"
                 />
               </div>
               <button
                 disabled={!alasan.trim()}
                 onClick={() => setStep("confirm")}
-                className="w-full py-3 rounded-xl bg-red-600 hover:bg-red-700 disabled:bg-gray-200 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                className="w-full py-3 rounded-xl bg-red-700 hover:bg-red-800 disabled:bg-slate-200 text-white text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2"
               >
                 <Zap className="w-4 h-4" /> Lanjut ke Konfirmasi
               </button>
@@ -238,20 +238,20 @@ function RefundModal({
           ) : (
             <>
               <div className="p-4 bg-red-50 border border-red-200 rounded-2xl space-y-2">
-                <p className="text-[10px] font-black text-red-700 uppercase tracking-wider">⚠ Konfirmasi Tindakan Ireversibel</p>
-                <p className="text-xs text-red-600 font-medium">
+                <p className="text-[10px] font-black text-red-800 uppercase tracking-wider">⚠ Konfirmasi Tindakan Ireversibel</p>
+                <p className="text-xs text-red-700 font-bold">
                   Dana <strong>Rp {refund.nilaiRp.toLocaleString("id-ID")}</strong> akan dikembalikan ke kas negara. Reputasi vendor akan turun <strong>-{refund.reputasiPenurunan} poin</strong>. Tindakan ini tidak dapat dibatalkan.
                 </p>
               </div>
 
               <div className="flex gap-3">
-                <button onClick={() => setStep("input")} className="flex-1 py-3 rounded-xl border border-gray-200 text-[10px] font-black text-gray-500 uppercase tracking-widest hover:bg-gray-50 transition-all">
+                <button onClick={() => setStep("input")} className="flex-1 py-3 rounded-xl border border-slate-200 text-xs font-black text-slate-800 uppercase tracking-wider hover:bg-slate-50 transition-all">
                   Kembali
                 </button>
                 <button
                   onClick={handleExecute}
                   disabled={executing}
-                  className="flex-1 py-3 rounded-xl bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2 disabled:opacity-70"
+                  className="flex-1 py-3 rounded-xl bg-red-700 hover:bg-red-800 text-white text-xs font-black uppercase tracking-wider transition-all flex items-center justify-center gap-2 disabled:opacity-70"
                 >
                   {executing ? <RotateCcw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4" />}
                   {executing ? "Memproses..." : "Eksekusi Refund"}
@@ -301,23 +301,23 @@ export default function VerifikasiPage() {
         <PageHeader
           title={
             <span className="inline-flex items-center gap-3">
-              <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-role-primary text-white">
+              <span className="inline-flex size-11 items-center justify-center rounded-2xl bg-[#213555] text-white">
                 <ShieldCheck className="size-5" />
               </span>
-              <span>Verifikasi & Arbitrase</span>
+              <span className="font-black text-slate-900">Verifikasi & Arbitrase</span>
             </span>
           }
           subtitle="Panel pengelolaan sengketa dan pengembalian kas negara."
           actions={
             <div className="flex flex-wrap items-center gap-2">
               {pendingCount > 0 ? (
-                <span className="inline-flex items-center gap-2 rounded-full border border-status-danger/25 bg-status-danger-bg px-4 py-2 text-xs font-medium uppercase tracking-wide text-status-danger">
-                  <span className="size-2 rounded-full bg-status-danger" aria-hidden />
+                <span className="inline-flex items-center gap-2 rounded-full border border-red-200 bg-red-50 px-4 py-2 text-xs font-black uppercase tracking-wide text-red-700">
+                  <span className="size-2 rounded-full bg-red-600 animate-pulse" aria-hidden />
                   {pendingCount} sengketa aktif
                 </span>
               ) : null}
               {refundReady > 0 ? (
-                <span className="inline-flex items-center gap-2 rounded-full border border-status-warning/25 bg-status-warning-bg px-4 py-2 text-xs font-medium uppercase tracking-wide text-status-warning">
+                <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-xs font-black uppercase tracking-wide text-amber-800">
                   <Zap className="size-4" aria-hidden />
                   {refundReady} siap dieksekusi
                 </span>
@@ -329,7 +329,7 @@ export default function VerifikasiPage() {
       <VendorVerificationDropdown />
       <SppgReceivingDropdown />
 
-      <div className="w-fit rounded-full border border-border bg-surface p-1 shadow-[var(--shadow-card)]">
+      <div className="w-fit rounded-full border border-slate-300 bg-white p-1">
         {([
           { key: "arbitrase", label: "Panel Arbitrase BGN", icon: ShieldCheck, badge: pendingCount },
           { key: "refund", label: "Kendali Refund", icon: RotateCcw, badge: refundReady },
@@ -338,16 +338,16 @@ export default function VerifikasiPage() {
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
             className={cn(
-              "relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-colors",
+              "relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-black uppercase tracking-wider transition-colors",
               activeTab === tab.key
-                ? "bg-surface-raised text-foreground"
-                : "text-muted-foreground hover:bg-surface-raised/70 hover:text-foreground"
+                ? "bg-[#213555] text-white"
+                : "text-slate-800 hover:bg-slate-100 hover:text-slate-900"
             )}
           >
             <tab.icon className="size-4" />
             <span>{tab.label}</span>
             {tab.badge > 0 && (
-              <span className="inline-flex size-5 items-center justify-center rounded-full bg-status-danger text-xs font-semibold text-white">
+              <span className="inline-flex size-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-black text-white">
                 {tab.badge}
               </span>
             )}
@@ -366,46 +366,46 @@ export default function VerifikasiPage() {
             className="space-y-4"
           >
             {cases.length === 0 ? (
-              <div className="flex flex-col items-center py-24 bg-white rounded-3xl border border-gray-100">
-                <div className="w-16 h-16 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4">
-                  <ShieldCheck className="w-8 h-8 text-emerald-500" />
+              <div className="flex flex-col items-center py-24 bg-white rounded-3xl border border-slate-200">
+                <div className="w-16 h-16 rounded-2xl bg-emerald-50 border border-emerald-200 flex items-center justify-center mb-4">
+                  <ShieldCheck className="w-8 h-8 text-emerald-700" />
                 </div>
-                <p className="text-base font-black text-gray-800">Tidak ada sengketa aktif</p>
-                <p className="text-xs text-gray-400 mt-1">Semua kasus telah diselesaikan</p>
+                <p className="text-base font-black text-slate-900">Tidak ada sengketa aktif</p>
+                <p className="text-xs font-bold text-slate-700 mt-1">Semua kasus telah diselesaikan</p>
               </div>
             ) : (
               cases.map(c => (
                 <motion.div
                   key={c.id}
                   layout
-                  className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
+                  className="bg-white rounded-3xl border border-slate-200 overflow-hidden"
                 >
                   {/* Case Header */}
                   <button
                     onClick={() => setExpandedCase(expandedCase === c.id ? null : c.id)}
-                    className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left hover:bg-gray-50/50 transition-colors"
+                    className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left hover:bg-slate-50/80 transition-colors"
                   >
                     <div className="flex items-start gap-4">
-                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 ${
-                        c.deadline <= 12 ? "bg-red-500" : c.deadline <= 24 ? "bg-amber-500" : "bg-indigo-500"
+                      <div className={`w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 font-black ${
+                        c.deadline <= 12 ? "bg-red-700" : c.deadline <= 24 ? "bg-amber-600" : "bg-[#213555]"
                       }`}>
                         <AlertCircle className="w-5 h-5" />
                       </div>
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{c.id}</span>
-                          <span className={`text-[8px] font-black px-2 py-0.5 rounded-full ${
-                            c.status === "aktif" ? "bg-red-100 text-red-600" : "bg-emerald-100 text-emerald-600"
+                          <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{c.id}</span>
+                          <span className={`text-[9px] font-black px-2 py-0.5 rounded-full border ${
+                            c.status === "aktif" ? "bg-red-100 text-red-800 border-red-200" : "bg-emerald-100 text-emerald-800 border-emerald-200"
                           }`}>
                             {c.status.toUpperCase()}
                           </span>
                         </div>
-                        <p className="text-sm font-bold text-gray-900">{c.vendorNama}</p>
-                        <p className="text-xs text-gray-500 mt-0.5">{c.deskripsi}</p>
-                        <p className="text-[9px] text-gray-400 mt-1">Dilaporkan: {c.dilaporkan}</p>
+                        <p className="text-sm font-black text-slate-900">{c.vendorNama}</p>
+                        <p className="text-xs font-bold text-slate-800 mt-0.5">{c.deskripsi}</p>
+                        <p className="text-[10px] font-extrabold text-slate-700 mt-1">Dilaporkan: {c.dilaporkan}</p>
                       </div>
                     </div>
-                    <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform mt-1 ${expandedCase === c.id ? "rotate-180" : ""}`} />
+                    <ChevronDown className={`w-4 h-4 text-slate-700 flex-shrink-0 transition-transform mt-1 ${expandedCase === c.id ? "rotate-180" : ""}`} />
                   </button>
 
                   {/* Countdown */}
@@ -420,24 +420,24 @@ export default function VerifikasiPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden border-t border-gray-100"
+                        className="overflow-hidden border-t border-slate-200"
                       >
                         <div className="p-6 space-y-5">
                           <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                             {/* Timeline */}
                             <div>
-                              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                              <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest mb-3">
                                 Timeline Aktivitas
                               </p>
                               <div className="space-y-2">
                                 {c.timeline.map((t, i) => (
                                   <div key={i} className="flex items-start gap-3">
-                                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-indigo-50 flex items-center justify-center">
-                                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                                    <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center">
+                                      <div className="w-1.5 h-1.5 rounded-full bg-[#213555]" />
                                     </div>
                                     <div>
-                                      <p className="text-xs font-bold text-gray-700">{t.aksi}</p>
-                                      <p className="text-[9px] text-gray-400">{t.waktu} WIB — {t.oleh}</p>
+                                      <p className="text-xs font-black text-slate-900">{t.aksi}</p>
+                                      <p className="text-[10px] font-bold text-slate-700">{t.waktu} WIB — {t.oleh}</p>
                                     </div>
                                   </div>
                                 ))}
@@ -449,22 +449,22 @@ export default function VerifikasiPage() {
                               {/* Forensik Hash */}
                               <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <FileSearch className="w-3.5 h-3.5 text-indigo-500" />
-                                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                                  <FileSearch className="w-3.5 h-3.5 text-[#213555]" />
+                                  <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest">
                                     Hash Forensik
                                   </p>
                                   <button
                                     onClick={() => router.push("/goverment/riwayat")}
-                                    className="text-[8px] font-black text-indigo-500 hover:text-indigo-700 uppercase tracking-wider"
+                                    className="text-[9px] font-black text-[#213555] hover:underline uppercase tracking-wider"
                                   >
                                     Lihat Riwayat →
                                   </button>
                                 </div>
-                                <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 font-mono">
-                                  <span className="flex-1 text-[10px] text-gray-700">{c.forHash}</span>
+                                <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono">
+                                  <span className="flex-1 text-xs font-bold text-slate-900">{c.forHash}</span>
                                   <button
                                     onClick={() => handleCopyHash(c.forHash, c.id)}
-                                    className="flex items-center gap-1 text-[8px] font-black text-gray-400 hover:text-indigo-600 transition-colors"
+                                    className="flex items-center gap-1 text-[9px] font-black text-slate-700 hover:text-[#213555] transition-colors"
                                   >
                                     <Copy className="w-3 h-3" />
                                     {copiedHash === c.id ? "Disalin!" : "Salin"}
@@ -475,8 +475,8 @@ export default function VerifikasiPage() {
                               {/* Route Minimap */}
                               <div>
                                 <div className="flex items-center gap-2 mb-2">
-                                  <Route className="w-3.5 h-3.5 text-indigo-500" />
-                                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                                  <Route className="w-3.5 h-3.5 text-[#213555]" />
+                                  <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest">
                                     Rute Pengiriman Sengketa
                                   </p>
                                 </div>
@@ -494,16 +494,16 @@ export default function VerifikasiPage() {
                           </div>
 
                           {/* Action Buttons */}
-                          <div className="flex gap-3 pt-2 border-t border-gray-100">
+                          <div className="flex gap-3 pt-2 border-t border-slate-200">
                             <button
                               onClick={() => setCases(prev => prev.map(x => x.id === c.id ? { ...x, status: "resolusi" } : x))}
-                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-gray-200 text-gray-600 text-[10px] font-black uppercase tracking-wider hover:border-gray-300 hover:bg-gray-50 transition-all"
+                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl border-2 border-slate-300 text-slate-900 text-xs font-black uppercase tracking-wider hover:border-slate-400 hover:bg-slate-100 transition-all"
                             >
                               <Eye className="w-3.5 h-3.5" /> Tinjau Dokumen
                             </button>
                             <button
                               onClick={() => setCases(prev => prev.map(x => x.id === c.id ? { ...x, status: "selesai" } : x))}
-                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-black uppercase tracking-wider transition-all shadow-md shadow-emerald-500/20"
+                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-black uppercase tracking-wider transition-all"
                             >
                               <BadgeCheck className="w-4 h-4" /> Resolusi Selesai
                             </button>
@@ -513,7 +513,7 @@ export default function VerifikasiPage() {
                                 if (refund) setRefundModal(refund);
                                 else setActiveTab("refund");
                               }}
-                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider transition-all shadow-md shadow-red-500/20"
+                              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-red-700 hover:bg-red-800 text-white text-xs font-black uppercase tracking-wider transition-all"
                             >
                               <Zap className="w-4 h-4" /> Proses Refund
                             </button>
@@ -540,13 +540,13 @@ export default function VerifikasiPage() {
             {/* Summary Bar */}
             <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "Total Nilai Refund", value: `Rp ${refunds.reduce((a, r) => a + r.nilaiRp, 0).toLocaleString("id-ID")}`, color: "text-red-600" },
-                { label: "Siap Dieksekusi", value: String(refunds.filter(r => r.status === "siap_eksekusi").length), color: "text-amber-600" },
-                { label: "Selesai Hari Ini", value: String(refunds.filter(r => r.status === "selesai").length), color: "text-emerald-600" },
+                { label: "Total Nilai Refund", value: `Rp ${refunds.reduce((a, r) => a + r.nilaiRp, 0).toLocaleString("id-ID")}`, color: "text-red-700" },
+                { label: "Siap Dieksekusi", value: String(refunds.filter(r => r.status === "siap_eksekusi").length), color: "text-amber-800" },
+                { label: "Selesai Hari Ini", value: String(refunds.filter(r => r.status === "selesai").length), color: "text-emerald-700" },
               ].map(s => (
-                <div key={s.label} className="bg-white rounded-2xl border border-gray-100 px-5 py-4">
-                  <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{s.label}</p>
-                  <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
+                <div key={s.label} className="bg-white rounded-2xl border border-slate-200 px-5 py-4">
+                  <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-1">{s.label}</p>
+                  <p className={`text-xl font-black tabular-nums ${s.color}`}>{s.value}</p>
                 </div>
               ))}
             </div>
@@ -558,10 +558,10 @@ export default function VerifikasiPage() {
               return (
                 <div key={statusGroup}>
                   <div className="flex items-center gap-2 mb-3">
-                    {statusGroup === "siap_eksekusi" && <Zap className="w-4 h-4 text-amber-500" />}
-                    {statusGroup === "ditinjau" && <Eye className="w-4 h-4 text-blue-500" />}
-                    {statusGroup === "selesai" && <CheckCircle2 className="w-4 h-4 text-emerald-500" />}
-                    <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">
+                    {statusGroup === "siap_eksekusi" && <Zap className="w-4 h-4 text-amber-600" />}
+                    {statusGroup === "ditinjau" && <Eye className="w-4 h-4 text-[#213555]" />}
+                    {statusGroup === "selesai" && <CheckCircle2 className="w-4 h-4 text-emerald-700" />}
+                    <p className="text-xs font-black text-slate-900 uppercase tracking-widest">
                       {{ siap_eksekusi: "Siap Dieksekusi", ditinjau: "Sedang Ditinjau", selesai: "Selesai" }[statusGroup]}
                     </p>
                   </div>
@@ -569,22 +569,22 @@ export default function VerifikasiPage() {
                     {groupRefunds.map(refund => (
                       <div
                         key={refund.id}
-                        className={`bg-white rounded-2xl border shadow-sm p-5 flex items-start justify-between gap-4 ${
-                          refund.status === "siap_eksekusi" ? "border-amber-200" : "border-gray-100"
+                        className={`bg-white rounded-2xl border p-5 flex items-start justify-between gap-4 ${
+                          refund.status === "siap_eksekusi" ? "border-amber-300 bg-amber-50/20" : "border-slate-200"
                         }`}
                       >
                         <div className="space-y-2 flex-1">
                           <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{refund.id}</span>
+                            <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{refund.id}</span>
                           </div>
-                          <p className="text-sm font-black text-gray-900">{refund.vendorNama}</p>
-                          <p className="text-xs text-gray-500">{refund.alasan}</p>
+                          <p className="text-sm font-black text-slate-900">{refund.vendorNama}</p>
+                          <p className="text-xs font-bold text-slate-800">{refund.alasan}</p>
                           <div className="flex items-center gap-3">
-                            <span className="text-base font-black text-red-600">
+                            <span className="text-base font-black text-red-700 tabular-nums">
                               Rp {refund.nilaiRp.toLocaleString("id-ID")}
                             </span>
-                            <span className="flex items-center gap-1 text-[9px] font-bold text-red-400">
-                              <TrendingDown className="w-3 h-3" />
+                            <span className="flex items-center gap-1 text-xs font-black text-red-700">
+                              <TrendingDown className="w-3.5 h-3.5" />
                               -{refund.reputasiPenurunan} poin reputasi
                             </span>
                           </div>
@@ -593,13 +593,13 @@ export default function VerifikasiPage() {
                         {refund.status === "siap_eksekusi" && (
                           <button
                             onClick={() => setRefundModal(refund)}
-                            className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded-xl transition-all shadow-md shadow-red-500/20"
+                            className="flex-shrink-0 flex items-center gap-2 px-5 py-2.5 bg-red-700 hover:bg-red-800 text-white text-xs font-black uppercase tracking-wider rounded-xl transition-all"
                           >
                             <Zap className="w-4 h-4" /> Eksekusi
                           </button>
                         )}
                         {refund.status === "selesai" && (
-                          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-600 text-[9px] font-black">
+                          <div className="flex items-center gap-2 px-4 py-2 bg-emerald-100 border border-emerald-200 rounded-xl text-emerald-800 text-xs font-black">
                             <CheckCircle2 className="w-4 h-4" /> Selesai
                           </div>
                         )}

@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useMemo } from "react";
-import Image from "next/image";
-import { LayoutDashboard, LogOut, Menu } from "lucide-react";
+import { Landmark, Store, Box, Truck, School, Users, LayoutDashboard, LogOut, Menu } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,10 +31,10 @@ import {
 import { authClient } from "@/lib/auth-browser-client";
 
 const NAV_LINKS = [
-  { href: "#home", label: "Home" },
-  { href: "#how", label: "How it works" },
-  { href: "#primitives", label: "Primitives" },
-  { href: "#roles", label: "Roles" },
+  { href: "/", label: "Beranda" },
+  { href: "/#how-it-works", label: "Alur Kerja" },
+  { href: "/#primitives", label: "Keamanan" },
+  { href: "/#roles", label: "Peran" },
 ];
 
 const ROLE_PORTALS = [
@@ -44,7 +43,7 @@ const ROLE_PORTALS = [
     label: "Pemerintah",
     desc: "Verifikasi & pengawasan program",
     accent: "#B45309",
-    imageSrc: "/mbg1.png",
+    icon: Landmark,
     href: "/goverment/dashboard",
     links: [
       { label: "Dashboard", href: "/goverment/dashboard" },
@@ -57,7 +56,7 @@ const ROLE_PORTALS = [
     label: "SPPG",
     desc: "Buat tender & pilih vendor",
     accent: "#9A3412",
-    imageSrc: "/mbg4.png",
+    icon: Box,
     href: "/sppg/dashboard",
     links: [
       { label: "Dashboard", href: "/sppg/dashboard" },
@@ -70,7 +69,7 @@ const ROLE_PORTALS = [
     label: "Vendor",
     desc: "Ajukan penawaran & pantau tender",
     accent: "#065F46",
-    imageSrc: "/mbg1.png",
+    icon: Store,
     href: "/vendor/dashboard",
     links: [
       { label: "Dashboard", href: "/vendor/dashboard" },
@@ -83,7 +82,7 @@ const ROLE_PORTALS = [
     label: "Logistik",
     desc: "Pantau distribusi & rute",
     accent: "#155E75",
-    imageSrc: "/mbg2.png",
+    icon: Truck,
     href: "/logistik/dashboard",
     links: [
       { label: "Dashboard", href: "/logistik/dashboard" },
@@ -96,7 +95,7 @@ const ROLE_PORTALS = [
     label: "Sekolah",
     desc: "Penerimaan & evaluasi",
     accent: "#1E3A8A",
-    imageSrc: "/mbg3.png",
+    icon: School,
     href: "/sekolah/admin",
     links: [
       { label: "Admin", href: "/sekolah/admin" },
@@ -131,7 +130,7 @@ export default function Navbar() {
   const dashboardHref = dashboardHrefByRole(userRole);
 
   const mobileLinks = useMemo(() => {
-    if (!isHomePage) return [{ href: "/", label: "Home" }];
+    if (!isHomePage) return [{ href: "/", label: "Beranda" }];
     return NAV_LINKS;
   }, [isHomePage]);
 
@@ -186,7 +185,7 @@ export default function Navbar() {
             {NAV_LINKS.map((item) => (
               <Link
                 key={item.href}
-                href={isHomePage ? item.href : "/"}
+                href={item.href}
                 className={
                   isHomePage
                     ? "rounded-md px-3 py-2 text-sm font-medium text-white/70 transition-colors hover:text-white"
@@ -207,24 +206,18 @@ export default function Navbar() {
                         : "h-auto bg-transparent px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-muted/40 hover:text-foreground focus:bg-muted/40 focus:text-foreground data-[state=open]:bg-muted/40 data-[state=open]:text-foreground"
                     }
                   >
-                    Portals
+                    Portal
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="md:w-[760px]">
                     <div className="grid gap-4 p-4 md:grid-cols-[260px_1fr] md:p-5">
                       <div className="overflow-hidden rounded-3xl bg-slate-950 text-white ring-1 ring-white/10">
                         <div className="relative h-28">
-                          <Image
-                            src="/mbg3.png"
-                            alt=""
-                            fill
-                            sizes="260px"
-                            className="object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-transparent" />
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#1D4ED8] via-[#1E3A5F] to-slate-950" />
+                          <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(rgba(255,255,255,0.14)_1px,transparent_1px)] [background-size:16px_16px]" />
                           <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-[#1D4ED8] via-[#1E40AF] to-transparent" />
                           <div className="absolute bottom-3 left-4 right-4">
                             <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/70">
-                              Role preview
+                              Pratinjau peran
                             </p>
                             <p className="mt-1 text-base font-extrabold tracking-tight">
                               Buka portal sesuai peran
@@ -243,7 +236,7 @@ export default function Navbar() {
                               Pilih role & masuk
                             </Link>
                             <Link
-                              href={isHomePage ? "#how" : "/#how"}
+                              href={isHomePage ? "#how-it-works" : "/#how-it-works"}
                               className="inline-flex items-center justify-center rounded-full bg-white/10 px-4 py-2 text-xs font-semibold text-white ring-1 ring-white/15 transition hover:bg-white/15"
                             >
                               Lihat flow phase
@@ -259,16 +252,12 @@ export default function Navbar() {
                             className="rounded-3xl bg-white/70 backdrop-blur ring-1 ring-black/5 p-3 shadow-sm shadow-black/5"
                           >
                             <div className="flex items-start gap-3">
-                              <div className="relative h-12 w-12 overflow-hidden rounded-2xl ring-1 ring-black/5">
-                                <Image
-                                  src={role.imageSrc}
-                                  alt=""
-                                  fill
-                                  sizes="48px"
-                                  className="object-cover"
-                                />
+                              <div
+                                className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl flex items-center justify-center ring-1 ring-black/5"
+                                style={{ background: `${role.accent}0D`, color: role.accent }}
+                              >
+                                <role.icon className="size-5" />
                                 <div className="absolute inset-x-0 top-0 h-1" style={{ background: role.accent }} />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/0 to-transparent" />
                               </div>
 
                               <div className="min-w-0 flex-1">
@@ -333,7 +322,7 @@ export default function Navbar() {
                   {mobileLinks.map((item) => (
                     <Link
                       key={item.href}
-                      href={isHomePage ? item.href : item.href}
+                      href={item.href}
                       className="rounded-xl border bg-background px-4 py-3 text-sm font-medium text-foreground hover:bg-muted/40"
                     >
                       {item.label}
@@ -342,7 +331,7 @@ export default function Navbar() {
 
                   <div className="pt-2">
                     <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.18em] text-muted-foreground">
-                      Portal roles
+                      Portal peran
                     </p>
                     <div className="mt-2 grid gap-2">
                       {ROLE_PORTALS.map((r) => (
@@ -351,10 +340,12 @@ export default function Navbar() {
                           href={r.href}
                           className="flex items-center gap-3 rounded-2xl border bg-background px-4 py-3 text-left hover:bg-muted/40"
                         >
-                          <div className="relative h-10 w-10 overflow-hidden rounded-xl ring-1 ring-black/5">
-                            <Image src={r.imageSrc} alt="" fill sizes="40px" className="object-cover" />
+                          <div
+                            className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ring-1 ring-black/5"
+                            style={{ background: `${r.accent}0D`, color: r.accent }}
+                          >
+                            <r.icon className="size-5" />
                             <div className="absolute inset-x-0 top-0 h-1" style={{ background: r.accent }} />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/0 to-transparent" />
                           </div>
                           <div className="min-w-0">
                             <p className="truncate text-sm font-semibold text-foreground">{r.label}</p>
@@ -409,7 +400,7 @@ export default function Navbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56 rounded-xl p-2">
                 <div className="px-2 py-1.5">
-                  <p className="text-xs font-semibold text-foreground">Signed in</p>
+                  <p className="text-xs font-semibold text-foreground">Masuk sebagai</p>
                   <p className="text-xs text-muted-foreground capitalize">{userRole || "user"}</p>
                 </div>
                 <DropdownMenuSeparator />

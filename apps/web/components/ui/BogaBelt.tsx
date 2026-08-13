@@ -15,6 +15,14 @@ const items = [
 
 const belt = Array(8).fill(items).flat();
 
+const beltTransitionDuration = (index: number) => {
+  const seed = index * 7 + 7;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return 3 + ((t ^ (t >>> 14)) >>> 0) % 3 / 10;
+};
+
 export const BogaBelt = () => {
   return (
     <div className="relative overflow-hidden border-y border-white/10 bg-gradient-to-r from-indigo-600 to-cyan-500 shadow-2xl mt-2">
@@ -36,7 +44,7 @@ export const BogaBelt = () => {
                 opacity: [0.7, 1, 0.7]
               }}
               transition={{ 
-                duration: 3 + Math.random(), 
+                duration: beltTransitionDuration(i), 
                 repeat: Infinity,
                 ease: "easeInOut" 
               }}

@@ -1,60 +1,55 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { SplashScene } from "@/components/ui/SplashScene";
 import { LandingNavbar } from "@/components/landing/LandingNavbar";
 import { HeroSection } from "@/components/landing/HeroSection";
-import { TrustMarquee } from "@/components/landing/TrustMarquee";
 import { PhaseTimeline } from "@/components/landing/PhaseTimeline";
-import { TrustPrimitives } from "@/components/landing/TrustPrimitives";
 import { RoleGateways } from "@/components/landing/RoleGateways";
+import { TestimonialSection } from "@/components/landing/TestimonialSection";
+import { FaqSection } from "@/components/landing/FaqSection";
 import { LandingFooter } from "@/components/landing/LandingFooter";
 
+const noopSubscribe = () => () => {};
+
+function isSplashSeenClient() {
+  if (typeof window === "undefined") return true;
+  return sessionStorage.getItem("boga_splash_seen") === "true";
+}
+
 export default function Home() {
-  const [showSplash, setShowSplash] = useState(false);
-  const [footerHeight, setFooterHeight] = useState(0);
-  const footerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const hasSeenSplash = sessionStorage.getItem("boga_splash_seen");
-    if (!hasSeenSplash) {
-      setShowSplash(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!footerRef.current) return;
-    const observer = new ResizeObserver((entries) => {
-      setFooterHeight(entries[0].contentRect.height);
-    });
-    observer.observe(footerRef.current);
-    return () => observer.disconnect();
-  }, []);
+  const isSplashSeen = useSyncExternalStore(
+    noopSubscribe,
+    isSplashSeenClient,
+    () => true
+  );
+  const [splashDismissed, setSplashDismissed] = useState(false);
 
   const handleSplashLift = () => {
     sessionStorage.setItem("boga_splash_seen", "true");
-    setShowSplash(false);
+    setSplashDismissed(true);
   };
+
+  const showSplash = !isSplashSeen && !splashDismissed;
 
   return (
     <>
       {showSplash && <SplashScene onLift={handleSplashLift} />}
-      <div className="min-h-screen bg-[#1A1A1A]">
+      <div className="min-h-screen bg-[#0F172A]">
         <div 
-          className="relative z-10 bg-[#FAFAF7] rounded-b-[40px] shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
-          style={{ marginBottom: footerHeight }}
+          className="relative z-10 bg-slate-900 rounded-b-[40px] overflow-hidden"
+          style={{ marginBottom: "calc(100vh - 72px)" }}
         >
           <LandingNavbar />
           <HeroSection />
-          <TrustMarquee />
           <PhaseTimeline />
-          <TrustPrimitives />
           <RoleGateways />
+          <TestimonialSection />
+          <FaqSection />
         </div>
         
         <div 
-          ref={footerRef}
-          className="fixed bottom-0 left-0 right-0 z-0"
+          className="fixed top-[72px] bottom-0 left-0 right-0 z-0 flex flex-col justify-center bg-[#0F172A]"
         >
           <LandingFooter />
         </div>

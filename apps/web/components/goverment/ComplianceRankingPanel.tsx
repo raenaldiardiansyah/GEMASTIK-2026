@@ -40,23 +40,23 @@ function RadialArc({
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-[15px] font-black text-foreground">
+        <span className="absolute inset-0 flex items-center justify-center text-[15px] font-black text-slate-900">
           {skor}%
         </span>
       </div>
 
       {/* Kategori */}
-      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">{kategori}</p>
+      <p className="text-xs font-bold text-slate-800 uppercase tracking-widest">{kategori}</p>
 
       {/* Delta anchor */}
       <p
         className={cn(
-          "text-xs font-semibold flex items-center gap-0.5",
+          "text-xs font-bold flex items-center gap-0.5",
           trend === "up"
-            ? "text-status-success"
+            ? "text-emerald-700"
             : trend === "down"
-            ? "text-status-danger"
-            : "text-status-pending"
+            ? "text-red-700"
+            : "text-amber-700"
         )}
       >
         {trend === "up" ? <TrendingUp className="w-2.5 h-2.5" aria-hidden /> : trend === "down" ? <TrendingDown className="w-2.5 h-2.5" aria-hidden /> : null}
@@ -80,15 +80,13 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
   const vendors = useMemo(() => getVendorRanking(), [])
   const [modalData, setModalData] = useState<ComplianceCategoryScore | null>(null)
 
-  const maxRate = vendors[vendors.length - 1]?.onTimeRate ?? 100
-
   return (
     <>
       <div className="bg-surface rounded-[var(--radius-lg)] border border-border p-5 shadow-card grid grid-cols-1 md:grid-cols-2 gap-6">
 
         {/* Left — RadialBar compliance */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">
+          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-900 mb-4">
             Kepatuhan Sistem
           </p>
           <div className="flex justify-around items-start">
@@ -102,9 +100,9 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
             ))}
           </div>
           <button
-            onClick={() => setModalData(scores[1])} // default to Sekolah (often below threshold)
+            onClick={() => setModalData(scores.find(s => s.skor < 95) || scores[0])}
             aria-label="Lihat detail audit kepatuhan"
-            className="mt-4 w-full py-2 rounded-[var(--radius-md)] bg-surface-raised hover:bg-muted/30 border border-border text-xs font-semibold uppercase tracking-widest text-muted-foreground transition-colors"
+            className="mt-4 w-full py-2.5 rounded-[var(--radius-md)] bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-black uppercase tracking-widest text-slate-900 transition-colors shadow-xs"
           >
             Lihat Detail Audit
           </button>
@@ -112,9 +110,9 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
 
         {/* Right — Vendor Ranking */}
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground mb-4">
+          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-900 mb-4">
             Ranking Vendor On-Time Rate
-            <span className="ml-1.5 text-muted-foreground/60 normal-case font-normal">(terendah di atas)</span>
+            <span className="ml-1.5 text-slate-600 normal-case font-medium">(terendah di atas)</span>
           </p>
 
           <div className="flex flex-col gap-2" role="list" aria-label="Ranking vendor berdasarkan on-time rate">
@@ -130,7 +128,7 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
                     <button
                       onClick={() => router.push(`/goverment/pengajuan?vendor=${v.id}`)}
                       aria-label={`Lihat detail vendor ${v.nama} di halaman pengajuan`}
-                      className="text-sm font-semibold text-foreground hover:text-role-primary transition-colors text-left min-w-0 truncate flex-1"
+                      className="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors text-left min-w-0 truncate flex-1"
                     >
                       {v.nama}
                     </button>
@@ -140,7 +138,7 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
                     )}
                     {/* Rate at end of bar (no X axis needed) */}
                     <span
-                      className={cn("text-xs font-semibold shrink-0 w-16 text-right tabular-nums", isLow ? "text-status-danger" : "text-foreground")}
+                      className={cn("text-xs font-bold shrink-0 w-16 text-right tabular-nums", isLow ? "text-red-600 font-extrabold" : "text-slate-800")}
                       aria-label={`${v.onTimeRate}%`}
                     >
                       {isLow ? "✕ " : "● "}{v.onTimeRate}%

@@ -39,18 +39,18 @@ export function DailyBriefing({ data }: { data: BriefingData }) {
           animate={{ opacity: 1, y: 0, height: "auto" }}
           exit={{ opacity: 0, y: -12, height: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="px-6 pt-4"
+          className="w-full"
         >
-          <div className="flex items-center gap-4 px-5 py-4 bg-role-surface border border-border rounded-[var(--radius-xl)]">
+          <div className="flex items-center gap-4 px-5 py-4 bg-role-surface border border-border rounded-[var(--radius-xl)] shadow-xs">
             <div className="flex-shrink-0 w-10 h-10 rounded-[var(--radius-xl)] bg-role-primary flex items-center justify-center text-white shadow-card">
               <Sun className="w-5 h-5" />
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold text-muted uppercase tracking-wider mb-0.5">
+              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-0.5">
                 Briefing Pagi
               </p>
-              <p className="text-sm font-medium text-foreground leading-relaxed">
+              <p className="text-sm font-bold text-slate-900 leading-relaxed">
                 Hari ini:{" "}
                 <span className="font-semibold tabular-nums">
                   {data.porsiHariIni.toLocaleString("id-ID")} porsi

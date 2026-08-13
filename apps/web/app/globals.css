@@ -109,7 +109,7 @@
   --secondary: var(--surface-raised);
   --secondary-foreground: var(--foreground);
   --muted: var(--muted-bg);
-  --muted-foreground: 220 10% 45%;
+  --muted-foreground: 215 20% 30%;
   --accent: var(--surface-raised);
   --accent-foreground: var(--foreground);
   --destructive: 0 72% 51%;
@@ -130,9 +130,9 @@
   --sidebar-accent-foreground: var(--foreground);
   --sidebar-ring: var(--ring);
 
-  --app-font-sans: var(--font-jakarta);
-  --app-font-display: var(--font-jakarta);
-  --app-font-serif: var(--font-jakarta);
+  --app-font-sans: var(--font-grotesk);
+  --app-font-display: var(--font-grotesk);
+  --app-font-serif: var(--font-grotesk);
   --radius: 0.875rem;
 
   /* Role palettes — SPPG Navy-Beige palette */
@@ -150,15 +150,15 @@
   --vendor-accent: 160 60% 90%;
   --vendor-surface: 160 60% 97%;
 
-  --sppg-primary: 24 95% 53%;
-  --sppg-primary-hover: 24 95% 45%;
-  --sppg-accent: 24 100% 94%;
-  --sppg-surface: 24 100% 98%;
+  --sppg-primary: 191 91% 36%;
+  --sppg-primary-hover: 191 91% 31%;
+  --sppg-accent: 189 94% 90%;
+  --sppg-surface: 191 100% 96%;
 
-  --school-primary: 217 91% 60%;
-  --school-primary-hover: 217 91% 52%;
-  --school-accent: 217 100% 94%;
-  --school-surface: 217 100% 98%;
+  --school-primary: 262 83% 58%;
+  --school-primary-hover: 262 83% 48%;
+  --school-accent: 263 70% 95%;
+  --school-surface: 263 70% 98%;
 
   --student-primary: 258 90% 66%;
   --student-primary-hover: 258 90% 58%;
@@ -168,17 +168,17 @@
   /* Existing logistik/landing accents (tokenized; no hex) */
   --brand-green: 152 100% 45%;
   --brand-cyan: 193 100% 50%;
-  --logistik-primary: 150 43% 30%;
-  --logistik-hero-1: 195 44% 11%;
-  --logistik-hero-2: 196 35% 19%;
-  --logistik-hero-3: 197 39% 28%;
+  --logistik-primary: 160 84% 31%;
+  --logistik-hero-1: 158 50% 10%;
+  --logistik-hero-2: 160 42% 18%;
+  --logistik-hero-3: 163 45% 27%;
 
   /* Logistics role palette (dashboard sidebar + accents) */
-  --logistics-primary: 195 84% 28%;
-  --logistics-primary-hover: 195 84% 22%;
-  --logistics-accent: 195 100% 94%;
-  --logistics-surface: 195 100% 98%;
-  --logistics-badge: 195 84% 28%;
+  --logistics-primary: 160 84% 31%;
+  --logistics-primary-hover: 160 84% 24%;
+  --logistics-accent: 160 60% 92%;
+  --logistics-surface: 160 60% 97%;
+  --logistics-badge: 160 84% 31%;
 
   /* Status */
   --status-success: 142 72% 42%;
@@ -364,9 +364,17 @@
 }
 
 [data-role="student"] {
+  --background: 210 40% 98%;
+  --foreground: 222 47% 11%;
+  --surface: 0 0% 100%;
+  --surface-raised: 210 20% 96%;
+  --border: 220 13% 91%;
+  --muted-bg: 220 13% 95%;
+  --muted-foreground: 220 10% 45%;
+
   --role-primary: var(--student-primary);
   --role-primary-hover: var(--student-primary-hover);
-  --role-accent: var(--student-primary);
+  --role-accent: var(--student-accent);
   --role-surface: var(--student-surface);
   --role-badge: var(--student-primary);
 
@@ -652,3 +660,37 @@
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(10px); }
 }
+
+/* ─── Glassmorphic Scrollbar ───────────────────────────────── */
+html {
+  color-scheme: dark;
+  background-color: #0f172a !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px !important;
+  height: 10px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-radius: 9999px !important;
+  border: 2px solid #0f172a !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.35) !important;
+}
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) #0f172a;
+}
+

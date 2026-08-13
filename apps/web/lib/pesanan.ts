@@ -1,6 +1,7 @@
 /**
  * Logic Utility for Order Management (B.O.G.A)
  * Berisi logika penentuan status pesanan dan kategori tab.
+ * Status pembayaran mengikuti alur: Transfer Manual SPPG → OCR Validasi → Ledger Audit.
  */
 
 export interface POItem { 
@@ -23,8 +24,8 @@ export interface PO {
   orderDate: string;
   financials: { 
     totalAmount: number; 
-    escrowStatus: string; 
-    signatures: Signatures 
+    paymentStatus: string; 
+    signatures: Signatures;
   };
   items: POItem[];
   pickup_pin?: string;
@@ -42,8 +43,8 @@ export function getPOTab(po: PO): Tab {
   // 1. Prioritas: Penolakan Vendor
   if (po.vendor_status === "REJECTED") return "rejected";
   
-  // 2. Prioritas: Kadaluarsa (Escrow Reclaimed)
-  if (po.financials.escrowStatus === "EXPIRED") return "expired";
+  // 2. Prioritas: Batas waktu verifikasi terlampaui
+  if (po.financials.paymentStatus === "EXPIRED") return "expired";
   
   const sigs = po.financials.signatures;
   
@@ -51,8 +52,8 @@ export function getPOTab(po: PO): Tab {
   const isDone = sigs.qc === "SIGNED" && sigs.admin === "SIGNED" && sigs.logistik === "SIGNED";
   if (isDone) return "completed";
   
-  // 4. Status: Proses (Sedang di-scan atau dalam revisi)
-  if (["READY_FOR_PICKUP", "VALIDATING", "REVISION"].includes(po.financials.escrowStatus)) {
+  // 4. Status: Proses (Sedang di-scan/verifikasi atau dalam review manual)
+  if (["SIAP_AMBIL", "OCR_VALIDATING", "MANUAL_REVIEW"].includes(po.financials.paymentStatus)) {
     return "scan";
   }
   

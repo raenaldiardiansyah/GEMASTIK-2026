@@ -58,7 +58,7 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
             <Activity className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-foreground">Log Aktivitas</h2>
+            <h2 className="text-sm font-semibold text-slate-900">Log Aktivitas</h2>
             <p className="text-xs font-medium text-muted uppercase tracking-wider">
               Stream real-time sistem
             </p>
@@ -117,7 +117,7 @@ export function ActivityFeed({ items }: ActivityFeedProps) {
                 />
 
                 {/* Message */}
-                <p className="flex-1 text-sm font-medium text-foreground leading-snug">
+                <p className="flex-1 text-sm font-medium text-slate-900 leading-snug">
                   {item.message}
                 </p>
 

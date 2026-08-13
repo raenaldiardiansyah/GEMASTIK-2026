@@ -18,7 +18,6 @@ import LocationPickerMapLibre from "@/components/ui/LocationPickerMapLibre";
 import { logger } from "@/lib/logger";
 
 /* ─── Constants ─── */
-const API = "http://localhost:3001";
 const O_COLOR = "#1D4ED8"; // Biru untuk Outbound
 const O_LIGHT = "#DBEAFE";
 
@@ -32,6 +31,7 @@ interface Movement {
   reason: string;
   reference_id: string;
   note: string;
+  proof_hash?: string;
   created_at: string;
 }
 
@@ -208,34 +208,44 @@ export default function VendorOutboundPage() {
   const [loadingData, setLoadingData] = useState(true);
 
   useEffect(() => {
-    const id = document.cookie.split("; ").find(row => row.startsWith("boga_vendor_id="))?.split("=")[1];
-    if (id) {
-      setVendorId(id);
-    } else {
-      setLoadingData(false);
-    }
+    const id = localStorage.getItem("boga_vendor_id") || "1";
+    setVendorId(id);
   }, []);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(() => {
     if (!vendorId) return;
     setLoadingData(true);
-    try {
-      // 1. Fetch Commodities
-      const resC = await fetch(`${API}/api/vendors/${vendorId}/commodities`);
-      const jsonC = await resC.json();
-      if (jsonC.status === "success") setCommodities(jsonC.data ?? []);
-
-      // 2. Fetch Outbound Movements
-      const resM = await fetch(`${API}/api/inventory/vendors/${vendorId}/outbound`);
-      const jsonM = await resM.json();
-      if (jsonM.status === "success") setMovements(jsonM.data ?? []);
-
-    } catch (error) {
-      logger.error('VendorOutbound', 'Gagal memuat data dari server', error);
-      toast.error("Gagal sinkronisasi data.");
-    } finally { 
-      setLoadingData(false); 
-    }
+    
+    // Simulate API fetch
+    setTimeout(() => {
+      const { vendorCommodities, inventoryMovements } = require("@/lib/mbgdummydata");
+      
+      const vId = Number(vendorId);
+      
+      const comms = vendorCommodities.filter((c: any) => c.vendorId === vId).map((c: any) => ({
+        id: c.id.toString(),
+        name: c.commodityName || c.name || "Unknown",
+        unit: c.unit || "kg",
+        current_stock: c.currentStock || c.current_stock || 0,
+        category: c.category || "Umum"
+      }));
+      setCommodities(comms);
+      
+      const moves = inventoryMovements.filter((m: any) => m.vendorId === vId && m.type === "outbound").map((m: any) => ({
+        id: m.id.toString(),
+        commodity_id: m.commodityId.toString(),
+        commodity_name: comms.find((c: any) => c.id === m.commodityId.toString())?.name || "Unknown",
+        quantity: m.quantity,
+        reason: m.reason || "PO_FULFILLMENT",
+        reference_id: m.referenceId || "PO-0000",
+        note: m.note || "",
+        proof_hash: m.proofHash || "dummyhash",
+        created_at: m.createdAt || new Date().toISOString()
+      }));
+      
+      setMovements(moves);
+      setLoadingData(false);
+    }, 500);
   }, [vendorId]);
 
   useEffect(() => { fetchData(); }, [fetchData]);

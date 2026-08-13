@@ -160,35 +160,35 @@ export default function VerifikasiSelesaiPage() {
   const totalRefundValue = COMPLETED_REFUNDS.reduce((a, r) => a + r.nilaiRp, 0);
 
   return (
-    <div className="p-6 space-y-5 min-h-full bg-slate-50/50">
+    <div className="p-6 space-y-5 min-h-full bg-background text-foreground">
 
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-gray-200">
+      <div className="flex items-center justify-between pb-2 border-b border-slate-200">
         <div className="flex items-center gap-3">
           <button
             onClick={() => router.push("/goverment/verifikasi")}
-            className="w-9 h-9 rounded-xl flex items-center justify-center bg-gray-100 hover:bg-gray-200 transition-all text-gray-500"
+            className="w-9 h-9 rounded-xl flex items-center justify-center bg-slate-100 hover:bg-slate-200 transition-all text-slate-700 border border-slate-200"
           >
             <ArrowLeft className="w-4 h-4" />
           </button>
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-emerald-500 to-teal-600">
-            <BadgeCheck className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-[#213555] text-white">
+            <BadgeCheck className="w-5 h-5" />
           </div>
           <div>
-            <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Sudah Diverifikasi</h1>
-            <p className="text-xs text-gray-400">Arsip kasus sengketa dan refund yang telah diselesaikan</p>
+            <h1 className="text-xl font-black text-slate-900 tracking-tight">Sudah Diverifikasi</h1>
+            <p className="text-xs font-bold text-slate-700">Arsip kasus sengketa dan refund yang telah diselesaikan</p>
           </div>
         </div>
 
         {/* Stats badges */}
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-full">
-            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
-            <span className="text-[9px] font-black text-emerald-600 uppercase tracking-wider">{COMPLETED_ARBITRASE.length} Kasus Selesai</span>
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-emerald-100 border border-emerald-200 rounded-full">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-800" />
+            <span className="text-xs font-black text-emerald-900 uppercase tracking-wider">{COMPLETED_ARBITRASE.length} Kasus Selesai</span>
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-full">
-            <RotateCcw className="w-3 h-3 text-blue-600" />
-            <span className="text-[9px] font-black text-blue-600 uppercase tracking-wider">Rp {totalRefundValue.toLocaleString("id-ID")} Dikembalikan</span>
+          <div className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#213555]/10 border border-[#213555]/20 rounded-full">
+            <RotateCcw className="w-3.5 h-3.5 text-[#213555]" />
+            <span className="text-xs font-black text-[#213555] uppercase tracking-wider">Rp {totalRefundValue.toLocaleString("id-ID")} Dikembalikan</span>
           </div>
         </div>
       </div>
@@ -196,19 +196,19 @@ export default function VerifikasiSelesaiPage() {
       {/* Summary Stats */}
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "Kasus Diselesaikan", value: String(COMPLETED_ARBITRASE.length), color: "text-emerald-600", bg: "bg-emerald-50" },
-          { label: "Total Refund Dieksekusi", value: `Rp ${totalRefundValue.toLocaleString("id-ID")}`, color: "text-red-600", bg: "bg-red-50" },
-          { label: "Refund Berhasil", value: String(COMPLETED_REFUNDS.length), color: "text-blue-600", bg: "bg-blue-50" },
+          { label: "Kasus Diselesaikan", value: String(COMPLETED_ARBITRASE.length), color: "text-emerald-700", bg: "bg-emerald-50/80" },
+          { label: "Total Refund Dieksekusi", value: `Rp ${totalRefundValue.toLocaleString("id-ID")}`, color: "text-red-700", bg: "bg-red-50/80" },
+          { label: "Refund Berhasil", value: String(COMPLETED_REFUNDS.length), color: "text-[#213555]", bg: "bg-slate-50" },
         ].map(s => (
-          <div key={s.label} className={`${s.bg} rounded-2xl border border-gray-100 px-5 py-4`}>
-            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{s.label}</p>
-            <p className={`text-xl font-black ${s.color}`}>{s.value}</p>
+          <div key={s.label} className={`${s.bg} rounded-2xl border border-slate-200 px-5 py-4`}>
+            <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest mb-1">{s.label}</p>
+            <p className={`text-xl font-black tabular-nums ${s.color}`}>{s.value}</p>
           </div>
         ))}
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-gray-100 p-1 rounded-2xl w-fit">
+      <div className="flex gap-2 bg-white p-1.5 rounded-full border border-slate-300 w-fit">
         {([
           { key: "arbitrase", label: "Arsip Arbitrase", icon: ShieldCheck, count: COMPLETED_ARBITRASE.length },
           { key: "refund", label: "Arsip Refund", icon: RotateCcw, count: COMPLETED_REFUNDS.length },
@@ -216,15 +216,15 @@ export default function VerifikasiSelesaiPage() {
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`relative flex items-center gap-2 px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+            className={`relative flex items-center gap-2 px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
               activeTab === tab.key
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-gray-500 hover:text-gray-700"
+                ? "bg-[#213555] text-white"
+                : "text-slate-800 hover:bg-slate-100 hover:text-slate-900"
             }`}
           >
-            <tab.icon className="w-3.5 h-3.5" />
+            <tab.icon className="w-4 h-4" />
             {tab.label}
-            <span className="w-4 h-4 rounded-full bg-emerald-500 text-white text-[8px] flex items-center justify-center">
+            <span className="w-4.5 h-4.5 rounded-full bg-emerald-600 text-white text-[10px] font-black flex items-center justify-center">
               {tab.count}
             </span>
           </button>
@@ -245,34 +245,34 @@ export default function VerifikasiSelesaiPage() {
               <motion.div
                 key={c.id}
                 layout
-                className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden"
+                className="bg-white rounded-3xl border border-slate-200 overflow-hidden"
               >
                 {/* Case Header */}
                 <button
                   onClick={() => setExpandedCase(expandedCase === c.id ? null : c.id)}
-                  className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left hover:bg-gray-50/50 transition-colors"
+                  className="w-full px-6 py-5 flex items-start justify-between gap-4 text-left hover:bg-slate-50/80 transition-colors"
                 >
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 bg-emerald-500">
+                    <div className="w-10 h-10 rounded-2xl flex items-center justify-center text-white flex-shrink-0 bg-emerald-700">
                       <BadgeCheck className="w-5 h-5" />
                     </div>
                     <div>
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{c.id}</span>
-                        <span className="text-[8px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600">
+                        <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{c.id}</span>
+                        <span className="text-[9px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200">
                           SELESAI
                         </span>
                       </div>
-                      <p className="text-sm font-bold text-gray-900">{c.vendorNama}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{c.deskripsi}</p>
+                      <p className="text-sm font-black text-slate-900">{c.vendorNama}</p>
+                      <p className="text-xs font-bold text-slate-800 mt-0.5">{c.deskripsi}</p>
                       <div className="flex items-center gap-3 mt-1">
-                        <p className="text-[9px] text-gray-400">Dilaporkan: {c.dilaporkan}</p>
-                        <span className="text-[9px] text-gray-300">•</span>
-                        <p className="text-[9px] text-emerald-500 font-bold">Selesai: {c.diselesaikan}</p>
+                        <p className="text-[10px] font-extrabold text-slate-700">Dilaporkan: {c.dilaporkan}</p>
+                        <span className="text-[10px] text-slate-400">•</span>
+                        <p className="text-[10px] text-emerald-700 font-black">Selesai: {c.diselesaikan}</p>
                       </div>
                     </div>
                   </div>
-                  <ChevronDown className={`w-4 h-4 text-gray-400 flex-shrink-0 transition-transform mt-1 ${expandedCase === c.id ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-4 h-4 text-slate-700 flex-shrink-0 transition-transform mt-1 ${expandedCase === c.id ? "rotate-180" : ""}`} />
                 </button>
 
                 {/* Expanded Detail */}
@@ -282,34 +282,34 @@ export default function VerifikasiSelesaiPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      className="overflow-hidden border-t border-gray-100"
+                      className="overflow-hidden border-t border-slate-200"
                     >
                       <div className="p-6 space-y-5">
 
                         {/* Resolusi */}
-                        <div className="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-start gap-3">
-                          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3">
+                          <CheckCircle2 className="w-4.5 h-4.5 text-emerald-700 flex-shrink-0 mt-0.5" />
                           <div>
-                            <p className="text-[9px] font-black text-emerald-600 uppercase tracking-widest mb-1">Keputusan Resolusi</p>
-                            <p className="text-xs text-emerald-800 font-medium">{c.resolusi}</p>
+                            <p className="text-[10px] font-black text-emerald-800 uppercase tracking-widest mb-1">Keputusan Resolusi</p>
+                            <p className="text-xs text-slate-900 font-bold">{c.resolusi}</p>
                           </div>
                         </div>
 
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                           {/* Timeline */}
                           <div>
-                            <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-3">
+                            <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest mb-3">
                               Timeline Aktivitas
                             </p>
                             <div className="space-y-2">
                               {c.timeline.map((t, i) => (
                                 <div key={i} className="flex items-start gap-3">
-                                  <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-emerald-50 flex items-center justify-center">
-                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                  <div className="flex-shrink-0 w-6 h-6 rounded-lg bg-emerald-100 border border-emerald-200 flex items-center justify-center">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-700" />
                                   </div>
                                   <div>
-                                    <p className="text-xs font-bold text-gray-700">{t.aksi}</p>
-                                    <p className="text-[9px] text-gray-400">{t.waktu} WIB — {t.oleh}</p>
+                                    <p className="text-xs font-black text-slate-900">{t.aksi}</p>
+                                    <p className="text-[10px] font-bold text-slate-700">{t.waktu} WIB — {t.oleh}</p>
                                   </div>
                                 </div>
                               ))}
@@ -321,16 +321,16 @@ export default function VerifikasiSelesaiPage() {
                             {/* Forensik Hash */}
                             <div>
                               <div className="flex items-center gap-2 mb-2">
-                                <FileSearch className="w-3.5 h-3.5 text-emerald-500" />
-                                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                                <FileSearch className="w-3.5 h-3.5 text-emerald-700" />
+                                <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest">
                                   Hash Forensik
                                 </p>
                               </div>
-                              <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-xl border border-gray-100 font-mono">
-                                <span className="flex-1 text-[10px] text-gray-700">{c.forHash}</span>
+                              <div className="flex items-center gap-2 p-3 bg-slate-50 rounded-xl border border-slate-200 font-mono">
+                                <span className="flex-1 text-xs font-bold text-slate-900">{c.forHash}</span>
                                 <button
                                   onClick={() => handleCopyHash(c.forHash, c.id)}
-                                  className="flex items-center gap-1 text-[8px] font-black text-gray-400 hover:text-emerald-600 transition-colors"
+                                  className="flex items-center gap-1 text-[9px] font-black text-slate-700 hover:text-emerald-700 transition-colors"
                                 >
                                   <Copy className="w-3 h-3" />
                                   {copiedHash === c.id ? "Disalin!" : "Salin"}
@@ -341,8 +341,8 @@ export default function VerifikasiSelesaiPage() {
                             {/* Route Minimap */}
                             <div>
                               <div className="flex items-center gap-2 mb-2">
-                                <Route className="w-3.5 h-3.5 text-emerald-500" />
-                                <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">
+                                <Route className="w-3.5 h-3.5 text-emerald-700" />
+                                <p className="text-[10px] font-black text-slate-800 uppercase tracking-widest">
                                   Rute Pengiriman
                                 </p>
                               </div>
@@ -377,32 +377,32 @@ export default function VerifikasiSelesaiPage() {
             {COMPLETED_REFUNDS.map(refund => (
               <div
                 key={refund.id}
-                className="bg-white rounded-2xl border border-emerald-100 shadow-sm p-5 flex items-start justify-between gap-4"
+                className="bg-white rounded-2xl border border-slate-200 p-5 flex items-start justify-between gap-4"
               >
                 <div className="space-y-2 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{refund.id}</span>
-                    <span className="text-[8px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-600">SELESAI</span>
+                    <span className="text-[10px] font-black text-slate-800 uppercase tracking-widest">{refund.id}</span>
+                    <span className="text-[9px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-200">SELESAI</span>
                   </div>
-                  <p className="text-sm font-black text-gray-900">{refund.vendorNama}</p>
-                  <p className="text-xs text-gray-500">{refund.alasan}</p>
+                  <p className="text-sm font-black text-slate-900">{refund.vendorNama}</p>
+                  <p className="text-xs font-bold text-slate-800">{refund.alasan}</p>
                   <div className="flex items-center gap-3">
-                    <span className="text-base font-black text-red-600">
+                    <span className="text-base font-black text-red-700 tabular-nums">
                       Rp {refund.nilaiRp.toLocaleString("id-ID")}
                     </span>
-                    <span className="flex items-center gap-1 text-[9px] font-bold text-red-400">
-                      <TrendingDown className="w-3 h-3" />
+                    <span className="flex items-center gap-1 text-xs font-black text-red-700">
+                      <TrendingDown className="w-3.5 h-3.5" />
                       -{refund.reputasiPenurunan} poin reputasi
                     </span>
                   </div>
-                  <div className="flex items-center gap-3 pt-1 border-t border-gray-50">
-                    <p className="text-[9px] text-gray-400">Dieksekusi: <span className="font-bold text-gray-500">{refund.tanggalEksekusi}</span></p>
-                    <span className="text-[9px] text-gray-300">•</span>
-                    <p className="text-[9px] text-gray-400">Oleh: <span className="font-bold text-gray-500">{refund.dieksekusiOleh}</span></p>
+                  <div className="flex items-center gap-3 pt-1.5 border-t border-slate-200">
+                    <p className="text-[10px] font-extrabold text-slate-700">Dieksekusi: <span className="font-black text-slate-900">{refund.tanggalEksekusi}</span></p>
+                    <span className="text-[10px] text-slate-400">•</span>
+                    <p className="text-[10px] font-extrabold text-slate-700">Oleh: <span className="font-black text-slate-900">{refund.dieksekusiOleh}</span></p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 px-4 py-2.5 bg-emerald-50 rounded-xl border border-emerald-100 text-emerald-600 text-[9px] font-black flex-shrink-0">
+                <div className="flex items-center gap-2 px-4 py-2.5 bg-emerald-100 border border-emerald-200 rounded-xl text-emerald-900 text-xs font-black flex-shrink-0">
                   <CheckCircle2 className="w-4 h-4" />
                   Selesai
                 </div>

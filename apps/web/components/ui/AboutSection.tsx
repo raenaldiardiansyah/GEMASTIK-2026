@@ -24,6 +24,56 @@ import {
 } from "@/components/ui/carousel";
 import { OrbitHubSection } from "@/components/ui/orbit-hub-section";
 
+// Deterministic particle generation to avoid Math.random() SSR issues
+const deterministicParticleColor = () => {
+  const seed = 7;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  const idx = ((t ^ (t >>> 14)) >>> 0) % 2;
+  return idx === 0 ? "#6366f1" : "#06b6d4";
+};
+
+const deterministicIsBig = () => {
+  const seed = 13;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return ((t ^ (t >>> 14)) >>> 0) % 2 === 0;
+};
+
+const deterministicLeft = () => {
+  const seed = 23;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return ((t ^ (t >>> 14)) >>> 0) % 100;
+};
+
+const deterministicTop = () => {
+  const seed = 31;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return ((t ^ (t >>> 14)) >>> 0) % 100;
+};
+
+const deterministicDelay = () => {
+  const seed = 37;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return (((t ^ (t >>> 14)) >>> 0) % 3 + 3) / 10;
+};
+
+const deterministicDelay2 = () => {
+  const seed = 41;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  return (((t ^ (t >>> 14)) >>> 0) % 5 + 1) / 10;
+};
+
 export const AboutSection = () => {
   const [isOrbitOpen, setIsOrbitOpen] = useState(false);
   const [rotationAngle, setRotationAngle] = useState(0);
@@ -39,7 +89,7 @@ export const AboutSection = () => {
     });
   }, [api]);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | null>(null);
   const particlesRef = useRef<any[]>([]);
   const twinklesRef = useRef<HTMLDivElement>(null);
 
@@ -229,14 +279,14 @@ export const AboutSection = () => {
       for (let i = 0; i < 60; i++) {
         const p = document.createElement("div");
         p.className = "boga-particle-twinkle";
-        const color = Math.random() > 0.5 ? "#6366f1" : "#06b6d4";
-        const big = Math.random() > 0.8;
+        const color = deterministicParticleColor();
+        const big = deterministicIsBig();
         p.style.cssText = `
           position: absolute;
-          left: ${Math.random() * 100}%;
-          top: ${Math.random() * 100}%;
-          --d: ${3 + Math.random() * 4}s;
-          --delay: ${Math.random() * 5}s;
+          left: ${deterministicLeft()}%;
+          top: ${deterministicTop()}%;
+          --d: ${deterministicDelay()}s;
+          --delay: ${deterministicDelay2()}s;
           width: ${big ? 4 : 2}px;
           height: ${big ? 4 : 2}px;
           background: ${color};
@@ -364,11 +414,7 @@ export const AboutSection = () => {
                               }`}
                             style={!sat.isGradient ? { backgroundColor: `${sat.color}15`, border: `1px solid ${sat.color}40` } : {}}
                           >
-                            {typeof sat.icon === 'function' ? (
-                              <sat.icon className={`w-20 h-20 ${sat.isGradient ? "text-white" : ""}`} style={!sat.isGradient ? { color: sat.color } : {}} />
-                            ) : (
-                              <sat.icon className={`w-20 h-20 ${sat.isGradient ? "text-white" : ""}`} style={!sat.isGradient ? { color: sat.color } : {}} />
-                            )}
+                            <sat.icon className={`w-20 h-20 ${sat.isGradient ? "text-white" : ""}`} style={!sat.isGradient ? { color: sat.color } : {}} />
                           </div>
                         </div>
                       </CarouselItem>

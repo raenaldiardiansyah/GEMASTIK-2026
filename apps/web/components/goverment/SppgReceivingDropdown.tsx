@@ -41,10 +41,10 @@ type ReceiptSummary = {
 }
 
 function checkLabel(check: ReceiptCheck) {
-  if (check === "ok") return { label: "Sesuai", icon: CheckCircle2, cls: "text-status-success" }
-  if (check === "warn") return { label: "Perlu Tinjau", icon: XCircle, cls: "text-status-warning" }
-  if (check === "fail") return { label: "Tidak Sesuai", icon: XCircle, cls: "text-status-danger" }
-  return { label: "Belum Ada Data", icon: Package, cls: "text-status-pending" }
+  if (check === "ok") return { label: "Sesuai", icon: CheckCircle2, cls: "text-emerald-900 font-black" }
+  if (check === "warn") return { label: "Perlu Tinjau", icon: XCircle, cls: "text-amber-900 font-black" }
+  if (check === "fail") return { label: "Tidak Sesuai", icon: XCircle, cls: "text-red-900 font-black" }
+  return { label: "Belum Ada Data", icon: Package, cls: "text-slate-700 font-bold" }
 }
 
 function overallStatus(summary: ReceiptSummary) {
@@ -65,7 +65,7 @@ function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border border-border bg-surface-raised px-3 py-1 text-xs font-medium uppercase tracking-widest text-muted-foreground",
+        "inline-flex items-center rounded-full border border-slate-300 bg-white px-3 py-1 text-xs font-black uppercase tracking-widest text-slate-900",
         className
       )}
     >
@@ -151,20 +151,20 @@ export function SppgReceivingDropdown() {
   }, [filtered])
 
   return (
-    <section className="overflow-hidden rounded-xl border border-border bg-surface shadow-[var(--shadow-card)]">
-      <div className="flex flex-col gap-4 border-b border-border px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:px-6">
+    <section className="overflow-hidden rounded-2xl border border-slate-300 bg-white">
+      <div className="flex flex-col gap-4 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:px-6 bg-slate-50/50">
         <div className="flex items-start gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-role-accent/15 text-role-badge">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-[#213555] text-white shadow-xs">
             <ShieldCheck className="size-5" />
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-xs font-black uppercase tracking-wider text-slate-800">
               Penerimaan SPPG
             </p>
-            <p className="mt-1 text-lg font-semibold tracking-tight text-foreground">
+            <h2 className="mt-1 text-xl font-black tracking-tight text-slate-900">
               Cek barang, kualitas, dan kuantitas
-            </p>
-            <p className="mt-1 max-w-2xl text-sm text-muted-foreground">
+            </h2>
+            <p className="mt-1 max-w-2xl text-xs font-bold text-slate-700">
               Ringkasan penerimaan berdasarkan vendor yang digunakan SPPG (demo dari data delivery).
               Item dengan catatan atau selisih porsi otomatis ditandai untuk tinjau.
             </p>
@@ -172,14 +172,14 @@ export function SppgReceivingDropdown() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-2 rounded-full border border-border bg-surface-raised px-3 py-2">
-            <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+          <div className="flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1.5">
+            <span className="text-xs font-black uppercase tracking-widest text-slate-800">
               Vendor
             </span>
             <select
               value={vendorFilter}
               onChange={(e) => setVendorFilter(e.target.value)}
-              className="h-8 rounded-[var(--radius-md)] border border-border bg-surface px-3 text-sm font-medium text-foreground outline-none transition focus-visible:ring-[3px] focus-visible:ring-ring/35"
+              className="h-8 rounded-lg border border-slate-300 bg-slate-50 px-3 text-xs font-black text-slate-900 outline-none transition focus:ring-2 focus:ring-[#213555]"
               aria-label="Filter vendor"
             >
               <option value="">Semua</option>
@@ -192,18 +192,18 @@ export function SppgReceivingDropdown() {
           </div>
 
           <Pill>
-            Total <span className="ml-2 text-foreground">{counts.total}</span>
+            Total <span className="ml-2 text-slate-900 font-black">{counts.total}</span>
           </Pill>
-          <Pill className="bg-status-warning-bg text-status-warning border-status-warning/25">
-            Tinjau <span className="ml-2 text-status-warning">{counts.tinjau}</span>
+          <Pill className="bg-amber-100 text-amber-900 border-amber-300 font-black">
+            Tinjau <span className="ml-2 text-amber-900 font-black">{counts.tinjau}</span>
           </Pill>
-          <Pill className="bg-status-success-bg text-status-success border-status-success/25">
-            Sesuai <span className="ml-2 text-status-success">{counts.lulus}</span>
+          <Pill className="bg-emerald-100 text-emerald-900 border-emerald-300 font-black">
+            Sesuai <span className="ml-2 text-emerald-900 font-black">{counts.lulus}</span>
           </Pill>
         </div>
       </div>
 
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-slate-200">
         {filtered.map((s, idx) => {
           const key = `${s.sppgName}-${s.vendorId}-${idx}`
           const isExpanded = expandedKey === key
@@ -215,42 +215,42 @@ export function SppgReceivingDropdown() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.03 }}
-              className="bg-surface"
+              className="bg-white"
             >
               <button
                 onClick={() => setExpandedKey(isExpanded ? null : key)}
                 aria-expanded={isExpanded}
                 className={cn(
                   "w-full px-5 py-4 text-left transition-colors sm:px-6",
-                  "hover:bg-surface-raised/60"
+                  "hover:bg-slate-100/80"
                 )}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="truncate text-sm font-semibold text-foreground">
+                      <p className="truncate text-sm font-black text-slate-900">
                         {s.vendorName}
                       </p>
-                      <Pill>{s.sppgName}</Pill>
+                      <Pill className="border-slate-300 bg-slate-100 text-slate-800 font-black">{s.sppgName}</Pill>
                       <StatusBadge status={status} />
                     </div>
 
-                    <div className="mt-1 flex flex-wrap items-center gap-4">
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Package className="size-4 text-role-badge" aria-hidden />
+                    <div className="mt-1.5 flex flex-wrap items-center gap-4">
+                      <span className="flex items-center gap-1 text-xs font-extrabold text-slate-800">
+                        <Package className="size-4 text-[#213555]" aria-hidden />
                         {s.deliveredCount > 0
                           ? `${s.deliveredCount} manifest terkirim`
                           : "Belum ada manifest terkirim"}
                       </span>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Star className="size-4 text-status-warning" aria-hidden />
+                      <span className="flex items-center gap-1 text-xs font-extrabold text-slate-800">
+                        <Star className="size-4 text-amber-600 fill-amber-500" aria-hidden />
                         {s.mismatch.withNotes > 0
                           ? `${s.mismatch.withNotes} catatan kualitas`
                           : "Tanpa catatan kualitas"}
                       </span>
                       {s.mismatch.qtyDiff > 0 ? (
-                        <span className="flex items-center gap-1 text-sm text-status-danger">
-                          <XCircle className="size-4" aria-hidden />
+                        <span className="flex items-center gap-1 text-xs font-black text-red-700">
+                          <XCircle className="size-4 text-red-600" aria-hidden />
                           Selisih {s.mismatch.qtyDiff} porsi
                         </span>
                       ) : null}
@@ -259,7 +259,7 @@ export function SppgReceivingDropdown() {
 
                   <ChevronDown
                     className={cn(
-                      "mt-1 size-5 shrink-0 text-muted-foreground transition-transform",
+                      "mt-1 size-5 shrink-0 text-slate-700 transition-transform",
                       isExpanded && "rotate-180"
                     )}
                     aria-hidden
@@ -273,9 +273,9 @@ export function SppgReceivingDropdown() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
+                    className="overflow-hidden border-t border-slate-200"
                   >
-                    <div className="px-5 pb-5 pt-1 sm:px-6">
+                    <div className="px-5 pb-5 pt-3 sm:px-6 bg-slate-50/50">
                       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
                         {(
                           [
@@ -289,30 +289,30 @@ export function SppgReceivingDropdown() {
                           return (
                             <div
                               key={it.key}
-                              className="rounded-xl border border-border bg-surface-raised p-4"
+                              className="rounded-xl border border-slate-200 bg-white p-4"
                             >
-                              <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                              <p className="text-xs font-black uppercase tracking-widest text-slate-800">
                                 {it.label}
                               </p>
                               <div className="mt-2 flex items-center gap-2">
                                 <Icon className={cn("size-4", cfg.cls)} aria-hidden />
-                                <p className={cn("text-sm font-semibold", cfg.cls)}>
+                                <p className={cn("text-sm font-black", cfg.cls)}>
                                   {cfg.label}
                                 </p>
                               </div>
                               {it.key === "kuantitas" && s.mismatch.qtyDiff > 0 ? (
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="mt-1 text-xs font-bold text-slate-700">
                                   Selisih total:{" "}
-                                  <span className="font-semibold text-status-danger tabular-nums">
+                                  <span className="font-black text-red-700 tabular-nums">
                                     {s.mismatch.qtyDiff}
                                   </span>{" "}
                                   porsi
                                 </p>
                               ) : null}
                               {it.key === "kualitas" && s.mismatch.withNotes > 0 ? (
-                                <p className="mt-1 text-xs text-muted-foreground">
+                                <p className="mt-1 text-xs font-bold text-slate-700">
                                   Manifest dengan catatan:{" "}
-                                  <span className="font-semibold tabular-nums">
+                                  <span className="font-black text-slate-900 tabular-nums">
                                     {s.mismatch.withNotes}
                                   </span>
                                 </p>
@@ -322,14 +322,14 @@ export function SppgReceivingDropdown() {
                         })}
                       </div>
 
-                      <div className="mt-4 rounded-xl border border-border bg-surface p-4">
-                        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                      <div className="mt-4 rounded-xl border border-slate-200 bg-white p-4">
+                        <p className="text-xs font-black uppercase tracking-widest text-slate-800">
                           Delivery terakhir
                         </p>
-                        <p className="mt-1 text-sm font-semibold text-foreground tabular-nums">
+                        <p className="mt-1 text-sm font-black text-slate-900 tabular-nums">
                           {s.lastDeliveryAt ?? "—"}
                         </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <p className="mt-1 text-xs font-bold text-slate-700">
                           Data ini bersifat demo dan mengambil agregasi dari `deliveryList`.
                         </p>
                       </div>

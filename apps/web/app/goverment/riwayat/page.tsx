@@ -16,7 +16,7 @@ import { ContextualMinimap, type MinimapEntity } from "@/components/goverment/Co
 
 type BAPStatus = "terverifikasi" | "pending" | "dispute";
 type DocType = "foto_pengiriman" | "bap" | "kontrak";
-type MidtransStatus = "berhasil" | "gagal" | "pending";
+type AuditPaymentStatus = "berhasil" | "gagal" | "pending";
 
 interface BAPRecord {
   id: string;
@@ -42,12 +42,12 @@ interface ForensikDoc {
   bapId: string;
 }
 
-interface MidtransLog {
+interface AuditPaymentLog {
   id: string;
   tanggal: string;
   vendor: string;
   nominal: number;
-  status: MidtransStatus;
+  status: AuditPaymentStatus;
   txId: string;
   timestamp: string;
 }
@@ -144,7 +144,7 @@ const FORENSIK_DOCS: ForensikDoc[] = [
   { id: "DOC-006", nama: "BAP Sengketa – SDN 164", tipe: "bap", hash: "f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9", ukuran: "210 KB", tanggal: "12 Apr 2025", bapId: "BAP-2025-0412-001" },
 ];
 
-const MIDTRANS_LOGS: MidtransLog[] = [
+const PAYMENT_AUDIT_LOGS: AuditPaymentLog[] = [
   { id: "MDT-001", tanggal: "13 Apr 2025", vendor: "CV Katering Bandung Juara", nominal: 10_200_000, status: "berhasil", txId: "TXN-BDG-0413-9928", timestamp: "13 Apr 2025 · 14:00:05 WIB" },
   { id: "MDT-002", tanggal: "13 Apr 2025", vendor: "Katering Pasundan Berkah", nominal: 4_800_000, status: "berhasil", txId: "TXN-BDG-0413-9929", timestamp: "13 Apr 2025 · 14:00:08 WIB" },
   { id: "MDT-003", tanggal: "12 Apr 2025", vendor: "CV Food Hub Jabar", nominal: 6_900_000, status: "gagal", txId: "TXN-BDG-0412-9901", timestamp: "12 Apr 2025 · 14:00:45 WIB" },
@@ -175,14 +175,14 @@ const ITEMS_PER_PAGE = 4;
 
 export default function RiwayatPage() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<"bap" | "forensik" | "midtrans">("bap");
+  const [activeTab, setActiveTab] = useState<"bap" | "forensik" | "audit">("bap");
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedBap, setExpandedBap] = useState<string | null>(null);
   const [docFilter, setDocFilter] = useState<DocType | "semua">("semua");
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [verifiedId, setVerifiedId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [midtransDetail, setMidtransDetail] = useState<MidtransLog | null>(null);
+  const [auditDetail, setAuditDetail] = useState<AuditPaymentLog | null>(null);
 
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text).catch(() => {});
@@ -211,9 +211,9 @@ export default function RiwayatPage() {
     FORENSIK_DOCS.filter(d => docFilter === "semua" || d.tipe === docFilter),
     [docFilter]);
 
-  const midtransTotal = MIDTRANS_LOGS.reduce((a, l) => a + (l.status === "berhasil" ? l.nominal : 0), 0);
-  const midtransBerhasil = MIDTRANS_LOGS.filter(l => l.status === "berhasil").length;
-  const midtransGagal = MIDTRANS_LOGS.filter(l => l.status === "gagal").length;
+  const auditTotal = PAYMENT_AUDIT_LOGS.reduce((a, l) => a + (l.status === "berhasil" ? l.nominal : 0), 0);
+  const auditBerhasil = PAYMENT_AUDIT_LOGS.filter(l => l.status === "berhasil").length;
+  const auditGagal = PAYMENT_AUDIT_LOGS.filter(l => l.status === "gagal").length;
 
   const getBapMinimap = (bap: BAPRecord): MinimapEntity[] => [
     { id: `v-${bap.id}`, lat: bap.route.vendorLat, lng: bap.route.vendorLng, type: "vendor", label: bap.vendorNama },
@@ -221,7 +221,7 @@ export default function RiwayatPage() {
   ];
 
   return (
-    <div className="p-6 space-y-5 min-h-full bg-slate-50/50">
+    <div className="p-6 space-y-5 min-h-full bg-background text-foreground">
 
       {/* Header */}
       <div className="flex items-center gap-3 pb-2 border-b border-gray-200">
@@ -230,7 +230,7 @@ export default function RiwayatPage() {
         </div>
         <div>
           <h1 className="text-xl font-extrabold text-gray-900 tracking-tight">Riwayat & Forensik</h1>
-          <p className="text-xs text-gray-400">Block explorer, lacak bukti kriptografis, dan log pencairan dana</p>
+          <p className="text-xs text-gray-400">Block explorer, lacak bukti kriptografis, dan log verifikasi pembayaran</p>
         </div>
       </div>
 
@@ -239,7 +239,7 @@ export default function RiwayatPage() {
         {([
           { key: "bap", label: "BOGA Block Explorer", icon: Hash },
           { key: "forensik", label: "Bukti Forensik", icon: ShieldCheck },
-          { key: "midtrans", label: "Log Midtrans", icon: Banknote },
+          { key: "audit", label: "Log Audit Pembayaran", icon: Banknote },
         ] as const).map(tab => (
           <button
             key={tab.key}
@@ -479,15 +479,15 @@ export default function RiwayatPage() {
           </motion.div>
         )}
 
-        {/* ── Midtrans Log ── */}
-        {activeTab === "midtrans" && (
-          <motion.div key="midtrans" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
+        {/* ── Log Audit Pembayaran ── */}
+        {activeTab === "audit" && (
+          <motion.div key="audit" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-5">
             {/* Summary */}
             <div className="grid grid-cols-3 gap-3">
               {[
-                { label: "Total Dicairkan", value: `Rp ${midtransTotal.toLocaleString("id-ID")}`, color: "text-emerald-600" },
-                { label: "Berhasil", value: String(midtransBerhasil), color: "text-emerald-600" },
-                { label: "Gagal", value: String(midtransGagal), color: "text-red-600" },
+                { label: "Total Terverifikasi", value: `Rp ${auditTotal.toLocaleString("id-ID")}`, color: "text-emerald-600" },
+                { label: "Berhasil", value: String(auditBerhasil), color: "text-emerald-600" },
+                { label: "Gagal", value: String(auditGagal), color: "text-red-600" },
               ].map(s => (
                 <div key={s.label} className="bg-white rounded-2xl border border-gray-100 px-5 py-4">
                   <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">{s.label}</p>
@@ -499,13 +499,13 @@ export default function RiwayatPage() {
             {/* Table */}
             <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
               <div className="px-6 py-4 border-b border-gray-100">
-                <p className="text-sm font-black text-gray-900">Log Pencairan Dana</p>
+                <p className="text-sm font-black text-gray-900">Log Verifikasi Pembayaran</p>
               </div>
               <div className="divide-y divide-gray-50">
-                {MIDTRANS_LOGS.map(log => (
+                {PAYMENT_AUDIT_LOGS.map(log => (
                   <button
                     key={log.id}
-                    onClick={() => setMidtransDetail(midtransDetail?.id === log.id ? null : log)}
+                    onClick={() => setAuditDetail(auditDetail?.id === log.id ? null : log)}
                     className={`w-full px-6 py-4 flex items-center gap-4 text-left hover:bg-gray-50/50 transition-all ${
                       log.status === "gagal" ? "bg-red-50/40 border-l-2 border-red-400" : ""
                     }`}
@@ -537,13 +537,13 @@ export default function RiwayatPage() {
 
             {/* Detail Modal */}
             <AnimatePresence>
-              {midtransDetail && (
+              {auditDetail && (
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-4"
-                  onClick={() => setMidtransDetail(null)}
+                  onClick={() => setAuditDetail(null)}
                 >
                   <motion.div
                     initial={{ y: 40, opacity: 0 }}
@@ -553,18 +553,18 @@ export default function RiwayatPage() {
                     className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden"
                   >
                     <div className="px-6 py-5 border-b border-gray-100 flex items-center justify-between">
-                      <p className="text-sm font-black text-gray-900">Detail Transaksi</p>
-                      <button onClick={() => setMidtransDetail(null)} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100">
+                      <p className="text-sm font-black text-gray-900">Detail Audit Pembayaran</p>
+                      <button onClick={() => setAuditDetail(null)} className="w-8 h-8 rounded-xl flex items-center justify-center text-gray-400 hover:bg-gray-100">
                         <XCircle className="w-4 h-4" />
                       </button>
                     </div>
                     <div className="p-6 space-y-4">
                       {[
-                        { label: "ID Transaksi", value: midtransDetail.txId, mono: true },
-                        { label: "Vendor", value: midtransDetail.vendor },
-                        { label: "Nominal", value: `Rp ${midtransDetail.nominal.toLocaleString("id-ID")}` },
-                        { label: "Status", value: midtransDetail.status.toUpperCase() },
-                        { label: "Timestamp", value: midtransDetail.timestamp },
+                        { label: "ID Transaksi", value: auditDetail.txId, mono: true },
+                        { label: "Vendor", value: auditDetail.vendor },
+                        { label: "Nominal", value: `Rp ${auditDetail.nominal.toLocaleString("id-ID")}` },
+                        { label: "Status", value: auditDetail.status.toUpperCase() },
+                        { label: "Timestamp", value: auditDetail.timestamp },
                       ].map(item => (
                         <div key={item.label} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
                           <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest">{item.label}</p>

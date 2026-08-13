@@ -38,12 +38,12 @@ export function VendorCard({
               className="inline-flex w-2.5 h-2.5 rounded-[4px] flex-shrink-0"
               style={{ background: color ?? "var(--role-primary)" }}
             />
-            <p className="font-semibold text-sm text-foreground truncate">
+            <p className="font-semibold text-sm text-slate-900 truncate">
               {vendor.nama}
             </p>
           </div>
 
-          <div className="space-y-0.5 text-xs text-muted">
+          <div className="space-y-0.5 text-xs text-slate-500">
             <p className="truncate">{vendor.kategori.replaceAll("_", " ")}</p>
             <p className="truncate tabular-nums">
               {vendor.rating} bintang · {vendor.on_time_rate}% on-time
@@ -55,7 +55,7 @@ export function VendorCard({
             <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-border bg-role-accent text-role-primary">
               {data.is_primary ? "Vendor Utama" : "Vendor Cadangan"}
             </span>
-            <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-border bg-muted-bg text-foreground tabular-nums">
+            <span className="text-xs font-medium px-2 py-0.5 rounded-full border border-border bg-slate-100 text-slate-800 tabular-nums">
               {data.porsi_per_hari.toLocaleString("id-ID")} porsi/hari
             </span>
           </div>
@@ -65,7 +65,7 @@ export function VendorCard({
               {data.menu_default.slice(0, 6).map((menu) => (
                 <span
                   key={menu}
-                  className="text-xs font-medium px-2.5 py-0.5 rounded-full border border-border bg-surface text-muted"
+                  className="text-xs font-medium px-2.5 py-0.5 rounded-full border border-slate-200 bg-slate-50 text-slate-500"
                 >
                   {menu.replaceAll("_", " ")}
                 </span>

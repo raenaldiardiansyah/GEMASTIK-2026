@@ -4,17 +4,18 @@ import { Providers } from "@/components/providers";
 import { Toaster } from "sonner";
 import MainWrapper from "@/components/ui/main-wrapper";
 
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 
-const jakartaSans = Plus_Jakarta_Sans({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-jakarta",
+  variable: "--font-grotesk",
   display: "swap",
 });
 
 export const metadata = {
-  title: "B.O.G.A - End-to-End Supply Chain Solutions",
-  description: "End-to-End Supply Chain Solutions, Built for Scale",
+  title: "GIZANTARA B.O.G.A — End-to-End Traceability Program MBG",
+  description:
+    "Platform end-to-end traceability untuk program Makan Bergizi Gratis: verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi.",
 };
 
 export default function RootLayout({
@@ -23,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={jakartaSans.variable}>
-      <body className="min-h-screen flex flex-col relative font-sans antialiased bg-background text-foreground">
+    <html lang="id" className={`${spaceGrotesk.variable} dark`} style={{ colorScheme: "dark" }}>
+      <body className="min-h-screen flex flex-col relative font-sans antialiased bg-[#0F172A] text-foreground">
         <Providers>
 
           <Navbar />

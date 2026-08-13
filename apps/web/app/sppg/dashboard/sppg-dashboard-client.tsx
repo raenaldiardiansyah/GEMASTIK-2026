@@ -57,7 +57,7 @@ export default function SppgDashboardClient() {
   const [query, setQuery] = useState("");
   const [cart, setCart] = useState<CartItem[]>([]);
   const [qrOpen, setQrOpen] = useState(false);
-  const [escrowLocked, setEscrowLocked] = useState(false);
+  const [paymentPending, setPaymentPending] = useState(false);
 
   const items = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -138,16 +138,16 @@ export default function SppgDashboardClient() {
             <Button
               variant="outline"
               className="rounded-full"
-              disabled={escrowLocked}
+              disabled={paymentPending}
               onClick={() => {
-                setEscrowLocked(true);
+                setPaymentPending(true);
                 toast.success("Dana dikunci (demo).", {
-                  description: "Escrow lock aktif untuk PO ini (simulasi).",
+                  description: "Menunggu verifikasi OCR bukti transfer (simulasi).",
                 });
               }}
             >
               <Lock data-icon="inline-start" />
-              Lock Escrow
+              Upload Bukti Transfer
             </Button>
             <Button variant="outline" asChild className="rounded-full">
               <Link href="/logistik/dashboard">
@@ -172,7 +172,7 @@ export default function SppgDashboardClient() {
             { label: "Guard HET (demo)", value: "Aktif", icon: BadgePercent },
             { label: "Draft PO", value: String(cart.length), icon: ClipboardList },
             { label: "Item katalog", value: String(tenderMaterials.length), icon: PackagePlus },
-            { label: "Escrow lock (demo)", value: escrowLocked ? "Locked" : "Draft", icon: Lock },
+            { label: "Status Pembayaran (simulasi)", value: paymentPending ? "Menunggu OCR" : "Draft", icon: Lock },
           ].map((m) => (
             <div
               key={m.label}

@@ -123,7 +123,7 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
 
 /* ─── Main Dashboard ─── */
 export default function VendorDashboardPage() {
-  const [vendorId, setVendorId] = useState<string>("");
+  const [vendorId, setVendorId] = useState<string>("1");
   const [stats, setStats] = useState({
     total_revenue: 0,
     active_orders: 0,
@@ -135,38 +135,23 @@ export default function VendorDashboardPage() {
   const [periodIdx, setPeriodIdx] = useState(1); // Default 30 Hari
   const periods = ["7 Hari", "30 Hari", "3 Bulan", "1 Tahun"];
 
-  // API base
-  const API = "http://localhost:3001";
-
   useEffect(() => {
-    const id = document.cookie.split("; ").find(row => row.startsWith("boga_vendor_id="))?.split("=")[1];
-    if (id) {
-      setVendorId(id);
-    } else {
+    const id = localStorage.getItem("boga_vendor_id") || "1";
+    setVendorId(id);
+    
+    // Simulate loading
+    setTimeout(() => {
+      const { getVendorDashboardStats } = require("@/lib/mbgdummydata");
+      const dummyStats = getVendorDashboardStats(Number(id));
+      setStats({
+        total_revenue: dummyStats.total_revenue,
+        active_orders: dummyStats.active_orders,
+        active_products: dummyStats.active_products,
+        total_inbound: dummyStats.total_inbound
+      });
       setLoading(false);
-    }
+    }, 500);
   }, []);
-
-  const fetchStats = useCallback(async () => {
-    if (!vendorId) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`${API}/api/vendors/${vendorId}/stats`);
-      const json = await res.json();
-      if (json.status === "success") {
-        setStats(json.data);
-      }
-    } catch (error) {
-      logger.error('VendorDashboard', 'Gagal memuat statistik', error);
-      toast.error("Gagal sinkronisasi dashboard.");
-    } finally {
-      setLoading(false);
-    }
-  }, [vendorId]);
-
-  useEffect(() => {
-    fetchStats();
-  }, [fetchStats]);
 
   const getDisplayData = () => {
     // Simulasi data grafik berdasarkan periode
@@ -176,6 +161,7 @@ export default function VendorDashboardPage() {
     return {
       total: stats.total_revenue * baseTrend,
       trend: 12.5 + (periodIdx * 3),
+      orders: stats.active_orders,
       chart: PENDAPATAN_DATA.map(d => ({ ...d, nilai: d.nilai * (0.8 + Math.random() * 0.4) })),
       weekly: WEEKLY_PO.map(d => ({ 
         hari: d.hari, 
@@ -440,7 +426,7 @@ export default function VendorDashboardPage() {
               <div className="flex-1">
                 <h3 className="text-sm font-black text-slate-800 uppercase tracking-tight">Tawaran PO Menunggu</h3>
                 <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
-                  Terdapat <span className="font-bold text-amber-600">{activeData.orders} pesanan baru</span> yang memerlukan persetujuan Anda agar dana bisa segera diamankan di sistem (Rekening Bersama).
+                  Terdapat <span className="font-bold text-amber-600">{activeData.orders} pesanan baru</span> yang memerlukan persetujuan Anda agar Pembayaran terverifikasi melalui OCR bukti transfer.
                 </p>
                 <div className="mt-4 flex items-center justify-between">
                   <div>
@@ -463,9 +449,9 @@ export default function VendorDashboardPage() {
                 <ShieldAlert size={22} className="text-red-600" />
               </div>
               <div className="flex-1">
-                <h3 className="text-sm font-black text-slate-800 uppercase tracking-tight">Kendala Pencairan Dana</h3>
+                <h3 className="text-sm font-black text-slate-800 uppercase tracking-tight">Kendala Verifikasi Pembayaran</h3>
                 <p className="text-[11px] text-slate-500 leading-relaxed mt-1">
-                  Ada <span className="font-bold text-red-600">2 pesanan</span> yang sudah Anda serahkan tapi <span className="font-bold">Persetujuan Pihak Terkait (QC/Admin)</span> belum lengkap. Dana Anda masih tersimpan aman di sistem.
+                  Ada <span className="font-bold text-red-600">2 pesanan</span> yang sudah Anda serahkan tapi <span className="font-bold">Persetujuan Pihak Terkait (QC/Admin)</span> belum lengkap. Pembayaran terverifikasi melalui OCR bukti transfer belum selesai.
                 </p>
                 <div className="mt-4 flex items-center justify-between">
                   <div className="flex -space-x-2">

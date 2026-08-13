@@ -12,7 +12,6 @@ import { Badge } from "@/components/ui/badge";
 import LocationPickerMapLibre from "@/components/ui/LocationPickerMapLibre";
 
 /* ─── Constants ─── */
-const API = "http://localhost:3001";
 const G = "#065F46";
 const G_LIGHT = "#D1FAE5";
 
@@ -22,6 +21,7 @@ interface Movement {
   id: string; commodity_id: string; quantity: number;
   price_per_unit: number;
   origin_source_name: string; origin_source_location: string;
+  origin_lat?: string; origin_lng?: string;
   origin_proof_url: string; origin_proof_hash: string;
   created_at: string;
 }
@@ -332,40 +332,17 @@ function AddInboundSheet({ open, onClose, vendorId, commodities, onAdded }: {
     logger.info('VendorInbound', 'Mengirim data Inbound ke server...', { commodity: selectedCommodity?.name, quantity: form.quantity });
     setLoading(true);
     const t = toast.loading("Mencatat stok masuk...");
-    try {
-      const res = await fetch(`${API}/api/inventory/inbound`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          vendor_id: vendorId,
-          commodity_id: form.commodity_id,
-          quantity: Number(form.quantity),
-          price_per_unit: Number(form.price_per_unit),
-          origin_source_name: form.origin_source_name,
-          origin_source_location: `${form.origin_lat},${form.origin_lng}`,
-          origin_proof_url: form.origin_proof_url, // Dikirim untuk dianalisis AI
-          notes: "Inbound via Dashboard",
-        }),
-      });
-      const json = await res.json();
+    
+    // Simulate API call
+    setTimeout(() => {
       toast.dismiss(t);
-      if (json.status === "success") {
-        logger.info('VendorInbound', 'Inbound Berhasil!', json.data);
-        toast.success("Stok berhasil dicatat! Hash nota dikunci.");
-        setForm(EMPTY);
-        onAdded();
-        onClose();
-      } else {
-        logger.error('VendorInbound', 'Inbound Gagal (Server Error)', json.message);
-        toast.error(json.message ?? "Gagal mencatat stok.");
-      }
-    } catch (error) {
-      logger.error('VendorInbound', 'Kesalahan koneksi saat submit', error);
-      toast.dismiss(t);
-      toast.error("Tidak dapat terhubung ke server.");
-    } finally {
+      logger.info('VendorInbound', 'Inbound Berhasil!');
+      toast.success("Simulasi: Inbound berhasil dicatat");
+      setForm(EMPTY);
+      onAdded();
+      onClose();
       setLoading(false);
-    }
+    }, 800);
   };
 
   return (
@@ -525,40 +502,47 @@ export default function VendorInboundPage() {
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
 
   useEffect(() => {
-    const id = document.cookie.split("; ").find(row => row.startsWith("boga_vendor_id="))?.split("=")[1];
-    if (id) {
-      setVendorId(id);
-    } else {
-      setLoadingData(false);
-    }
+    const id = localStorage.getItem("boga_vendor_id") || "1";
+    setVendorId(id);
   }, []);
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(() => {
     if (!vendorId) return;
     logger.info('VendorInbound', 'Memulai pengambilan data stok dan riwayat...', { startDate, endDate });
     setLoadingData(true);
-    try {
-      // 1. Ambil Katalog Barang Vendor (untuk dropdown & stok)
-      const resComm = await fetch(`${API}/api/vendors/${vendorId}/commodities`);
-      const jsonComm = await resComm.json();
-      if (jsonComm.status === "success") {
-        setCommodities(jsonComm.data || []);
-        logger.debug('VendorInbound', 'Data stok katalog berhasil dimuat', { count: jsonComm.data?.length });
-      }
-
-    // 2. Ambil Riwayat Inbound dengan Filter Rentang Tanggal
-      const resMov = await fetch(`${API}/api/inventory/vendors/${vendorId}/inbound?start_date=${startDate}&end_date=${endDate}`);
-      const jsonMov = await resMov.json();
-      if (jsonMov.status === "success") {
-        setMovements(jsonMov.data || []);
-        logger.debug('VendorInbound', 'Riwayat transaksi berhasil dimuat', { count: jsonMov.data?.length });
-      }
-    } catch (error) {
-      logger.error('VendorInbound', 'Gagal mengambil data dari server', error);
-      toast.error("Gagal sinkronisasi data server.");
-    } finally {
+    
+    // Simulasi load
+    setTimeout(() => {
+      const { vendorCommodities, inventoryMovements } = require("@/lib/mbgdummydata");
+      
+      const vId = Number(vendorId);
+      const comms = vendorCommodities.filter((c: any) => c.vendorId === vId).map((c: any) => ({
+        id: c.id.toString(),
+        name: c.commodityName || c.name || "Unknown",
+        unit: c.unit || "kg",
+        current_stock: c.currentStock || c.current_stock || 0,
+        target_stock: c.targetStock || c.target_stock || 0,
+        category: c.category || "Umum"
+      }));
+      setCommodities(comms);
+      
+      const moves = inventoryMovements.filter((m: any) => m.vendorId === vId && m.type === "inbound").map((m: any) => ({
+        id: m.id.toString(),
+        commodity_id: m.commodityId.toString(),
+        quantity: m.quantity,
+        price_per_unit: m.pricePerUnit || 0,
+        origin_source_name: m.originSourceName || "Dummy Source",
+        origin_source_location: m.originSourceLocation || "",
+        origin_lat: m.originLat,
+        origin_lng: m.originLng,
+        origin_proof_url: m.originProofUrl || "",
+        origin_proof_hash: m.originProofHash || "dummyhash",
+        created_at: m.createdAt || new Date().toISOString()
+      }));
+      
+      setMovements(moves);
       setLoadingData(false);
-    }
+    }, 500);
   }, [vendorId, startDate, endDate]);
 
   useEffect(() => { fetchData(); }, [fetchData]);

@@ -14,11 +14,12 @@ export interface DashboardFilter {
   jenjang: JenjangFilter[] // empty array = semua jenjang
 }
 
-interface DashboardFilterContextValue {
+export interface DashboardFilterContextValue {
   filter: DashboardFilter
   setPeriode: (p: DashboardPeriode) => void
   setSppgId: (id: number | null) => void
   toggleJenjang: (j: JenjangFilter) => void
+  setJenjang: (j: JenjangFilter[]) => void
 }
 
 const DashboardFilterContext = createContext<DashboardFilterContextValue | null>(null)
@@ -39,9 +40,11 @@ export function DashboardFilterProvider({ children }: { children: React.ReactNod
         ? prev.jenjang.filter((x) => x !== j)
         : [...prev.jenjang, j],
     }))
+  const setJenjang = (j: JenjangFilter[]) =>
+    setFilter((prev) => ({ ...prev, jenjang: j }))
 
   const value = useMemo(
-    () => ({ filter, setPeriode, setSppgId, toggleJenjang }),
+    () => ({ filter, setPeriode, setSppgId, toggleJenjang, setJenjang }),
     [filter]
   )
 

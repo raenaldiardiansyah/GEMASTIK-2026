@@ -22,16 +22,12 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
           return;
         }
 
-        const res = await fetch(`http://localhost:3001/api/vendors/${vendorId}`);
-        const json = await res.json();
-
-        if (json.status === "success") {
-          const dbStatus = json.data.status;
-          const mappedStatus = dbStatus === "APPROVED" ? "approved" : "pending";
-          setStatus(mappedStatus);
-          // Sync cookie for other components
-          document.cookie = `boga_vendor_status=${mappedStatus}; path=/`;
-        }
+        // Data vendor diambil dari localStorage (simulasi)
+        
+        // Simulasikan sukses sebagai APPROVED
+        const mappedStatus = "approved";
+        setStatus(mappedStatus);
+        document.cookie = `boga_vendor_status=${mappedStatus}; path=/`;
       } catch (err) {
         console.error("Failed to fetch vendor status:", err);
       } finally {

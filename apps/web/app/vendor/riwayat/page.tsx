@@ -8,6 +8,7 @@ import {
   XCircle, ShieldCheck, Wallet, Tag, Filter,
   Clock, Hash, AlertTriangle,
 } from "lucide-react";
+import { getVendorHistoryEvents } from "@/lib/mbgdummydata";
 
 /* ─── Constants ─── */
 const G = "#065F46";
@@ -20,7 +21,7 @@ type EventType =
   | "PO_ACCEPTED"
   | "PO_REJECTED"
   | "MULTISIG_PROGRESS"
-  | "ESCROW_RELEASED"
+  | "PAYMENT_VERIFIED"
   | "KATALOG_ADDED"
   | "KATALOG_REMOVED"
   | "SERAH_TERIMA";
@@ -41,7 +42,7 @@ interface ActivityEvent {
 const MOCK_EVENTS: ActivityEvent[] = [
   // --- HALAMAN 1 (10 Data Terbaru) ---
   {
-    id: "EVT-001", type: "ESCROW_RELEASED", title: "Dana Escrow Dicairkan", subtitle: "PO-DEMO-099 · SPPG Bandung Barat",
+    id: "EVT-001", type: "PAYMENT_VERIFIED", title: "Pembayaran Terverifikasi", subtitle: "PO-DEMO-099 · SPPG Bandung Barat",
     detail: "Multi-Sig 3/3 lengkap. Dana tahap 1 dikirim ke rekening BCA Anda.", amount: 4500000,
     timestamp: new Date().toISOString(), hash: "0x4fa3b1c9d8e2",
   },
@@ -62,7 +63,7 @@ const MOCK_EVENTS: ActivityEvent[] = [
   },
   {
     id: "EVT-005", type: "PO_RECEIVED", title: "Pesanan Masuk dari SPPG", subtitle: "PO-DEMO-099 · SPPG Bandung Barat",
-    detail: "Pesanan baru untuk 250 kg Beras Premium. Dana sudah dikunci di escrow.",
+    detail: "Pesanan baru untuk 250 kg Beras Premium. Pesanan menunggu konfirmasi dan verifikasi.",
     amount: 4500000, timestamp: new Date(Date.now() - 28800000).toISOString(),
   },
   {
@@ -90,7 +91,7 @@ const MOCK_EVENTS: ActivityEvent[] = [
 
   // --- HALAMAN 2 ---
   {
-    id: "EVT-011", type: "ESCROW_RELEASED", title: "Pembayaran Selesai", subtitle: "PO-X-771 · SPPG Bekasi Utara",
+    id: "EVT-011", type: "PAYMENT_VERIFIED", title: "Pembayaran Selesai", subtitle: "PO-X-771 · SPPG Bekasi Utara",
     amount: 8200000, timestamp: new Date(Date.now() - 500000000).toISOString(),
   },
   {
@@ -118,7 +119,7 @@ const MOCK_EVENTS: ActivityEvent[] = [
     timestamp: new Date(Date.now() - 1100000000).toISOString(),
   },
   {
-    id: "EVT-018", type: "ESCROW_RELEASED", title: "Dana Cair: PO-A-22", subtitle: "Tahap Final · 100%",
+    id: "EVT-018", type: "PAYMENT_VERIFIED", title: "Dana Cair: PO-A-22", subtitle: "Tahap Final · 100%",
     amount: 15000000, timestamp: new Date(Date.now() - 1200000000).toISOString(),
   },
   {
@@ -160,7 +161,7 @@ const EVENT_CONFIG: Record<EventType, { icon: React.ElementType; color: string; 
   PO_ACCEPTED:      { icon: CheckCircle2,    color: G,         bg: G_LIGHT,   label: "Pesanan" },
   PO_REJECTED:      { icon: XCircle,         color: "#DC2626", bg: "#FEE2E2", label: "Pesanan" },
   MULTISIG_PROGRESS:{ icon: ShieldCheck,     color: "#7C3AED", bg: "#F5F3FF", label: "Multi-Sig" },
-  ESCROW_RELEASED:  { icon: Wallet,          color: G,         bg: G_LIGHT,   label: "Keuangan" },
+  PAYMENT_VERIFIED: { icon: Wallet,          color: G,         bg: G_LIGHT,   label: "Verifikasi Pembayaran" },
   KATALOG_ADDED:    { icon: Package,         color: "#0891B2", bg: "#ECFEFF", label: "Katalog" },
   KATALOG_REMOVED:  { icon: Package,         color: "#64748B", bg: "#F1F5F9", label: "Katalog" },
   SERAH_TERIMA:     { icon: CheckCircle2,    color: G,         bg: G_LIGHT,   label: "Logistik" },
@@ -172,7 +173,7 @@ const FILTER_MAP: Record<FilterKey, EventType[]> = {
   all:      [],
   pesanan:  ["PO_RECEIVED", "PO_ACCEPTED", "PO_REJECTED", "SERAH_TERIMA", "MULTISIG_PROGRESS"],
   stok:     ["INBOUND"],
-  keuangan: ["ESCROW_RELEASED"],
+  keuangan: ["PAYMENT_VERIFIED"],
   katalog:  ["KATALOG_ADDED", "KATALOG_REMOVED"],
 };
 
@@ -298,8 +299,6 @@ export default function VendorRiwayatPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const API = "http://localhost:3001";
-
   useEffect(() => {
     const id = document.cookie.split("; ").find(row => row.startsWith("boga_vendor_id="))?.split("=")[1];
     if (id) {
@@ -309,17 +308,12 @@ export default function VendorRiwayatPage() {
     }
   }, []);
 
-  const fetchHistory = useCallback(async () => {
+  const fetchHistory = useCallback(() => {
     if (!vendorId) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/inventory/vendors/${vendorId}/history`);
-      const json = await res.json();
-      if (json.status === "success") {
-        setEvents(json.data || []);
-      }
+      setEvents(getVendorHistoryEvents(Number(vendorId)) as any);
     } catch (error) {
-      logger.error('VendorRiwayat', 'Gagal memuat riwayat', error);
       toast.error("Gagal sinkronisasi data riwayat.");
     } finally {
       setLoading(false);
@@ -391,7 +385,7 @@ export default function VendorRiwayatPage() {
 
   const todayCount = events.filter(ev => new Date(ev.timestamp).toDateString() === new Date().toDateString()).length;
   const pendingPO  = events.filter(ev => ev.type === "PO_RECEIVED").length;
-  const released   = events.filter(ev => ev.type === "ESCROW_RELEASED").reduce((s, e) => s + (e.amount ?? 0), 0);
+  const released   = events.filter(ev => ev.type === "PAYMENT_VERIFIED").reduce((s, e) => s + (e.amount ?? 0), 0);
 
   return (
     <div className="min-h-svh bg-slate-50" data-role="vendor">

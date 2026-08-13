@@ -1,12 +1,12 @@
 "use client"
 
 import { useMemo } from "react"
-import { ChevronDown, LayoutDashboard } from "lucide-react"
+import { useRouter } from "next/navigation"
+import { Bell, ChevronDown, LayoutDashboard } from "lucide-react"
 
-import { sppgList } from "@/lib/mbgdummydata"
-import type { DashboardPeriode, JenjangFilter } from "@/lib/mbgdummydata"
 import { cn } from "@/lib/utils"
 import { useDashboardFilter } from "./DashboardFilterContext"
+import { sppgList, type DashboardPeriode, type JenjangFilter } from "@/lib/mbgdummydata"
 import { PageHeader } from "@/components/ui/page-header"
 import {
   DropdownMenu,
@@ -15,42 +15,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-const ANCHOR_FORMATTED = "3 Apr 2025, 08.43"
-const REFRESH_LABEL = "Diperbarui 3 menit lalu"
-
-const PERIODES: { label: string; value: DashboardPeriode }[] = [
-  { label: "1 Hari", value: "1H" },
-  { label: "7 Hari", value: "7H" },
-  { label: "30 Hari", value: "30H" },
-]
-
-const JENJANGS: JenjangFilter[] = ["SD", "SMP", "SMA"]
+const STATUS_COLORS = {
+  delivered: "hsl(var(--status-success))",
+  on_transit: "hsl(var(--status-info))",
+  pending: "hsl(var(--status-pending))",
+  gagal: "hsl(var(--status-danger))",
+}
 
 export function DashboardHeader() {
-  const { filter, setPeriode, setSppgId, toggleJenjang } = useDashboardFilter()
-
-  const activeSppg = useMemo(
-    () => sppgList.find((s) => s.id === filter.sppgId) ?? null,
-    [filter.sppgId]
-  )
+  const { filter, setPeriode, setSppgId, toggleJenjang, setJenjang } = useDashboardFilter()
+  const router = useRouter()
 
   return (
     <div className="space-y-4">
       <PageHeader
         title={
-          <span className="inline-flex items-center gap-2">
-            <span className="inline-flex size-9 items-center justify-center rounded-xl bg-role-primary text-white">
-              <LayoutDashboard className="size-5" aria-hidden />
+          <span className="inline-flex items-center gap-2.5">
+            <span className="size-6 inline-flex items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
+              <LayoutDashboard className="size-4" aria-hidden />
             </span>
-            <span>Dashboard Pemerintah</span>
+            <span className="font-black text-xl sm:text-2xl tracking-tight text-slate-900">Dashboard Pemerintah</span>
           </span>
         }
-        subtitle={
-          <span>
-            Data per <span className="font-medium text-foreground">{ANCHOR_FORMATTED}</span>{" "}
-            <span className="text-muted-foreground">•</span>{" "}
-            <span className="text-muted-foreground">{REFRESH_LABEL}</span>
-          </span>
+        subtitle={null}
+        actions={
+          <button
+            onClick={() => router.push("/goverment/notifikasi")}
+            aria-label="Lihat notifikasi (4 notifikasi belum dibaca)"
+            className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-surface border border-border text-slate-800 hover:bg-slate-100 hover:text-indigo-600 transition-all shadow-xs group"
+          >
+            <Bell className="w-5 h-5" />
+            <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white shadow-sm ring-2 ring-white">
+              4
+            </span>
+          </button>
         }
       />
 
@@ -60,21 +58,24 @@ export function DashboardHeader() {
           role="group"
           aria-label="Filter periode"
         >
-          {PERIODES.map((p) => (
-            <button
-              key={p.value}
-              onClick={() => setPeriode(p.value)}
-              aria-pressed={filter.periode === p.value}
-              className={cn(
-                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-                filter.periode === p.value
-                  ? "bg-role-primary text-white"
-                  : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
-              )}
-            >
-              {p.label}
-            </button>
-          ))}
+          {["1H", "7H", "30H"].map((p) => {
+            const val = p as DashboardPeriode
+            const label = { "1H": "1 Hari", "7H": "7 Hari", "30H": "30 Hari" }[p]
+            const isActive = filter.periode === val
+            return (
+              <button
+                key={p}
+                onClick={() => setPeriode(val)}
+                aria-pressed={isActive}
+                className={cn(
+                  "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
+                  isActive ? "bg-indigo-600 text-white" : "text-slate-800 font-semibold hover:bg-surface-raised"
+                )}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
 
         <DropdownMenu>
@@ -84,7 +85,7 @@ export function DashboardHeader() {
               aria-label="Filter SPPG"
             >
               <span className="max-w-[220px] truncate">
-                {activeSppg ? activeSppg.nama : "Semua SPPG"}
+                {filter.sppgId ? "SPPG " + filter.sppgId : "Semua SPPG"}
               </span>
               <ChevronDown className="size-4 text-muted-foreground" aria-hidden />
             </button>
@@ -92,17 +93,16 @@ export function DashboardHeader() {
           <DropdownMenuContent align="start" className="text-sm">
             <DropdownMenuItem
               onClick={() => setSppgId(null)}
-              className={cn(!filter.sppgId && "font-semibold")}
+              className="font-semibold"
             >
               Semua SPPG
             </DropdownMenuItem>
-            {sppgList.map((s) => (
+            {sppgList.map(sppg => (
               <DropdownMenuItem
-                key={s.id}
-                onClick={() => setSppgId(s.id)}
-                className={cn(filter.sppgId === s.id && "font-semibold")}
+                key={sppg.id}
+                onClick={() => setSppgId(sppg.id)}
               >
-                {s.nama}
+                {sppg.nama}
               </DropdownMenuItem>
             ))}
           </DropdownMenuContent>
@@ -111,31 +111,36 @@ export function DashboardHeader() {
         <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter jenjang">
           <button
             onClick={() => {
-              filter.jenjang.forEach((j) => toggleJenjang(j))
+              const all: JenjangFilter[] = ["SD", "SMP", "SMA"]
+              setJenjang(
+                filter.jenjang.length === all.length
+                  ? []
+                  : all
+              )
             }}
-            aria-pressed={filter.jenjang.length === 0}
+            aria-pressed={filter.jenjang.length > 0}
             className={cn(
               "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
               filter.jenjang.length === 0
-                ? "border-role-primary bg-role-accent text-foreground"
-                : "border-border bg-surface text-muted-foreground hover:bg-surface-raised hover:text-foreground"
+                ? "border-indigo-600 bg-indigo-100 text-indigo-700 font-semibold"
+                : "border-border bg-surface text-slate-800 font-semibold hover:bg-surface-raised"
             )}
           >
             Semua
           </button>
 
-          {JENJANGS.map((j) => {
-            const active = filter.jenjang.includes(j)
+          {"SD SMP SMA".split(" ").map((j) => {
+            const active = filter.jenjang.includes(j as any)
             return (
               <button
                 key={j}
-                onClick={() => toggleJenjang(j)}
+                onClick={() => toggleJenjang(j as any)}
                 aria-pressed={active}
                 className={cn(
                   "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
                   active
-                    ? "border-role-primary bg-role-accent text-foreground"
-                    : "border-border bg-surface text-muted-foreground hover:bg-surface-raised hover:text-foreground"
+                    ? "border-indigo-600 bg-indigo-100 text-indigo-700 font-semibold"
+                    : "border-border bg-surface text-slate-800 font-semibold hover:bg-surface-raised"
                 )}
               >
                 {j}

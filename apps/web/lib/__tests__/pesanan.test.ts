@@ -8,7 +8,7 @@ describe('Pesanan Logic (getPOTab)', () => {
     orderDate: new Date().toISOString(),
     financials: {
       totalAmount: 1000,
-      escrowStatus: "ESCROW_HOLD",
+      paymentStatus: "MENUNGGU_KONFIRMASI",
       signatures: { qc: "PENDING", admin: "PENDING", logistik: "PENDING" }
     },
     items: []
@@ -25,10 +25,10 @@ describe('Pesanan Logic (getPOTab)', () => {
     expect(tab).toBe('rejected');
   });
 
-  it('harus mengembalikan status "expired" jika escrow expired', () => {
+  it('harus mengembalikan status "expired" jika batas waktu terlampaui', () => {
     const po: PO = { 
       ...basePO, 
-      financials: { ...basePO.financials, escrowStatus: "EXPIRED" } 
+      financials: { ...basePO.financials, paymentStatus: "EXPIRED" } 
     };
     const tab = getPOTab(po);
     expect(tab).toBe('expired');
@@ -46,19 +46,38 @@ describe('Pesanan Logic (getPOTab)', () => {
     expect(tab).toBe('completed');
   });
 
-  it('harus mengembalikan status "scan" jika dalam tahap READY_FOR_PICKUP', () => {
+  it('harus mengembalikan status "scan" jika dalam tahap SIAP_AMBIL', () => {
     const po: PO = { 
       ...basePO, 
-      financials: { ...basePO.financials, escrowStatus: "READY_FOR_PICKUP" } 
+      financials: { ...basePO.financials, paymentStatus: "SIAP_AMBIL" } 
     };
     const tab = getPOTab(po);
     expect(tab).toBe('scan');
   });
 
-  it('harus mengembalikan status "scan" jika dalam tahap REVISION', () => {
+  it('harus mengembalikan status "scan" jika dalam tahap MANUAL_REVIEW', () => {
     const po: PO = { 
       ...basePO, 
-      financials: { ...basePO.financials, escrowStatus: "REVISION" } 
+      financials: { ...basePO.financials, paymentStatus: "MANUAL_REVIEW" } 
+    };
+    const tab = getPOTab(po);
+    expect(tab).toBe('scan');
+  });
+
+  // New tests for payment flow
+  it('harus mengembalikan status "pending" untuk MENUNGGU_BUKTI_TRANSFER', () => {
+    const po: PO = { 
+      ...basePO, 
+      financials: { ...basePO.financials, paymentStatus: "MENUNGGU_BUKTI_TRANSFER" } 
+    };
+    const tab = getPOTab(po);
+    expect(tab).toBe('pending');
+  });
+
+  it('harus mengembalikan status "scan" untuk OCR_VALIDATING', () => {
+    const po: PO = { 
+      ...basePO, 
+      financials: { ...basePO.financials, paymentStatus: "OCR_VALIDATING" } 
     };
     const tab = getPOTab(po);
     expect(tab).toBe('scan');

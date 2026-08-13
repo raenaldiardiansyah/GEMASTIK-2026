@@ -88,20 +88,20 @@ function statusBadge(status: VerificationStatus) {
   if (status === "lulus") {
     return {
       label: "Lulus",
-      cls: "bg-status-success-bg text-status-success border-status-success/25",
+      cls: "bg-emerald-100 text-emerald-900 border-emerald-300 font-black",
       icon: CheckCircle2,
     };
   }
   if (status === "tinjau") {
     return {
       label: "Perlu Tinjau",
-      cls: "bg-status-warning-bg text-status-warning border-status-warning/25",
+      cls: "bg-amber-100 text-amber-900 border-amber-300 font-black",
       icon: AlertTriangle,
     };
   }
   return {
     label: "Gagal",
-    cls: "bg-status-danger-bg text-status-danger border-status-danger/25",
+    cls: "bg-red-100 text-red-900 border-red-300 font-black",
     icon: XCircle,
   };
 }
@@ -130,7 +130,7 @@ function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full border px-3 py-1.5 text-xs font-medium uppercase tracking-wide",
+        "inline-flex items-center rounded-full border px-3 py-1 text-xs font-black uppercase tracking-wide",
         className
       )}
     >
@@ -168,78 +168,78 @@ export function VendorVerificationDropdown() {
   }, [vendorsWithVerification]);
 
   return (
-    <section className="overflow-hidden rounded-xl border border-border bg-surface shadow-[var(--shadow-card)]">
-      <div className="flex flex-col gap-4 border-b border-border px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:px-6">
+    <section className="overflow-hidden rounded-2xl border border-slate-300 bg-white">
+      <div className="flex flex-col gap-4 border-b border-slate-200 px-5 py-5 sm:flex-row sm:items-start sm:justify-between sm:px-6 bg-slate-50/50">
         <div className="flex items-start gap-3">
-          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-border bg-role-accent/15 text-role-badge">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-xl border border-slate-300 bg-[#213555] text-white shadow-xs">
             <BadgeCheck className="size-5" />
           </div>
           <div className="min-w-0">
-            <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+            <p className="text-xs font-black uppercase tracking-wide text-slate-800">
               Vendor digunakan
             </p>
-            <h2 className="mt-1 text-lg font-semibold tracking-tight text-foreground">
+            <h2 className="mt-1 text-xl font-black tracking-tight text-slate-900">
               Hasil verifikasi vendor
             </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
+            <p className="mt-1 text-xs font-bold text-slate-700">
               Klik vendor untuk melihat detail—terutama yang{" "}
-              <span className="font-medium text-status-danger">gagal</span> atau{" "}
-              <span className="font-medium text-status-warning">perlu tinjau</span>.
+              <span className="font-black text-red-700">gagal</span> atau{" "}
+              <span className="font-black text-amber-800">perlu tinjau</span>.
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-          <Pill className="border-border bg-surface-raised text-foreground">Total {counts.total}</Pill>
+          <Pill className="border-slate-300 bg-white text-slate-900 font-black">Total {counts.total}</Pill>
           {counts.gagal > 0 ? (
-            <Pill className="border-status-danger/25 bg-status-danger-bg text-status-danger">
+            <Pill className="border-red-300 bg-red-100 text-red-900 font-black">
               {counts.gagal} gagal
             </Pill>
           ) : null}
           {counts.tinjau > 0 ? (
-            <Pill className="border-status-warning/25 bg-status-warning-bg text-status-warning">
+            <Pill className="border-amber-300 bg-amber-100 text-amber-900 font-black">
               {counts.tinjau} tinjau
             </Pill>
           ) : null}
           {counts.lulus > 0 ? (
-            <Pill className="border-status-success/25 bg-status-success-bg text-status-success">
+            <Pill className="border-emerald-300 bg-emerald-100 text-emerald-900 font-black">
               {counts.lulus} lulus
             </Pill>
           ) : null}
         </div>
       </div>
 
-      <div className="divide-y divide-border">
+      <div className="divide-y divide-slate-200">
         {vendorsWithVerification.map(({ v, ver }) => {
           const badge = statusBadge(ver.status);
           const Icon = badge.icon;
           const isExpanded = expandedVendorId === v.id;
 
           return (
-            <motion.div key={v.id} layout className="bg-surface">
+            <motion.div key={v.id} layout className="bg-white">
               <button
                 type="button"
                 onClick={() => setExpandedVendorId(isExpanded ? null : v.id)}
                 aria-expanded={isExpanded}
                 className={cn(
-                  "w-full px-5 py-4 sm:px-6 text-left transition-colors hover:bg-surface-raised/60",
+                  "w-full px-5 py-4 sm:px-6 text-left transition-colors hover:bg-slate-100/80",
                   ver.status === "gagal"
-                    ? "bg-status-danger-bg/50"
+                    ? "bg-red-50/60"
                     : ver.status === "tinjau"
-                      ? "bg-status-warning-bg/50"
+                      ? "bg-amber-50/60"
                       : undefined
                 )}
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="truncate text-sm font-semibold text-foreground">{v.nama}</p>
-                      <Pill className="border-border bg-surface-raised text-muted-foreground">
+                      <p className="truncate text-sm font-black text-slate-900">{v.nama}</p>
+                      <Pill className="border-slate-300 bg-slate-100 text-slate-800 font-black">
                         {kategoriLabel(v.kategori)}
                       </Pill>
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium uppercase tracking-wide",
+                          "inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-black uppercase tracking-wide",
                           badge.cls
                         )}
                       >
@@ -248,13 +248,13 @@ export function VendorVerificationDropdown() {
                       </span>
                     </div>
 
-                    <div className="mt-1 flex flex-wrap items-center gap-4">
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Timer className="size-4 text-role-badge" aria-hidden />
+                    <div className="mt-1.5 flex flex-wrap items-center gap-4">
+                      <span className="flex items-center gap-1 text-xs font-extrabold text-slate-800">
+                        <Timer className="size-4 text-[#213555]" aria-hidden />
                         {v.on_time_rate.toFixed(1)}% tepat waktu
                       </span>
-                      <span className="flex items-center gap-1 text-sm text-muted-foreground">
-                        <Star className="size-4 text-status-warning" aria-hidden />
+                      <span className="flex items-center gap-1 text-xs font-extrabold text-slate-800">
+                        <Star className="size-4 text-amber-600 fill-amber-500" aria-hidden />
                         {v.rating.toFixed(1)}
                       </span>
                     </div>
@@ -262,7 +262,7 @@ export function VendorVerificationDropdown() {
 
                   <ChevronDown
                     className={cn(
-                      "mt-1 size-5 shrink-0 text-muted-foreground transition-transform",
+                      "mt-1 size-5 shrink-0 text-slate-700 transition-transform",
                       isExpanded && "rotate-180"
                     )}
                     aria-hidden
@@ -276,21 +276,21 @@ export function VendorVerificationDropdown() {
                     initial={{ height: 0, opacity: 0 }}
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
-                    className="overflow-hidden"
+                    className="overflow-hidden border-t border-slate-200"
                   >
-                    <div className="px-5 pb-5 pt-1 sm:px-6">
+                    <div className="px-5 pb-5 pt-3 sm:px-6 bg-slate-50/50">
                       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                        <div className="rounded-xl border border-border bg-surface-raised p-4">
-                          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <div className="rounded-xl border border-slate-200 bg-white p-4">
+                          <p className="text-xs font-black uppercase tracking-wide text-slate-800">
                             Temuan
                           </p>
                           {ver.issues.length === 0 ? (
-                            <p className="mt-2 text-sm text-muted-foreground">Tidak ada temuan.</p>
+                            <p className="mt-2 text-xs font-bold text-slate-700">Tidak ada temuan.</p>
                           ) : (
-                            <ul className="mt-2 space-y-2 text-sm text-foreground">
+                            <ul className="mt-2 space-y-2 text-xs font-bold text-slate-900">
                               {ver.issues.map((issue) => (
                                 <li key={issue} className="flex gap-2">
-                                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-role-badge" aria-hidden />
+                                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-red-600" aria-hidden />
                                   <span className="leading-relaxed">{issue}</span>
                                 </li>
                               ))}
@@ -298,17 +298,17 @@ export function VendorVerificationDropdown() {
                           )}
                         </div>
 
-                        <div className="rounded-xl border border-border bg-surface-raised p-4">
-                          <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+                        <div className="rounded-xl border border-slate-200 bg-white p-4">
+                          <p className="text-xs font-black uppercase tracking-wide text-slate-800">
                             Rekomendasi tindakan
                           </p>
                           {ver.suggestedActions.length === 0 ? (
-                            <p className="mt-2 text-sm text-muted-foreground">Tidak ada rekomendasi.</p>
+                            <p className="mt-2 text-xs font-bold text-slate-700">Tidak ada rekomendasi.</p>
                           ) : (
-                            <ul className="mt-2 space-y-2 text-sm text-foreground">
+                            <ul className="mt-2 space-y-2 text-xs font-bold text-slate-900">
                               {ver.suggestedActions.map((action) => (
                                 <li key={action} className="flex gap-2">
-                                  <span className="mt-2 size-1.5 shrink-0 rounded-full bg-role-badge" aria-hidden />
+                                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-[#213555]" aria-hidden />
                                   <span className="leading-relaxed">{action}</span>
                                 </li>
                               ))}

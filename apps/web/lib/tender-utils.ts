@@ -15,6 +15,7 @@ export interface CatalogItem {
   isMarkup?: boolean;
   markupPercent?: number;
   hetValue: number;
+  het?: string;
   distance: number;
   description: string;
   vendor: string;
@@ -49,6 +50,8 @@ export interface CustomMenu {
   overheadCost: number;
   cookingTime: number;
   image: string;
+  compartments: { karbo: string; proteinUtama: string; proteinNabati: string; sayur: string; buah: string };
+  ingredients: SelectedIngredient[];
 }
 
 export const STUDENTS_COUNT = 540;

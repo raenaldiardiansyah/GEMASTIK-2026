@@ -159,7 +159,7 @@ const KPICard = memo(function KPICard({
       )}
     >
       {/* Label */}
-      <p className="text-[9px] font-black uppercase tracking-[0.18em] text-slate-400">{label}</p>
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-700">{label}</p>
 
       {/* Value + icon */}
       <div className="flex items-center gap-2">
@@ -178,7 +178,7 @@ const KPICard = memo(function KPICard({
 
       {/* Sub + delta */}
       <div className="flex flex-col gap-0.5">
-        <p className="text-[9px] text-slate-400 truncate">{sub}</p>
+        <span className="text-[10px] font-semibold text-slate-600 leading-tight">{sub}</span>
         {delta}
       </div>
     </motion.button>

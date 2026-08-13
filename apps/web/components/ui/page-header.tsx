@@ -16,11 +16,11 @@ export function PageHeader({
   return (
     <header className={cn("flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between", className)}>
       <div className="min-w-0">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+        <h1 className="text-xl font-black tracking-tight text-slate-900 sm:text-2xl">
           {title}
         </h1>
         {subtitle ? (
-          <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{subtitle}</p>
+          <p className="mt-1 text-sm leading-relaxed text-slate-700 font-bold">{subtitle}</p>
         ) : null}
       </div>
 

@@ -11,7 +11,11 @@ import {
   ShieldCheck,
   Package,
 } from "lucide-react";
-import { sekolahList, vendorList } from "../../lib/mbgdummydata";
+import {
+  sekolahList,
+  vendorList,
+  getDummyRoute,
+} from "../../lib/mbgdummydata";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface DriverUnit {
@@ -85,7 +89,6 @@ export default function MapSupervision({
       center: [107.6191, -6.9175],
       zoom: 12,
       pitch: 0,
-      antialias: true,
     });
 
     map.current = m;
@@ -241,7 +244,10 @@ export default function MapSupervision({
       );
       const data = await res.json();
       path = data.routes?.[0]?.geometry?.coordinates ?? [];
-    } catch (_) {}
+    } catch (_) {
+      // Fallback jika API OSRM mati/offline
+      path = getDummyRoute(vendor.id, school.id);
+    }
 
     if (!path.length || !map.current) return;
     // Guard: abort if user closed during the fetch

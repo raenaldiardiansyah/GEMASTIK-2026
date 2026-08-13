@@ -42,7 +42,6 @@ export default function MapLibreMap({ selectedSchool, onSchoolSelect, userSchool
       zoom: 13,
       pitch: 0,
       bearing: 0,
-      antialias: true
     });
 
     map.current.on('load', () => {

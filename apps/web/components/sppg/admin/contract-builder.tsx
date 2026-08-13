@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Filter, ChevronDown } from "lucide-react";
 import { SchoolMap } from "./school-map";
+import { sekolahList } from "@/lib/mbgdummydata";
 
 export function ContractBuilder() {
   const router = useRouter();
@@ -55,11 +56,11 @@ export function ContractBuilder() {
     const fetchSchools = async () => {
       setIsLoadingSchools(true);
       try {
-        const res = await fetch(`http://localhost:3001/api/sekolah?q=${searchQuery}&cat=${selectedCategory}`);
-        const data = await res.json();
-        if (data.success) {
-          setSchools(data.data);
+        let filtered = sekolahList.filter(s => s.nama.toLowerCase().includes(searchQuery.toLowerCase()));
+        if (selectedCategory !== "Semua") {
+          filtered = filtered.filter(s => (s as any).tingkat === selectedCategory);
         }
+        setSchools(filtered);
       } catch (err) {
         console.error("Failed to fetch schools:", err);
       } finally {

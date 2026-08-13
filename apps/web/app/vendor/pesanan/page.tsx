@@ -12,93 +12,28 @@ import { Input } from "@/components/ui/input";
 import { logger } from "@/lib/logger";
 
 /* ─── Constants ─── */
-const API = "http://localhost:3001";
 const G = "#065F46";
 const G_LIGHT = "#D1FAE5";
 
 import { getPOTab, type PO, type POItem, type Signatures, type Tab } from "@/lib/pesanan";
+import { getPurchaseOrdersByVendor, vendorList, sppgList } from "@/lib/mbgdummydata";
 
-/* ─── Mock demo data ─── */
-const MOCK_POS: PO[] = [
-  {
-    purchaseOrderId: "PO-2024-001",
-    sppgId: "SDN 01 Menteng",
-    orderDate: new Date(Date.now() - 1 * 3600000).toISOString(),
-    financials: { totalAmount: 10200000, escrowStatus: "ESCROW_HOLD", signatures: { qc: "PENDING", admin: "PENDING", logistik: "PENDING" } },
-    items: [
-      { item_name: "Beras Premium Cap Ramos", quantity: 250, unit: "kg", price_at_purchase: 18000, subtotal: 4500000 },
-      { item_name: "Telur Ayam Ras", quantity: 50, unit: "kg", price_at_purchase: 28000, subtotal: 1400000 },
-      { item_name: "Daging Ayam Ras Segar", quantity: 100, unit: "kg", price_at_purchase: 30000, subtotal: 3000000 },
-      { item_name: "Cabai Merah Besar", quantity: 10, unit: "kg", price_at_purchase: 50000, subtotal: 500000 },
-      { item_name: "Minyak Goreng Kita 1L", quantity: 50, unit: "liter", price_at_purchase: 16000, subtotal: 800000 },
-    ],
-  },
-  {
-    purchaseOrderId: "PO-2024-002",
-    sppgId: "SMPN 2 Jakarta",
-    orderDate: new Date(Date.now() - 40 * 3600000).toISOString(),
-    financials: { totalAmount: 2880000, escrowStatus: "READY_FOR_PICKUP", signatures: { qc: "PENDING", admin: "PENDING", logistik: "PENDING" } },
-    items: [{ item_name: "Telur Ayam Ras", quantity: 100, unit: "kg", price_at_purchase: 28800, subtotal: 2880000 }],
-    pickup_pin: "847291",
-  },
-  {
-    purchaseOrderId: "PO-2024-003",
-    sppgId: "SMA 70 Jakarta",
-    orderDate: new Date(Date.now() - 60 * 3600000).toISOString(),
-    // Skenario: Tahap 1 Selesai (QR Hilang), sedang proses Tahap 2 (Multi-Sig)
-    financials: { totalAmount: 6750000, escrowStatus: "VALIDATING", signatures: { qc: "SIGNED", admin: "SIGNED", logistik: "SIGNED" } },
-    items: [{ item_name: "Daging Sapi Segar", quantity: 50, unit: "kg", price_at_purchase: 135000, subtotal: 6750000 }],
-  },
-  {
-    purchaseOrderId: "PO-2024-004",
-    sppgId: "TK Pembina Pusat",
-    orderDate: new Date(Date.now() - 48 * 3600000).toISOString(),
-    financials: { totalAmount: 1200000, escrowStatus: "ESCROW_HOLD", signatures: { qc: "PENDING", admin: "PENDING", logistik: "PENDING" } },
-    items: [{ item_name: "Daging Ayam Ras", quantity: 40, unit: "kg", price_at_purchase: 30000, subtotal: 1200000 }],
-    vendor_status: "REJECTED",
-  },
-  {
-    purchaseOrderId: "PO-2024-005",
-    sppgId: "SDN 05 Pagi",
-    orderDate: new Date(Date.now() - 30 * 60000).toISOString(),
-    financials: { totalAmount: 1750000, escrowStatus: "ESCROW_HOLD", signatures: { qc: "PENDING", admin: "PENDING", logistik: "PENDING" } },
-    items: [{ item_name: "Ikan Bandeng Tanpa Duri", quantity: 50, unit: "kg", price_at_purchase: 35000, subtotal: 1750000 }],
-  },
-  {
-    purchaseOrderId: "PO-2024-006",
-    sppgId: "SDN 03 Menteng",
-    orderDate: new Date(Date.now() - 5 * 3600000).toISOString(),
-    financials: { totalAmount: 1250000, escrowStatus: "REVISION", signatures: { qc: "REVISION", admin: "PENDING", logistik: "SIGNED" } },
-    items: [
-      { item_name: "Bayam Hijau Segar", quantity: 50, unit: "ikat", price_at_purchase: 5000, subtotal: 250000 },
-      { item_name: "Jeruk Lokal Medan", quantity: 30, unit: "kg", price_at_purchase: 30000, subtotal: 900000 },
-    ],
-    revision_note: "Ditemukan 2 ikat bayam yang sudah layu dan jeruk ada yang busuk sekitar 3-4 biji. Mohon segera kirimkan penggantian barang yang segar.",
-  },
-  {
-    purchaseOrderId: "PO-2024-007",
-    sppgId: "SDN 04 Pagi",
-    orderDate: new Date(Date.now() - 2 * 3600000).toISOString(),
-    financials: { totalAmount: 3500000, escrowStatus: "REVISION", signatures: { qc: "PENDING", admin: "PENDING", logistik: "REVISION" } },
-    items: [{ item_name: "Ikan Kembung Segar", quantity: 100, unit: "kg", price_at_purchase: 35000, subtotal: 3500000 }],
-    revision_note: "Logistik: Jumlah karung ikan tidak sesuai. Tertera 10 box, hanya diterima 9 box. Mohon kirimkan 1 box susulan.",
-  },
-  {
-    purchaseOrderId: "PO-2024-008",
-    sppgId: "SMPN 5 Jakarta",
-    orderDate: new Date(Date.now() - 8 * 3600000).toISOString(),
-    financials: { totalAmount: 2200000, escrowStatus: "REVISION", signatures: { qc: "SIGNED", admin: "REVISION", logistik: "SIGNED" } },
-    items: [{ item_name: "Tepung Terigu Segitiga", quantity: 200, unit: "kg", price_at_purchase: 11000, subtotal: 2200000 }],
-    revision_note: "Admin: Scan faktur pajak tidak terbaca (buram). Mohon unggah ulang dokumen yang lebih jelas/high-res.",
-  },
-  {
-    purchaseOrderId: "PO-2024-009",
-    sppgId: "SDN 12 Kebayoran",
-    orderDate: new Date(Date.now() - 80 * 3600000).toISOString(),
-    financials: { totalAmount: 5400000, escrowStatus: "EXPIRED", signatures: { qc: "PENDING", admin: "PENDING", logistik: "SIGNED" } },
-    items: [{ item_name: "Ayam Potong Broiler", quantity: 150, unit: "kg", price_at_purchase: 36000, subtotal: 5400000 }],
-  },
-];
+/* ─── Data Mapping ─── */
+function mapPO(po: any): PO {
+  return {
+    purchaseOrderId: po.id,
+    sppgId: String(po.sppgId),
+    orderDate: po.orderDate,
+    financials: {
+      totalAmount: po.totalAmount,
+      paymentStatus: po.status,
+      signatures: po.signatures,
+    },
+    items: po.items.map((i: any) => ({ item_name: i.itemName, quantity: i.quantity, unit: i.unit, price_at_purchase: i.pricePerUnit, subtotal: i.subtotal })),
+    pickup_pin: po.pickupPin,
+    revision_note: po.revisionNote,
+  };
+}
 
 /* ─── Helpers ─── */
 function currency(v: number) {
@@ -155,7 +90,7 @@ function DeadlineBar({ orderDate }: { orderDate: string }) {
         <div className="flex items-center gap-1.5">
           <Clock size={10} style={{ color }} />
           <span className="text-[9px] font-black uppercase tracking-wider" style={{ color }}>
-            Batas Validasi Escrow
+            Batas Verifikasi Pembayaran
           </span>
         </div>
         <span className="text-[10px] font-mono font-bold" style={{ color }}>
@@ -249,10 +184,10 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
   const statusConfig = {
     pending: { label: "Menunggu Konfirmasi", color: "#D97706", bg: "#FEF3C7", icon: Clock },
     scan: { 
-      label: po.financials.escrowStatus === "REVISION" ? "Perlu Revisi" : "Proses Distribusi", 
-      color: po.financials.escrowStatus === "REVISION" ? "#D97706" : G, 
-      bg: po.financials.escrowStatus === "REVISION" ? "#FEF3C7" : G_LIGHT, 
-      icon: po.financials.escrowStatus === "REVISION" ? AlertTriangle : RefreshCw 
+      label: po.financials.paymentStatus === "MANUAL_REVIEW" ? "Perlu Revisi" : "Proses Distribusi", 
+      color: po.financials.paymentStatus === "MANUAL_REVIEW" ? "#D97706" : G, 
+      bg: po.financials.paymentStatus === "MANUAL_REVIEW" ? "#FEF3C7" : G_LIGHT, 
+      icon: po.financials.paymentStatus === "MANUAL_REVIEW" ? AlertTriangle : RefreshCw 
     },
     expired: { label: "Waktu Habis", color: "#B91C1C", bg: "#FEE2E2", icon: XCircle },
     completed: { label: "Selesai", color: G, bg: G_LIGHT, icon: CheckCircle2 },
@@ -284,14 +219,14 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
       {tab === "scan" && sigCount < 3 && <DeadlineBar orderDate={po.orderDate} />}
 
       {/* Expired Warning Banner */}
-      {po.financials.escrowStatus === "EXPIRED" && (
+      {po.financials.paymentStatus === "EXPIRED" && (
         <div className="px-4 py-3 bg-red-50 border-b border-red-100">
           <div className="flex items-start gap-2">
             <XCircle size={14} className="text-red-600 mt-0.5 shrink-0" />
             <div>
               <p className="text-[10px] font-black text-red-700 uppercase tracking-wider">Protokol Zero-Trust Dipicu</p>
               <p className="text-[9px] text-red-600 leading-relaxed mt-0.5 font-medium">
-                Batas waktu validasi 72 jam telah terlampaui. Dana escrow otomatis ditarik kembali ke Kas Negara melalui sistem DOKU. Hubungi pihak SPPG untuk instruksi lebih lanjut.
+                Batas waktu verifikasi 72 jam telah terlampaui. Hubungi pihak SPPG untuk instruksi lebih lanjut.
               </p>
             </div>
           </div>
@@ -338,12 +273,12 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
       {/* Financials */}
       <div className="px-4 pb-3 flex items-center justify-between">
         <div>
-          <p className="text-[10px] text-slate-400 font-medium">Total Dana Escrow</p>
+          <p className="text-[10px] text-slate-400 font-medium">Total Nilai PO</p>
           <p className="text-sm font-extrabold" style={{ color: G }}>{currency(po.financials.totalAmount)}</p>
         </div>
         <div className="flex items-center gap-1 rounded-xl bg-slate-50 border border-slate-100 px-2 py-1.5">
           <Hash size={10} className="text-slate-400" />
-          <p className="text-[10px] font-bold text-slate-500">Escrow Terkunci (DOKU Gateway)</p>
+          <p className="text-[10px] font-bold text-slate-500">Menunggu Verifikasi Pembayaran</p>
         </div>
       </div>
 
@@ -381,15 +316,15 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
         <div className="px-4 pb-4">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-5 h-5 rounded-full flex items-center justify-center text-[9px] font-black text-white shrink-0" 
-              style={{ background: sigCount === 3 ? "#10B981" : (po.financials.escrowStatus === "REVISION" ? "#F59E0B" : (po.financials.escrowStatus === "VALIDATING" ? G : "#94A3B8")) }}>
+              style={{ background: sigCount === 3 ? "#10B981" : (po.financials.paymentStatus === "MANUAL_REVIEW" ? "#F59E0B" : (po.financials.paymentStatus === "OCR_VALIDATING" ? G : "#94A3B8")) }}>
               {sigCount === 3 ? <Check size={10} /> : "2"}
             </div>
-            <p className={`text-[10px] font-bold uppercase tracking-wider ${sigCount === 3 ? "text-emerald-600" : (po.financials.escrowStatus === "REVISION" ? "text-amber-600" : (po.financials.escrowStatus === "VALIDATING" ? "text-slate-600" : "text-slate-400"))}`}>
+            <p className={`text-[10px] font-bold uppercase tracking-wider ${sigCount === 3 ? "text-emerald-600" : (po.financials.paymentStatus === "MANUAL_REVIEW" ? "text-amber-600" : (po.financials.paymentStatus === "OCR_VALIDATING" ? "text-slate-600" : "text-slate-400"))}`}>
               {sigCount === 3 ? "Validasi Internal Selesai" : "Validasi Internal SPPG"}
             </p>
           </div>
-          <div className={`rounded-2xl border px-3 py-3 space-y-2 ${po.financials.escrowStatus === "REVISION" ? "bg-amber-50 border-amber-200" : "bg-slate-50 border-slate-100"}`}>
-            {po.financials.escrowStatus === "REVISION" ? (
+          <div className={`rounded-2xl border px-3 py-3 space-y-2 ${po.financials.paymentStatus === "MANUAL_REVIEW" ? "bg-amber-50 border-amber-200" : "bg-slate-50 border-slate-100"}`}>
+            {po.financials.paymentStatus === "MANUAL_REVIEW" ? (
               <div className="space-y-2">
                 <div className="flex items-start gap-2">
                   <AlertTriangle size={12} className="text-amber-500 mt-0.5 shrink-0" />
@@ -405,7 +340,7 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
               </div>
             ) : (
               <p className="text-[10px] text-slate-400 leading-relaxed">
-                Dilakukan di dapur umum SPPG — 3 staf menandatangani secara digital untuk mencairkan dana escrow ke rekening Anda.
+                Dilakukan di dapur umum SPPG — 3 staf menandatangani secara digital untuk menyelesaikan verifikasi pembayaran via OCR.
               </p>
             )}
             <div className="flex gap-1.5 pt-1">
@@ -416,7 +351,7 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
             {sigCount === 3 && (
               <div className="mt-1 rounded-xl bg-emerald-50 border border-emerald-200 px-3 py-2 flex items-center gap-2">
                 <ShieldCheck size={11} className="text-emerald-600" />
-                <p className="text-[10px] font-bold text-emerald-700">Multi-Sig lengkap — Dana escrow siap dicairkan ke rekening Anda!</p>
+                <p className="text-[10px] font-bold text-emerald-700">Multi-Sig lengkap — Pembayaran siap diverifikasi via OCR!</p>
               </div>
             )}
           </div>
@@ -447,7 +382,7 @@ function PesananCard({ po, onAccept, onReject, accepting }: {
           <div className="rounded-2xl bg-red-50 border border-red-100 px-3 py-2.5 flex items-start gap-2">
             <AlertTriangle size={12} className="text-red-400 mt-0.5 shrink-0" />
             <p className="text-[10px] text-red-600 leading-relaxed">
-              Pesanan ini telah dibatalkan. Dana escrow akan dikembalikan ke Kas Negara dalam 3×24 jam sesuai protokol mitigasi Zero-Trust B.O.G.A.
+              Pesanan ini telah dibatalkan.
             </p>
           </div>
         </div>
@@ -473,17 +408,15 @@ export default function VendorPesananPage() {
     }
   }, []);
 
+
   const fetchPOs = useCallback(async () => {
     if (!vendorId) return;
     logger.info('VendorPesanan', 'Memulai pengambilan data pesanan SPPG...', { vendorId });
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/spk/vendor/${vendorId}`);
-      const json = await res.json();
-      if (json.status === "success") {
-        setPos(json.data || []);
-        logger.debug('VendorPesanan', 'Data pesanan berhasil dimuat dari server', { count: json.data?.length });
-      }
+      const posData = getPurchaseOrdersByVendor(Number(vendorId));
+      setPos(posData.map(mapPO));
+      logger.debug('VendorPesanan', 'Data pesanan berhasil dimuat dari dummy', { count: posData.length });
     } catch (error) { 
       logger.error('VendorPesanan', 'Gagal mengambil data pesanan', error);
       toast.error("Gagal sinkronisasi data pesanan.");
@@ -497,32 +430,17 @@ export default function VendorPesananPage() {
     logger.info('VendorPesanan', 'Vendor mengonfirmasi pesanan (Accept)', { poId });
     setAccepting(poId);
     try {
-      const res = await fetch(`${API}/api/spk/${poId}/ready-for-pickup`, {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ vendorId }),
-      });
-      const json = await res.json();
-      if (json.status === "success") {
-        logger.info('VendorPesanan', 'Pesanan berhasil dikonfirmasi ke server', { poId, pin: json.data.pickupPin });
-        toast.success("Pesanan dikonfirmasi! PIN serah terima telah dibuat.");
-        setPos(prev => prev.map(p =>
-          p.purchaseOrderId === poId
-            ? { ...p, financials: { ...p.financials, escrowStatus: "READY_FOR_PICKUP" }, pickup_pin: json.data.pickupPin }
-            : p
-        ));
-      } else {
-        logger.error('VendorPesanan', 'Server menolak konfirmasi pesanan', json.message);
-        toast.error(json.message);
-      }
-    } catch (error) {
-      logger.warn('VendorPesanan', 'Gagal koneksi ke server, menggunakan mode simulasi (Demo)', error);
+      await new Promise(r => setTimeout(r, 500));
       const pin = String(Math.floor(100000 + Math.random() * 900000));
+      logger.info('VendorPesanan', 'Pesanan berhasil dikonfirmasi ke server', { poId, pin });
+      toast.success("Simulasi: Pesanan dikonfirmasi! PIN serah terima telah dibuat.");
       setPos(prev => prev.map(p =>
         p.purchaseOrderId === poId
-          ? { ...p, financials: { ...p.financials, escrowStatus: "READY_FOR_PICKUP" }, pickup_pin: pin }
+          ? { ...p, financials: { ...p.financials, paymentStatus: "SIAP_AMBIL" }, pickup_pin: pin }
           : p
       ));
-      toast.success("(Demo) Pesanan diterima! PIN: " + pin);
+    } catch (error) {
+      toast.error("Gagal simulasi konfirmasi pesanan.");
     } finally { setAccepting(null); }
   };
 
@@ -534,22 +452,12 @@ export default function VendorPesananPage() {
         onClick: async () => {
           logger.info('VendorPesanan', 'Mengirim permintaan penolakan ke server...', { poId });
           try {
-            const res = await fetch(`${API}/api/spk/${poId}/reject`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ vendorId }),
-            });
-            const json = await res.json();
-            if (json.status === "success") {
-              logger.info('VendorPesanan', 'Pesanan resmi ditolak oleh vendor', { poId });
-              setPos(prev => prev.map(p =>
-                p.purchaseOrderId === poId ? { ...p, vendor_status: "REJECTED" } : p
-              ));
-              toast.success("Pesanan berhasil ditolak.");
-            } else {
-              logger.error('VendorPesanan', 'Gagal menolak pesanan di server', json.message);
-              toast.error(json.message);
-            }
+            await new Promise(r => setTimeout(r, 500));
+            logger.info('VendorPesanan', 'Pesanan resmi ditolak oleh vendor', { poId });
+            setPos(prev => prev.map(p =>
+              p.purchaseOrderId === poId ? { ...p, vendor_status: "REJECTED" } : p
+            ));
+            toast.success("Simulasi: Pesanan berhasil ditolak.");
           } catch (error) {
             logger.error('VendorPesanan', 'Koneksi gagal saat menolak pesanan', error);
             toast.error("Gagal koneksi ke server.");

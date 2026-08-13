@@ -13,7 +13,7 @@ export const SplashScene: React.FC<SplashSceneProps> = ({ onLift }) => {
   const [isLifted, setIsLifted] = useState(false);
 
   // Animation Refs
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number | null>(null);
   const geoShapesRef = useRef<any[]>([]);
 
   const handleLift = () => {

@@ -63,23 +63,25 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
 
   return (
     <section className="bg-surface rounded-[var(--radius-lg)] border border-border p-5 shadow-card">
-      <div className="flex items-start justify-between gap-4 mb-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Status per Jenjang
-          </p>
-          <p className="mt-0.5 text-sm font-semibold text-foreground">
-            Breakdown distribusi pengiriman
-          </p>
+      <div className="flex flex-col gap-2 mb-4">
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-800">
+              Status per Jenjang
+            </p>
+            <p className="mt-0.5 text-sm font-bold text-slate-900">
+              Breakdown distribusi pengiriman
+            </p>
+          </div>
         </div>
 
-        <div className="flex items-center gap-3" aria-label="Legenda status">
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1" aria-label="Legenda status">
           {(Object.keys(SEG_CONFIG) as SegKey[]).map((key) => (
             <div key={key} className="flex items-center gap-1">
-              <span className="text-sm" style={{ color: SEG_CONFIG[key].color }} aria-hidden>
+              <span className="text-xs" style={{ color: SEG_CONFIG[key].color }} aria-hidden>
                 {SEG_CONFIG[key].shape}
               </span>
-              <span className="text-xs font-semibold text-muted-foreground">
+              <span className="text-xs font-semibold text-slate-700">
                 {SEG_CONFIG[key].label}
               </span>
             </div>
@@ -106,7 +108,7 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
                   style={{ background: jenjangDot(row.jenjang) }}
                   aria-hidden
                 />
-                <span className="text-sm font-semibold text-foreground">{row.jenjang}</span>
+                <span className="text-sm font-black text-slate-900">{row.jenjang}</span>
               </div>
 
               {row.total > 0 ? (
@@ -132,7 +134,7 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
                         title={`${SEG_CONFIG[key].label}: ${count}`}
                       >
                         {pct > 14 && (
-                          <span className="text-xs font-semibold text-white/90 mix-blend-overlay tabular-nums">
+                          <span className="text-xs font-black text-white drop-shadow-xs tabular-nums">
                             {count}
                           </span>
                         )}
@@ -142,7 +144,7 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
                 </div>
               ) : (
                 <div className="flex-1 h-7 rounded-[var(--radius-md)] bg-muted/20 border border-border flex items-center px-3">
-                  <span className="text-xs text-muted-foreground font-semibold">
+                  <span className="text-xs text-slate-700 font-bold">
                     Tidak ada data
                   </span>
                 </div>
@@ -150,12 +152,12 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
 
               <div className="w-24 shrink-0 text-right">
                 <span
-                  className={`text-xs font-semibold tabular-nums ${
-                    completionOk ? "text-status-success" : "text-status-danger"
+                  className={`text-xs font-extrabold tabular-nums ${
+                    completionOk ? "text-emerald-700" : "text-red-700"
                   }`}
                   aria-label={`${row.completionPct}% selesai`}
                 >
-                  {completionOk ? "●" : "✕"} {row.completionPct}% selesai
+                  {completionOk ? "● " : "✕ "} {row.completionPct}% selesai
                 </span>
               </div>
             </div>

@@ -16,7 +16,7 @@ import { Button } from "@/components/ui/button";
 import { logger } from "@/lib/logger";
 
 /* ─── Constants ─── */
-const API = "http://localhost:3001";
+import { getVendorCommodities } from "@/lib/mbgdummydata";
 const G = "#065F46";
 const G_LIGHT = "#D1FAE5";
 
@@ -439,7 +439,7 @@ function CategoryPicker({
 
 /* ─── Bottom Sheet ─── */
 function AddSheet({ open, onClose, onAdded, vendorId }: {
-  open: boolean; onClose: () => void; onAdded: () => void; vendorId: string;
+  open: boolean; onClose: () => void; onAdded: (newItem?: Commodity) => void; vendorId: string;
 }) {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -478,29 +478,25 @@ function AddSheet({ open, onClose, onAdded, vendorId }: {
         });
       }
 
-      const res = await fetch(`${API}/api/vendors/${vendorId}/commodities`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...form,
-          photo_url: finalPhotoUrl,
-          price: Number(form.price),
-          is_active: 1,
-        }),
-      });
-      const json = await res.json();
       toast.dismiss();
-      if (json.status === "success") {
-        logger.info('VendorKatalog', 'Produk Berhasil Ditambahkan!', { name: form.name, id: json.data?.id });
-        toast.success(`${form.name} berhasil ditambahkan!`);
-        setForm(EMPTY_FORM);
-        setSelectedFile(null);
-        onAdded();
-        onClose();
-      } else {
-        logger.error('VendorKatalog', 'Gagal menambahkan barang (Server Error)', json.message);
-        toast.error(json.message || "Gagal menambahkan barang.");
-      }
+      const newItem: Commodity = {
+        id: "PROD-" + Date.now(),
+        name: form.name,
+        price: Number(form.price),
+        unit: form.unit,
+        pihps_id: form.pihps_id,
+        markup_percentage: Number(markupPct) || 0,
+        is_markup: isMarkup ? 1 : 0,
+        current_stock: 0,
+        is_active: 1,
+        photo_url: finalPhotoUrl,
+        description: form.description
+      };
+      toast.success(`Simulasi: ${form.name} berhasil ditambahkan!`);
+      setForm(EMPTY_FORM);
+      setSelectedFile(null);
+      onAdded(newItem);
+      onClose();
     } catch (error) {
       logger.error('VendorKatalog', 'Kesalahan koneksi saat menambahkan produk', error);
       toast.error("Tidak dapat terhubung ke server.");
@@ -932,13 +928,9 @@ export default function VendorKatalogPage() {
     logger.info('VendorKatalog', 'Memulai pengambilan data katalog produk...');
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/vendors/${vendorId}/commodities`);
-      const json = await res.json();
-      if (json.status === "success") {
-        const activeOnly = (json.data || []).filter((i: any) => i.is_active === 1);
-        setItems(activeOnly);
-        logger.debug('VendorKatalog', 'Data katalog berhasil dimuat', { count: activeOnly.length });
-      }
+      const activeOnly = getVendorCommodities(Number(vendorId) || 1).filter((i: any) => i.is_active === 1);
+      setItems(activeOnly as any);
+      logger.debug('VendorKatalog', 'Data katalog berhasil dimuat', { count: activeOnly.length });
     } catch (error) { 
       logger.error('VendorKatalog', 'Gagal mengambil data katalog', error);
       toast.error("Gagal mengambil data katalog.");
@@ -959,18 +951,9 @@ export default function VendorKatalogPage() {
         onClick: async () => {
           logger.info('VendorKatalog', 'Melakukan penghapusan barang dari server...', { id });
           try {
-            const res = await fetch(`${API}/api/vendors/${vendorId}/commodities/${id}`, {
-              method: "DELETE"
-            });
-            const json = await res.json();
-            if (json.status === "success") {
-              logger.info('VendorKatalog', 'Barang berhasil dihapus', { id });
-              setItems((prev) => prev.filter((i) => i.id !== id));
-              toast.success("Barang dihapus dari katalog.");
-            } else {
-              logger.error('VendorKatalog', 'Gagal menghapus barang (Server Error)', json.message);
-              toast.error(json.message || "Gagal menghapus barang.");
-            }
+            logger.info('VendorKatalog', 'Barang berhasil dihapus', { id });
+            setItems((prev) => prev.filter((i) => i.id !== id));
+            toast.success("Simulasi: Barang dihapus dari katalog.");
           } catch (error) {
             logger.error('VendorKatalog', 'Kesalahan koneksi saat menghapus', error);
             toast.error("Tidak dapat terhubung ke server.");
@@ -1105,7 +1088,7 @@ export default function VendorKatalogPage() {
       </div>
 
       {/* ── Add Sheet ── */}
-      <AddSheet open={sheetOpen} onClose={() => setSheetOpen(false)} onAdded={fetchItems} vendorId={vendorId} />
+      <AddSheet open={sheetOpen} onClose={() => setSheetOpen(false)} onAdded={(newItem) => { if (newItem) setItems(prev => [newItem, ...prev]); else fetchItems(); }} vendorId={vendorId} />
 
       {/* ── Filter Sheet ── */}
       <FilterSheet 

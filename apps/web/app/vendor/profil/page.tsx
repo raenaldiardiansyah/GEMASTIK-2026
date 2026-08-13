@@ -127,51 +127,32 @@ export default function VendorProfilPage() {
           return;
         }
 
-        const res = await fetch(`http://localhost:3001/api/vendors/${vendorId}`);
-        const json = await res.json();
+        // Data vendor diambil dari mbgdummydata (simulasi)
 
-        if (json.status === "success") {
-          const d = json.data;
-          let mappedStatus: "pending" | "approved" | "rejected" = "pending";
-          if (d.status === "APPROVED") mappedStatus = "approved";
-          else if (d.status === "REJECTED") mappedStatus = "rejected";
-
-          const loadedProfile: VendorProfile = {
-            id: d.id,
-            business_name: d.business_name || "-",
-            business_email: d.business_email || "-",
-            business_phone: d.business_phone || "-",
-            business_address: d.business_address || "-",
-            latitude: d.latitude || "0",
-            longitude: d.longitude || "0",
-            npwp_number: d.npwp_number || "-",
-            nib_number: d.nib_number || "-",
-            logo_url: d.logo_url || "",
-            
-            akta_document_url: d.akta_document_url || "",
-            akta_document_hash: d.akta_document_hash || "",
-            sk_kemenkumham_url: d.sk_kemenkumham_url || "",
-            sk_kemenkumham_hash: d.sk_kemenkumham_hash || "",
-            npwp_document_url: d.npwp_document_url || "",
-            npwp_document_hash: d.npwp_document_hash || "",
-            nib_document_url: d.nib_document_url || "",
-            nib_document_hash: d.nib_document_hash || "",
-            sppg_readiness_document_url: d.sppg_readiness_document_url || "",
-            sppg_readiness_document_hash: d.sppg_readiness_document_hash || "",
-
-            bank_name: d.bank_name || "-",
-            bank_account_number: d.bank_account_number || "-",
-            bank_account_name: d.bank_account_name || "-",
-            
-            sbt_token_id: d.sbt_token_id,
-            reputasi_score: d.reputasi_score || 92,
+        // Simulasikan success
+        const mappedStatus = "approved";
+        
+        // Coba load dari localStorage dulu jika pernah disimpan (mock persistence)
+        const savedProfileStr = localStorage.getItem(`boga_vendor_profile_${vendorId}`);
+        let loadedProfile: VendorProfile;
+        
+        if (savedProfileStr) {
+          loadedProfile = JSON.parse(savedProfileStr);
+        } else {
+          // Dummy default
+          loadedProfile = {
+            ...INITIAL_PROFILE,
+            id: vendorId,
+            business_name: "Vendor PT " + vendorId.substring(0, 4),
+            business_email: "contact@" + vendorId.toLowerCase() + ".com",
+            business_phone: "08123456789",
             status: mappedStatus
           };
-
-          setProfile(loadedProfile);
-          setDraft(loadedProfile);
-          document.cookie = `boga_vendor_status=${mappedStatus}; path=/`;
         }
+
+        setProfile(loadedProfile);
+        setDraft(loadedProfile);
+        document.cookie = `boga_vendor_status=${mappedStatus}; path=/`;
       } catch (err) {
         console.error("Fetch error:", err);
         toast.error("Gagal mengambil data dari server.");
@@ -187,43 +168,18 @@ export default function VendorProfilPage() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const res = await fetch(`http://localhost:3001/api/vendors/${draft.id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          business_name: draft.business_name,
-          business_email: draft.business_email,
-          business_phone: draft.business_phone,
-          business_address: draft.business_address,
-          latitude: draft.latitude,
-          longitude: draft.longitude,
-          npwp_number: draft.npwp_number,
-          nib_number: draft.nib_number,
-          logo_url: draft.logo_url,
-          akta_document_url: draft.akta_document_url,
-          akta_document_hash: draft.akta_document_hash,
-          sk_kemenkumham_url: draft.sk_kemenkumham_url,
-          sk_kemenkumham_hash: draft.sk_kemenkumham_hash,
-          npwp_document_url: draft.npwp_document_url,
-          npwp_document_hash: draft.npwp_document_hash,
-          nib_document_url: draft.nib_document_url,
-          nib_document_hash: draft.nib_document_hash,
-          sppg_readiness_document_url: draft.sppg_readiness_document_url,
-          sppg_readiness_document_hash: draft.sppg_readiness_document_hash,
-          bank_name: draft.bank_name,
-          bank_account_number: draft.bank_account_number,
-          bank_account_name: draft.bank_account_name
-        })
-      });
+      // Profil disimpan ke localStorage (simulasi)
+      
+      // Simulasikan delay jaringan
+      await new Promise(r => setTimeout(r, 600));
 
-      const json = await res.json();
-      if (json.status === "success") {
-        setProfile({ ...draft });
-        setEditing(false);
-        toast.success("Profil berhasil diperbarui secara On-Chain!");
-      } else {
-        toast.error(json.message || "Gagal memperbarui profil.");
-      }
+      // Simpan ke localStorage
+      localStorage.setItem(`boga_vendor_profile_${draft.id}`, JSON.stringify(draft));
+
+      // Asumsi sukses
+      setProfile({ ...draft });
+      setEditing(false);
+      toast.success("Profil berhasil diperbarui secara lokal (Simulasi)!");
     } catch (err) {
       toast.error("Terjadi kesalahan pada server.");
     } finally {
@@ -387,7 +343,7 @@ export default function VendorProfilPage() {
         </Section>
 
         {/* ── Rekening Bank ── */}
-        <Section title="Rekening Pencairan" icon={CreditCard}>
+        <Section title="Rekening Pembayaran" icon={CreditCard}>
           <FieldRow label="Bank">
             {editing ? (
               <select value={p.bank_name}

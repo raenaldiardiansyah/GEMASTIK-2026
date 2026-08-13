@@ -1,7 +1,6 @@
 "use client"
 
 import { useMemo } from "react"
-import { AlertCircle, Package, Timer, Wallet } from "lucide-react"
 
 import {
   DashboardFilterProvider,
@@ -16,8 +15,10 @@ import { StatusPerJenjangChart } from "@/components/goverment/StatusPerJenjangCh
 import { ComplianceRankingPanel } from "@/components/goverment/ComplianceRankingPanel"
 import { SchoolStatusPanel } from "@/components/goverment/SchoolStatusPanel"
 import { DeliveryHeatmap } from "@/components/goverment/DeliveryHeatmap"
-import { KpiCard } from "@/components/ui/kpi-card"
-import { getKPISummary } from "@/lib/mbgdummydata"
+import { KPIBar } from "@/components/goverment/KPIBar"
+import { DailyBriefing } from "@/components/goverment/DailyBriefing"
+import { ActivityFeed, type FeedItem, type FeedItemType } from "@/components/goverment/ActivityFeed"
+import { getKPISummary, getActivityLog } from "@/lib/mbgdummydata"
 
 const ALERTS: AlertItem[] = [
   {
@@ -30,60 +31,64 @@ const ALERTS: AlertItem[] = [
   },
 ]
 
-function GovKpiRow() {
+function DashboardContent() {
   const { filter } = useDashboardFilter()
   const kpi = useMemo(() => getKPISummary(filter.periode), [filter.periode])
-
-  const compact = (value: number) =>
-    Intl.NumberFormat("id-ID", { notation: "compact", maximumFractionDigits: 1 }).format(value)
-
-  const compactRp = (value: number) =>
-    new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-      maximumFractionDigits: 0,
-      notation: "compact",
-      compactDisplay: "short",
-    }).format(value)
+  const activityItems: FeedItem[] = useMemo(() => {
+    const raw = getActivityLog().slice(0, 5)
+    return raw.map(item => ({
+      id: item.id,
+      type: item.type as FeedItemType,
+      message: item.message,
+      time: item.timeLabel,
+      href: item.href,
+    }))
+  }, [])
 
   return (
-    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Ringkasan KPI">
-      <KpiCard
-        title="Anggaran terserap"
-        value={compactRp(kpi.totalPengeluaran)}
-        trend={`${kpi.totalPengeluaran >= kpi.totalPengeluaranPrev ? "+" : ""}${compactRp(
-          kpi.totalPengeluaran - kpi.totalPengeluaranPrev
-        )} vs periode lalu`}
-        trendDirection={kpi.totalPengeluaran >= kpi.totalPengeluaranPrev ? "up" : "down"}
-        icon={<Wallet className="size-4" aria-hidden />}
-      />
-      <KpiCard
-        title="Porsi terdistribusi"
-        value={compact(kpi.totalPorsi)}
-        unit="porsi"
-        trend={`${kpi.totalPorsi >= kpi.totalPorsiPrev ? "+" : ""}${compact(
-          kpi.totalPorsi - kpi.totalPorsiPrev
-        )} vs periode lalu`}
-        trendDirection={kpi.totalPorsi >= kpi.totalPorsiPrev ? "up" : "down"}
-        icon={<Package className="size-4" aria-hidden />}
-      />
-      <KpiCard
-        title="On-time rate"
-        value={`${kpi.onTimeRate}%`}
-        trend={`${kpi.onTimeRate >= kpi.onTimeRatePrev ? "+" : ""}${(
-          kpi.onTimeRate - kpi.onTimeRatePrev
-        ).toFixed(1)}% vs periode lalu`}
-        trendDirection={kpi.onTimeRate >= kpi.onTimeRatePrev ? "up" : "down"}
-        icon={<Timer className="size-4" aria-hidden />}
-      />
-      <KpiCard
-        title="Sengketa aktif"
-        value={kpi.sengketaAktif}
-        trend={kpi.sengketaAktif > 0 ? "Perlu keputusan hari ini" : "Tidak ada sengketa"}
-        trendDirection={kpi.sengketaAktif > 0 ? "down" : "flat"}
-        icon={<AlertCircle className="size-4" aria-hidden />}
-      />
-    </section>
+    <div className="min-h-full bg-background text-foreground">
+      <div className="space-y-6 px-4 py-6 md:px-6 lg:px-8">
+        <DashboardHeader />
+        <DailyBriefing
+          data={{
+            porsiHariIni: kpi.totalPorsi,
+            sengketaAktif: kpi.sengketaAktif,
+            vendorMenunggu: kpi.vendorPending,
+            urgentHref: kpi.sengketaAktif > 0 ? "/goverment/verifikasi" : "/goverment/pengawasan",
+          }}
+        />
+        <AlertBanner alerts={ALERTS} />
+        <KPIBar />
+
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
+          {/* Row 1: Utama */}
+          <div className="min-w-0 xl:col-span-8 h-full">
+            <ComposedTrendChart />
+          </div>
+          <div className="min-w-0 xl:col-span-4 space-y-6">
+            <OnTimeRateChart />
+            <StatusPerJenjangChart />
+          </div>
+
+          {/* Row 2: Compliance Panel memakan porsi full agar tidak tabrakan/cramped */}
+          <div className="min-w-0 xl:col-span-12">
+            <ComplianceRankingPanel />
+          </div>
+
+          {/* Row 3: Tabel Status Sekolah (Full Width) */}
+          <div className="min-w-0 xl:col-span-12">
+            <SchoolStatusPanel />
+          </div>
+
+          {/* Row 4: Log Aktivitas (Full Width, Atas Bawah) */}
+          <div className="min-w-0 xl:col-span-12">
+            <ActivityFeed items={activityItems} />
+          </div>
+        </div>
+
+        <DeliveryHeatmap />
+      </div>
+    </div>
   )
 }
 
@@ -91,27 +96,7 @@ export default function GovermentDashboard() {
   return (
     <DashboardFilterProvider>
       <SchoolSearchProvider>
-        <div className="min-h-full bg-background text-foreground">
-          <div className="space-y-6 px-4 py-6 md:px-6 lg:px-8">
-            <DashboardHeader />
-            <AlertBanner alerts={ALERTS} />
-            <GovKpiRow />
-
-            <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-              <div className="min-w-0 space-y-6 xl:col-span-8">
-                <ComposedTrendChart />
-                <SchoolStatusPanel />
-              </div>
-              <div className="min-w-0 space-y-6 xl:col-span-4">
-                <OnTimeRateChart />
-                <ComplianceRankingPanel />
-                <StatusPerJenjangChart />
-              </div>
-            </div>
-
-            <DeliveryHeatmap />
-          </div>
-        </div>
+        <DashboardContent />
       </SchoolSearchProvider>
     </DashboardFilterProvider>
   )

@@ -30,6 +30,16 @@ import {
 import { GlassCard } from "@/components/ui/GlassCard";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Deterministic jitter based on ID to avoid Math.random() SSR issues
+const deterministicJitter = (base: number, id: number, maxOffset: number) => {
+  const seed = id * 37 + 7;
+  let s = seed >>> 0;
+  let t = Math.imul(s ^ (s >>> 15), 1 | s);
+  t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+  const offset = ((t ^ (t >>> 14)) >>> 0) / 0xffffffff * 2 - 1;
+  return base + offset * maxOffset;
+};
+
 const MapSupervision = dynamic(() => import("@/components/goverment/MapSupervision"), {
   ssr: false,
   loading: () => <div className="w-full h-full bg-slate-100 animate-pulse rounded-[40px]" />,
@@ -119,8 +129,8 @@ export default function PengawasanPage() {
           arah,
           status: "Moving",
           manifest: `${delivery.porsi_dikirim} Porsi Nasi Box`,
-          lat: (vendor?.lat || -6.8850) + (Math.random() - 0.5) * 0.02,
-          lng: (vendor?.lng || 107.6130) + (Math.random() - 0.5) * 0.02,
+          lat: deterministicJitter((vendor?.lat || -6.8850), delivery.id, 0.02),
+          lng: deterministicJitter((vendor?.lng || 107.6130), delivery.id, 0.02),
           eta: "14:45",
           vendorName: vendor?.nama || "Unknown Vendor",
           schoolName: sekolah?.nama || "Unknown School",
@@ -141,8 +151,8 @@ export default function PengawasanPage() {
         arah: "sppg_ke_sekolah" as ArahPengiriman,
         status: "Moving",
         manifest: `${rel.porsi_per_hari} Porsi — ${sppg.nama}`,
-        lat: sppg.lat + (Math.random() - 0.5) * 0.015,
-        lng: sppg.lng + (Math.random() - 0.5) * 0.015,
+        lat: deterministicJitter(sppg.lat, i, 0.015),
+        lng: deterministicJitter(sppg.lng, i, 0.015),
         eta: "07:15",
         vendorName: sppg.nama,
         schoolName: sekolah.nama,
@@ -152,14 +162,17 @@ export default function PengawasanPage() {
 
     setActiveDrivers([...initial, ...sppgDrivers]);
 
-    // Simulation: jitter positions every 2s
+    // Simulation: jitter positions every 2s (deterministic)
     const interval = setInterval(() => {
       setActiveDrivers((prev) =>
-        prev.map((d) => ({
-          ...d,
-          lat: d.lat + (Math.random() - 0.5) * 0.0005,
-          lng: d.lng + (Math.random() - 0.5) * 0.0005,
-        }))
+        prev.map((d) => {
+          const numId = parseInt(d.id.replace(/\D/g, ""), 10) || 1;
+          return {
+            ...d,
+            lat: d.lat + deterministicJitter(0, numId, 0.0005),
+            lng: d.lng + deterministicJitter(0, numId, 0.0005),
+          };
+        })
       );
     }, 2000);
 

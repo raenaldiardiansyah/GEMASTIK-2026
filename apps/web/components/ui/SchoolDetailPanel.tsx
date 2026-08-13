@@ -41,6 +41,8 @@ interface SchoolDetailPanelProps {
 
 export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, vendors, onClose, readOnly = false }) => {
   const [submitted, setSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState<"vendor" | "sppg">("vendor");
+  const [rating, setRating] = useState({ rasa: 0, higiene: 0, porsi: 0, waktu: 0 });
   
   const comments = generateComments(school.nama);
   const sppg = getSPPGBySekolah(school.id);
@@ -98,7 +100,7 @@ export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, ve
         <button
           onClick={() => setActiveTab("vendor")}
           className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all ${
-            activeTab === "vendor" ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50/30" : "text-slate-400 hover:text-slate-600"
+            activeTab === "vendor" ? "text-role-primary border-b-2 border-role-primary bg-role-accent/40" : "text-slate-400 hover:text-slate-600"
           }`}
         >
           Vendor
@@ -106,7 +108,7 @@ export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, ve
         <button
           onClick={() => setActiveTab("sppg")}
           className={`flex-1 py-2.5 text-[9px] font-black uppercase tracking-widest transition-all ${
-            activeTab === "sppg" ? "text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50/30" : "text-slate-400 hover:text-slate-600"
+            activeTab === "sppg" ? "text-role-primary border-b-2 border-role-primary bg-role-accent/40" : "text-slate-400 hover:text-slate-600"
           }`}
         >
           Unit (SPPG)
@@ -114,7 +116,16 @@ export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, ve
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto p-3 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto p-3 no-scrollbar">
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
         <AnimatePresence mode="wait">
           {activeTab === "vendor" ? (
             <motion.div 
@@ -122,10 +133,10 @@ export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, ve
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="space-y-1"
+              className="space-y-3"
             >
               {vendors.map((v, idx) => (
-                <div key={v.id} className="transform scale-[0.85] origin-top -mb-8">
+                <div key={v.id} className="w-full">
                   <VendorCard
                     data={v}
                     color={
@@ -151,7 +162,7 @@ export const SchoolDetailPanel: React.FC<SchoolDetailPanelProps> = ({ school, ve
                 <>
                   <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
                     <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-100">
+                      <div className="w-10 h-10 bg-role-primary rounded-xl flex items-center justify-center text-white shadow-lg">
                         <Factory className="w-5 h-5" />
                       </div>
                       <div>

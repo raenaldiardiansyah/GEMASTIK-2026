@@ -54,30 +54,31 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
   const lastLabel = series[series.length - 1]?.label
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+    <div className="rounded-xl border border-border bg-surface p-5 shadow-[var(--shadow-card)] h-full flex flex-col">
       <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="mb-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          <p className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-800">
             Tren Distribusi
           </p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm font-semibold text-slate-700">
             Porsi dikirim{" "}
-            <span className="text-muted-foreground">vs</span>{" "}
+            <span className="text-slate-500 font-medium">vs</span>{" "}
             pengeluaran
           </p>
         </div>
         {avgPrev > 0 && (
           <div className="text-right">
-            <p className="text-xs text-muted-foreground">Rata-rata periode lalu</p>
-            <p className="text-sm font-semibold text-foreground tabular-nums">
+            <p className="text-xs font-semibold text-slate-600">Rata-rata periode lalu</p>
+            <p className="text-sm font-bold text-slate-900 tabular-nums">
               {avgPrev.toLocaleString("id-ID")} porsi/hari
             </p>
           </div>
         )}
       </div>
 
-      <ResponsiveContainer width="100%" height={180}>
-        <ComposedChart data={series} margin={{ left: 0, right: 0, top: 8, bottom: 0 }}>
+      <div className="w-full flex-1 min-h-[220px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart data={series} margin={{ left: 0, right: 0, top: 8, bottom: 0 }}>
           <defs>
             <linearGradient id="porsiGrad2" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="hsl(var(--status-info))" stopOpacity={0.16} />
@@ -96,8 +97,8 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
                   y={Number(y) + 14}
                   textAnchor="middle"
                   fontSize={12}
-                  fontWeight={500}
-                  fill="hsl(var(--muted-foreground))"
+                  fontWeight={700}
+                  fill="#1e293b"
                 >
                   {payload.value}
                 </text>
@@ -110,7 +111,7 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
             yAxisId="porsi"
             orientation="left"
             tickFormatter={fmt}
-            tick={{ fontSize: 12, fontWeight: 500, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 12, fontWeight: 600, fill: "#334155" }}
             axisLine={false}
             tickLine={false}
             width={36}
@@ -119,7 +120,7 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
             yAxisId="pengeluaran"
             orientation="right"
             tickFormatter={fmtRp}
-            tick={{ fontSize: 12, fontWeight: 500, fill: "hsl(var(--muted-foreground))" }}
+            tick={{ fontSize: 12, fontWeight: 600, fill: "#334155" }}
             axisLine={false}
             tickLine={false}
             width={44}
@@ -167,8 +168,9 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
             dot={false}
             activeDot={{ r: 3, strokeWidth: 0, fill: "hsl(var(--role-badge))" }}
           />
-        </ComposedChart>
-      </ResponsiveContainer>
+          </ComposedChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   )
 })
