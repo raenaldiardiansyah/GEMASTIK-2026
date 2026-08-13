@@ -11,10 +11,10 @@ const phasesData = [
     step: 1,
     phaseTag: "FASE 01",
     title: "Verifikasi & Whitelist Vendor",
-    subtitle: "AI OCR Dokumen Legalitas (NIB / NPWP / Rekening)",
-    description: "Vendor mendaftarkan identitas legal. Engine AI OCR memindai NIB, NPWP, dan nomor rekening secara instan. Pemerintah meninjau data sebelum menerbitkan sertifikat whitelist SBT.",
+    subtitle: "OCR Dokumen Legalitas (NIB / NPWP / Rekening)",
+    description: "Vendor mendaftarkan identitas legal. Engine OCR memindai NIB, NPWP, dan nomor rekening secara instan. Pemerintah meninjau data sebelum menerbitkan sertifikat whitelist SBT.",
     features: [
-      "Ekstraksi AI OCR 99.8% akurat",
+      "Ekstraksi OCR 99.8% akurat",
       "Validasi otomatis rekening bank & NIB",
       "Pemerintah approve ke Whitelist B.O.G.A"
     ],
@@ -31,7 +31,7 @@ const phasesData = [
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
-              <h5 className="text-sm font-extrabold text-white">AI OCR Scanner Active</h5>
+              <h5 className="text-sm font-extrabold text-white">OCR Scanner Active</h5>
               <p className="text-[11px] text-slate-400">CV. Tani Makmur Sejahtera</p>
             </div>
           </div>
@@ -126,8 +126,8 @@ const phasesData = [
     step: 3,
     phaseTag: "FASE 03",
     title: "Audit Pembayaran via OCR",
-    subtitle: "Transfer Bank Manual SPPG + Ekstraksi AI OCR",
-    description: "Setelah QC menyetujui barang, SPPG melakukan transfer bank manual ke rekening vendor dan mengunggah bukti transfer. AI OCR membaca tanggal, nominal, pengirim, penerima, dan refID untuk memverifikasi kesesuaian dengan PO.",
+    subtitle: "Transfer Bank Manual SPPG + Ekstraksi OCR",
+    description: "Setelah QC menyetujui barang, SPPG melakukan transfer bank manual ke rekening vendor dan mengunggah bukti transfer. Sistem OCR membaca tanggal, nominal, pengirim, penerima, dan refID untuk memverifikasi kesesuaian dengan PO.",
     features: [
       "Transfer manual langsung oleh SPPG",
       "OCR ekstraksi nominal, bank & refID",
@@ -234,12 +234,12 @@ const phasesData = [
     step: 5,
     phaseTag: "FASE 05",
     title: "Distribusi Geofence & Rating Siswa",
-    subtitle: "Validasi GPS <= 50m & Sentimen AI NLP",
-    description: "Kurir memindai QR di titik lokasi sekolah. Formula Haversine memverifikasi koordinat GPS ≤ 50m sebelum status distribusi berubah menjadi Verified. Siswa memberikan ulasan gizi yang dikelompokkan oleh AI NLP.",
+    subtitle: "Validasi GPS <= 50m & Sentimen Ulasan",
+    description: "Kurir memindai QR di titik lokasi sekolah. Formula Haversine memverifikasi koordinat GPS ≤ 50m sebelum status distribusi berubah menjadi Verified. Siswa memberikan ulasan gizi yang dikelompokkan oleh sistem analisis.",
     features: [
       "Geofencing radius ketat ≤ 50 meter",
       "QR Scan titik serah terima sekolah",
-      "Analisis ulasan & kecukupan gizi AI NLP"
+      "Analisis ulasan & kecukupan gizi otomatis"
     ],
     href: "/sekolah/siswa",
     align: "left" as const,
@@ -276,7 +276,7 @@ const phasesData = [
               </div>
             </div>
             <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-md border border-emerald-500/20">
-              NLP: Positif (98%)
+              Sentimen: Positif (98%)
             </span>
           </div>
           <p className="text-[11px] text-slate-300 italic px-1 leading-relaxed">
@@ -327,7 +327,7 @@ export function PhaseTimeline() {
           className="mb-4 [&_h2]:text-[clamp(1.5rem,4vw,3.5rem)] [&_h2]:text-slate-900" 
         />
         <p className="text-slate-600 text-base md:text-lg leading-relaxed text-center max-w-[780px] mx-auto mb-10 font-medium">
-          Setiap fase dikunci oleh satu bukti otentik yang terdokumentasi — dari verifikasi AI OCR, batas HET PO, audit struk transfer manual, perekaman ledger, hingga validasi titik GPS geofence.
+          Setiap fase dikunci oleh satu bukti otentik yang terdokumentasi — dari verifikasi OCR, batas HET PO, audit struk transfer manual, perekaman ledger, hingga validasi titik GPS geofence.
         </p>
 
         {/* Tailark Architectural Guideline Connector with Node Points */}

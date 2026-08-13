@@ -301,7 +301,7 @@ function ProofUploader({ value, onChange }: { value: string, onChange: (val: str
 
       <div className="text-center">
         <p className="text-[11px] font-bold text-slate-400 group-hover:text-emerald-600 transition-colors">Ketuk untuk pilih foto</p>
-        <p className="text-[9px] text-slate-300 font-medium tracking-tight mt-0.5">Foto akan dianalisis otomatis oleh AI Verifikator</p>
+        <p className="text-[9px] text-slate-300 font-medium tracking-tight mt-0.5">Foto akan dianalisis otomatis oleh Sistem Verifikator</p>
       </div>
     </div>
   );

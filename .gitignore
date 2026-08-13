@@ -44,3 +44,7 @@ yarn-error.log*
 # Local DB / generated artifacts
 apps/web/better-auth.sqlite
 apps/web/tsconfig.tsbuildinfo
+
+# AI guidelines
+AGENTS.md
+agents.md

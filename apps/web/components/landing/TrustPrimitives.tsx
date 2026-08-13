@@ -60,7 +60,7 @@ function PaymentAuditDiagram() {
           >
             <SearchCheck className="w-6 h-6 text-white" />
           </motion.div>
-          <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">AI OCR</span>
+          <span className="text-[9px] text-amber-600 font-black uppercase tracking-widest">OCR</span>
         </div>
         
         <div className="flex-1 h-px bg-slate-300 relative">

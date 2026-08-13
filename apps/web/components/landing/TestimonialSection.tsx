@@ -106,7 +106,7 @@ export function TestimonialSection() {
 
               {/* Quote */}
               <p className="text-slate-700 text-sm md:text-[15px] leading-relaxed font-medium mb-8">
-                &ldquo;Transfer bank manual tetap dikontrol ketat oleh AI OCR. Nominal bukti transfer langsung cocok dengan PO, menghilangkan risiko penggelembungan harga HET.&rdquo;
+                &ldquo;Transfer bank manual tetap dikontrol ketat oleh sistem OCR otomatis. Nominal bukti transfer langsung cocok dengan PO, menghilangkan risiko penggelembungan harga HET.&rdquo;
               </p>
 
               {/* Author Info */}
@@ -183,7 +183,7 @@ export function TestimonialSection() {
 
               {/* Quote */}
               <p className="text-slate-700 text-sm md:text-[15px] leading-relaxed font-medium mb-8">
-                &ldquo;Proses registrasi vendor sangat cepat lewat pemindaian AI OCR pada NIB, NPWP, dan rekening. Tidak ada kekhawatiran karena seluruh transaksi tercatat di immutable ledger.&rdquo;
+                &ldquo;Proses registrasi vendor sangat cepat lewat pemindaian OCR otomatis pada NIB, NPWP, dan rekening. Tidak ada kekhawatiran karena seluruh transaksi tercatat di immutable ledger.&rdquo;
               </p>
 
               {/* Author Info */}

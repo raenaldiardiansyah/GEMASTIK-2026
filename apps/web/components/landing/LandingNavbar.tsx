@@ -57,7 +57,7 @@ const portalLinks = [
     label: "Portal Siswa", 
     href: "/sekolah/siswa", 
     icon: Users,
-    desc: "Rating gizi menu harian & pengelompokan ulasan NLP.",
+    desc: "Rating gizi menu harian & analisis sentimen ulasan.",
     tag: "Feedback",
     color: "from-pink-500/20 to-rose-500/10 text-pink-400 border-pink-500/30"
   },

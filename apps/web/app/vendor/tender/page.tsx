@@ -94,7 +94,7 @@ export default function TenderPage() {
             <div className="mt-6 flex items-center gap-3 rounded-2xl border border-border bg-surface-raised p-4 text-xs font-medium text-foreground md:mt-8 md:gap-4 md:text-sm">
               <Sparkles className="size-4 shrink-0 text-primary md:size-5" />
               <span>
-                AI menyarankan: <strong>Daging Sapi & Beras Premium</strong> paling banyak dicari
+                Sistem menyarankan: <strong>Daging Sapi & Beras Premium</strong> paling banyak dicari
                 penyedia sekolah.
               </span>
             </div>

@@ -102,7 +102,7 @@ export function HeroSection() {
             
             {/* Mockup Body */}
             <div className="p-5 flex flex-col h-[calc(100%-2.5rem)]">
-              {/* Header with Popover explanation 1: Komputer Bisa Baca Struk (AI OCR) */}
+              {/* Header with Popover explanation 1: Komputer Bisa Baca Struk (OCR Otomatis) */}
               <Popover>
                 <PopoverTrigger asChild>
                   <div className="flex items-center justify-between pb-4 border-b border-slate-800 cursor-pointer hover:bg-slate-900/60 p-2 rounded-xl transition-all group">
@@ -123,7 +123,7 @@ export function HeroSection() {
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
                       <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                      Komputer Bisa Baca Struk (AI OCR)
+                      Komputer Bisa Baca Struk (OCR Otomatis)
                     </div>
                     <p className="text-xs text-slate-300 leading-relaxed font-normal">
                       Sistem ini bisa melihat dan membaca foto bukti transfer pembayaran secara otomatis. Komputer langsung memastikan uang yang ditransfer sudah cocok 100% dengan nota tagihannya, jadi tidak perlu lagi repot mengecek secara manual.
@@ -238,7 +238,7 @@ export function HeroSection() {
             </PopoverContent>
           </Popover>
           
-          {/* Floating Element 2: Komputer Bisa Baca Struk (AI OCR) */}
+          {/* Floating Element 2: Komputer Bisa Baca Struk (OCR Otomatis) */}
           <Popover>
             <PopoverTrigger asChild>
               <motion.div
@@ -254,7 +254,7 @@ export function HeroSection() {
                     Bukti Transfer
                     <Info className="w-2.5 h-2.5 text-cyan-400 opacity-70 group-hover:opacity-100" />
                   </p>
-                  <p className="text-[11px] font-mono text-white font-bold">AI OCR Validated</p>
+                  <p className="text-[11px] font-mono text-white font-bold">OCR Validated</p>
                 </div>
               </motion.div>
             </PopoverTrigger>
@@ -262,7 +262,7 @@ export function HeroSection() {
               <div className="flex flex-col gap-2">
                 <div className="flex items-center gap-2 text-cyan-400 font-bold text-sm">
                   <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                  Komputer Bisa Baca Struk (AI OCR)
+                  Komputer Bisa Baca Struk (OCR Otomatis)
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed font-normal">
                   Sistem ini bisa melihat dan membaca foto bukti transfer pembayaran secara otomatis. Komputer langsung memastikan uang yang ditransfer sudah cocok 100% dengan nota tagihannya, jadi tidak perlu lagi repot mengecek secara manual.

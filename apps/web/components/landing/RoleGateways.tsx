@@ -158,10 +158,10 @@ const rolePreviews: Record<string, { widgetTitle: string; badgeText: string; ite
   },
   Siswa: {
     widgetTitle: "Ulasan Gizi & Feedback",
-    badgeText: "NLP Classified",
+    badgeText: "Ulasan Terverifikasi",
     items: [
       { label: "Rating Menu Hari Ini", val: "4.9 / 5.0 (Sangat Layak)", highlight: true },
-      { label: "Kategori Ulasan NLP", val: "Rasa & Kebersihan Baik" },
+      { label: "Sentimen Ulasan", val: "Rasa & Kebersihan Baik" },
       { label: "Status Kehadiran", val: "5/5 Hari Aktif" },
     ]
   }

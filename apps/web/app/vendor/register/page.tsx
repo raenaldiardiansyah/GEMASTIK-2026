@@ -301,7 +301,7 @@ export default function VendorRegisterPage() {
         const t = toast.loading("Mendaftarkan vendor ke B.O.G.A...");
         setTimeout(() => {
             toast.dismiss(t);
-            toast.success("Simulasi: Pendaftaran berhasil! Menunggu verifikasi AI OCR.");
+            toast.success("Simulasi: Pendaftaran berhasil! Menunggu verifikasi dokumen otomatis.");
             router.push("/auth/login");
         }, 1500);
     };
@@ -318,7 +318,7 @@ export default function VendorRegisterPage() {
                     </div>
                     <h1 className="text-2xl font-extrabold text-slate-800">Berhasil!</h1>
                     <p className="text-sm text-slate-500 mt-2 leading-relaxed">
-                        Pendaftaran Anda diterima. AI Vision sedang memvalidasi dokumen legalitas Anda.
+                        Pendaftaran Anda diterima. Sistem verifikasi sedang memvalidasi dokumen legalitas Anda.
                     </p>
                     <div className="mt-5 rounded-2xl border border-emerald-100 bg-emerald-50 px-5 py-4 text-left">
                         <p className="text-[10px] font-black uppercase tracking-widest text-emerald-500 mb-1">Vendor ID</p>

@@ -523,7 +523,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
             <div>
               <div className={`flex items-center gap-2 mb-6 text-rose-400`}>
                 <AlertCircle className="w-5 h-5" />
-                <span className="text-[10px] font-black uppercase tracking-widest leading-none">Status AI Insights</span>
+                <span className="text-[10px] font-black uppercase tracking-widest leading-none">Status Analisis Performa</span>
               </div>
               <h4 className="text-white text-xl font-black leading-tight mb-4">
                 {entityId === 6 ? "Intervensi Manajemen!" : "Sesuai Standar"}
