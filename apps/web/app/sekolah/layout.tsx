@@ -140,7 +140,7 @@ export default function SekolahLayout({
             </div>
             
             <div className="mt-auto pt-6 border-t border-violet-500/50 flex flex-col items-center justify-between gap-3 sm:flex-row">
-              <p className="text-violet-100 text-xs font-medium">(c) 2026 GIZANTARA GIZANTARA. Hak Cipta Dilindungi.</p>
+              <p className="text-violet-100 text-xs font-medium">(c) 2026 GIZANTARA. Hak Cipta Dilindungi.</p>
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
                 <span className="text-violet-100 text-xs font-bold">Sistem Operasional Aktif</span>

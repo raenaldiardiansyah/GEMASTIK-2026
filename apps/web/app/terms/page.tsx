@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 const sections = [
   {
     title: "1. Status Demo",
-    body: "GIZANTARA GIZANTARA adalah platform simulasi untuk verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi. Akses ke sini tidak menjamin layanan produksi apa pun dan tidak terkait dengan pembayaran dana riil.",
+    body: "GIZANTARA adalah platform simulasi untuk verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi. Akses ke sini tidak menjamin layanan produksi apa pun dan tidak terkait dengan pembayaran dana riil.",
   },
   {
     title: "2. Transfer Manual & OCR",
@@ -37,7 +37,7 @@ export default function TermsPage() {
             Syarat & Ketentuan
           </h1>
           <p className="mt-4 text-base text-slate-400">
-            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA GIZANTARA.
+            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA.
           </p>
           <div className="mt-8 space-y-5">
             {sections.map((s) => (

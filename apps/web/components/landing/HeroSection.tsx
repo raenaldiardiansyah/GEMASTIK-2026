@@ -52,8 +52,8 @@ export function HeroSection() {
             variants={itemVariants}
             className="text-4xl md:text-5xl lg:text-[3.5rem] font-extrabold leading-[1.06] tracking-tight text-white mb-4"
           >
-            End-to-End <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">Traceability</span> <br />
+            Penelusuran <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400">End-to-End</span> <br />
             Platform MBG.
           </motion.h1>
 

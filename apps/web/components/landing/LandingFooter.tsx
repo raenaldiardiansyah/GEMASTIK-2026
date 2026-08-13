@@ -52,7 +52,7 @@ export function LandingFooter() {
           </div>
         </div>
         <div className="mt-6 lg:mt-12 pt-4 lg:pt-6 border-t border-[#334155] flex flex-col items-center justify-between gap-2 sm:flex-row">
-          <p className="text-slate-500 text-xs lg:text-sm">(c) 2026 GIZANTARA GIZANTARA. Semua hak dilindungi.</p>
+          <p className="text-slate-500 text-xs lg:text-sm">(c) 2026 GIZANTARA. Semua hak dilindungi.</p>
           <div className="flex items-center gap-4 text-xs lg:text-sm">
             {legalLinks.map((link) => (
               <Link key={link.label} href={link.href} className="text-slate-500 hover:text-white transition-colors">{link.label}</Link>

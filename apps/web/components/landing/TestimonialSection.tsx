@@ -28,15 +28,15 @@ export function TestimonialSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-12 items-end mb-10 lg:mb-12">
           <div>
             <span className="text-xs font-bold tracking-widest text-indigo-500 uppercase mb-3 block">
-              TESTIMONIALS
+              TESTIMONI
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tight text-slate-900 leading-[1.1]">
-              You&apos;re in good<br />company
+              Berada di Jaringan<br />Tepercaya
             </h2>
           </div>
           <div>
             <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium md:max-w-md md:ml-auto">
-              Bergabung dengan jaringan mitra dan pengawas yang mengandalkan GIZANTARA GIZANTARA untuk verifikasi vendor, audit pengadaan, dan validasi logistik presisi.
+              Bergabung dengan jaringan mitra dan pengawas yang mengandalkan GIZANTARA untuk verifikasi vendor, audit pengadaan, dan validasi logistik presisi.
             </p>
           </div>
         </div>

@@ -324,7 +324,7 @@ export const vendorReviews: VendorReview[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// NEW DATA: 13-Langkah GIZANTARA GIZANTARA
+// NEW DATA: 13-Langkah GIZANTARA
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── Langkah 3: Vendor Commodities (Katalog + HET/PIHPS) ───────────────────

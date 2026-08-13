@@ -4,7 +4,7 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 const sections = [
   {
     title: "1. Data yang Kami Proses",
-    body: "Situs ini adalah simulasi (mock) untuk memvisualkan alur kerja GIZANTARA GIZANTARA. Data yang dimasukkan — seperti dokumen vendor, PO, dan bukti transfer — hanya disimpan di penyimpanan lokal perangkat Anda (localStorage) dan tidak dikirim ke server produksi.",
+    body: "Situs ini adalah simulasi (mock) untuk memvisualkan alur kerja GIZANTARA. Data yang dimasukkan — seperti dokumen vendor, PO, dan bukti transfer — hanya disimpan di penyimpanan lokal perangkat Anda (localStorage) dan tidak dikirim ke server produksi.",
   },
   {
     title: "2. Penggunaan Demo",
@@ -37,7 +37,7 @@ export default function PrivacyPage() {
             Kebijakan Privasi
           </h1>
           <p className="mt-4 text-base text-slate-400">
-            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA GIZANTARA.
+            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA.
           </p>
           <div className="mt-8 space-y-5">
             {sections.map((s) => (

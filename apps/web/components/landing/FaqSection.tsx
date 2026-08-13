@@ -7,7 +7,7 @@ import { SectionHeader } from "./SectionHeader";
 
 const faqs = [
   {
-    q: "Apa itu GIZANTARA GIZANTARA?",
+    q: "Apa itu GIZANTARA?",
     a: "GIZANTARA adalah platform end-to-end traceability untuk program Makan Bergizi Gratis (MBG): verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, hingga reputasi vendor dan SPPG pada immutable ledger.",
   },
   {
