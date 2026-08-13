@@ -177,7 +177,7 @@ export default function Navbar() {
                   : "text-sm font-semibold tracking-tight text-foreground"
               }
             >
-              B.O.G.A
+              GIZANTARA
             </span>
           </Link>
 

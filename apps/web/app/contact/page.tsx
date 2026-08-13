@@ -13,7 +13,7 @@ export default function ContactPage() {
 
           <div className="relative mx-auto max-w-3xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-              B.O.G.A • Support
+              GIZANTARA • Support
             </p>
             <h1 className="mt-4 text-3xl font-semibold tracking-tight md:text-5xl">
               Butuh bantuan operasional?

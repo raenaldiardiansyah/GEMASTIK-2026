@@ -254,7 +254,7 @@ export default function VendorProfilPage() {
                 <div className="flex-1">
                   <p className="text-sm font-extrabold text-amber-900">Verifikasi Sedang Berjalan</p>
                   <p className="text-[11px] text-amber-700 leading-relaxed mt-0.5">
-                    Akun Anda saat ini sedang dalam status <strong>Pending</strong>. Tim B.O.G.A sedang meninjau dokumen legalitas Anda. 
+                    Akun Anda saat ini sedang dalam status <strong>Pending</strong>. Tim GIZANTARA sedang meninjau dokumen legalitas Anda. 
                     Selama proses ini, fitur katalog dan pesanan ditutup sementara.
                   </p>
                 </div>

@@ -125,7 +125,7 @@ export default function SimulatorPage() {
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight">B.O.G.A Simulator</h1>
+            <h1 className="text-2xl font-black text-slate-800 tracking-tight">GIZANTARA Simulator</h1>
             <p className="text-sm text-slate-500 font-medium mt-1">Pengujian End-to-End Alur SPPG → Vendor</p>
           </div>
           <button onClick={resetSimulator} className="p-2 bg-white rounded-2xl border border-slate-200 text-slate-400 hover:text-rose-500 transition-colors">

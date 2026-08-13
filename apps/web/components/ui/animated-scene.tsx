@@ -246,7 +246,7 @@ export function AnimatedScene() {
           color: "rgba(196,181,253,0.75)",
           textTransform: "uppercase",
         }}>
-          B.O.G.A
+          GIZANTARA
         </span>
         <span style={{
           fontSize: 8,

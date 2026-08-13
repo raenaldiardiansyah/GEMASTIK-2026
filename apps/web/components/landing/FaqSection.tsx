@@ -7,8 +7,8 @@ import { SectionHeader } from "./SectionHeader";
 
 const faqs = [
   {
-    q: "Apa itu GIZANTARA B.O.G.A?",
-    a: "B.O.G.A adalah platform end-to-end traceability untuk program Makan Bergizi Gratis (MBG): verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, hingga reputasi vendor dan SPPG pada immutable ledger.",
+    q: "Apa itu GIZANTARA GIZANTARA?",
+    a: "GIZANTARA adalah platform end-to-end traceability untuk program Makan Bergizi Gratis (MBG): verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, hingga reputasi vendor dan SPPG pada immutable ledger.",
   },
   {
     q: "Bagaimana alur pembayaran bekerja?",
@@ -16,7 +16,7 @@ const faqs = [
   },
   {
     q: "Apakah platform menangani pembayaran secara otomatis?",
-    a: "Tidak. B.O.G.A tidak menyentuh APBN langsung dan bukan payment gateway. Dana dikelola secara manual oleh SPPG; platform hanya memverifikasi bukti pembayaran dan mencatatnya di ledger audit.",
+    a: "Tidak. GIZANTARA tidak menyentuh APBN langsung dan bukan payment gateway. Dana dikelola secara manual oleh SPPG; platform hanya memverifikasi bukti pembayaran dan mencatatnya di ledger audit.",
   },
   {
     q: "Bagaimana distribusi makanan divalidasi?",

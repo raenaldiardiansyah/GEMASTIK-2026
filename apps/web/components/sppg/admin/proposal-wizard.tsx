@@ -167,7 +167,7 @@ export function ProposalWizard() {
               <span className="bg-blue-100 text-blue-700 w-8 h-8 rounded-lg flex items-center justify-center text-lg">1</span>
               Wilayah & Parameter Kontrak
             </CardTitle>
-            <p className="text-sm text-slate-500 font-medium mt-1 ml-11">Pastikan ID Sekolah sasaran sudah terdaftar pada sistem Dapodik B.O.G.A.</p>
+            <p className="text-sm text-slate-500 font-medium mt-1 ml-11">Pastikan ID Sekolah sasaran sudah terdaftar pada sistem Dapodik GIZANTARA.</p>
           </CardHeader>
           <CardContent className="p-6 md:p-8">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">

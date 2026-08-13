@@ -163,7 +163,7 @@ export default function SppgAdminDashboard() {
         <div className="space-y-6">
           <Card className="rounded-2xl border shadow-sm" style={{ backgroundColor: "#F5EFE7", borderColor: "#D8C4B6" }}>
             <CardHeader className="pb-3">
-              <CardTitle className="text-lg font-bold" style={{ color: "#213555" }}>Status Node B.O.G.A</CardTitle>
+              <CardTitle className="text-lg font-bold" style={{ color: "#213555" }}>Status Node GIZANTARA</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">

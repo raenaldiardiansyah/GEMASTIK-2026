@@ -73,7 +73,7 @@ export default function BootOverlay() {
         </div>
 
         <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-white/65">
-          B.O.G.A - MBG Operations
+          GIZANTARA - MBG Operations
         </p>
         <h2 className="mt-3 text-2xl font-semibold tracking-tight">
           Menyiapkan workspace

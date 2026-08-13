@@ -283,7 +283,7 @@ export function LoginForm({
 
     setIsSubmitting(true);
     const loadingToast = toast.loading(
-      isSignup ? "Mendaftarkan ke B.O.G.A..." : "Sedang mengautentikasi (Simulasi)..."
+      isSignup ? "Mendaftarkan ke GIZANTARA..." : "Sedang mengautentikasi (Simulasi)..."
     );
 
     try {
@@ -576,7 +576,7 @@ export function LoginForm({
                         <svg width={10} height={10} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={3} strokeLinecap="round"><path d="M12 8v4M12 16h.01" /></svg>
                       </div>
                       <p className="text-[10px] text-amber-700 leading-tight">
-                        Unggah dokumen legalitas dalam format <b>PDF (Maks. 5MB)</b>. Dokumen akan di-hash dan dicatat ke Ledger B.O.G.A.
+                        Unggah dokumen legalitas dalam format <b>PDF (Maks. 5MB)</b>. Dokumen akan di-hash dan dicatat ke Ledger GIZANTARA.
                       </p>
                     </div>
 
@@ -796,7 +796,7 @@ export function LoginForm({
           <label className="flex items-start gap-2 cursor-pointer mb-2 px-1">
             <input type="checkbox" className="mt-0.5 rounded accent-[hsl(var(--primary))] cursor-pointer shrink-0" defaultChecked />
             <span className="text-[10px] text-gray-500 leading-tight">
-              Saya menyetujui <span className="font-bold text-slate-900">Syarat & Ketentuan</span> serta <span className="font-bold text-slate-900">Kebijakan Privasi</span> B.O.G.A
+              Saya menyetujui <span className="font-bold text-slate-900">Syarat & Ketentuan</span> serta <span className="font-bold text-slate-900">Kebijakan Privasi</span> GIZANTARA
             </span>
           </label>
         )}

@@ -53,7 +53,7 @@ export default function SekolahLayout({
                 </div>
                 <div className="flex flex-col">
                   <span className="font-extrabold text-base tracking-tight text-slate-900 leading-none">
-                    B.O.G.A
+                    GIZANTARA
                   </span>
                   <span className="text-[10px] font-extrabold text-violet-600 tracking-wider uppercase mt-0.5">
                     GIZANTARA
@@ -107,7 +107,7 @@ export default function SekolahLayout({
               <div className="col-span-2 lg:col-span-1">
                 <div className="flex items-center gap-3 mb-3">
                   <div className="w-8 h-8 bg-white rounded-xl flex items-center justify-center text-violet-700 font-bold text-sm shadow-md">B</div>
-                  <span className="font-bold text-white text-base tracking-tight">B.O.G.A</span>
+                  <span className="font-bold text-white text-base tracking-tight">GIZANTARA</span>
                 </div>
                 <p className="text-violet-100 text-xs lg:text-sm leading-relaxed max-w-xs">Portal Admin Sekolah untuk manajemen program makan bergizi gratis GIZANTARA.</p>
               </div>
@@ -140,7 +140,7 @@ export default function SekolahLayout({
             </div>
             
             <div className="mt-auto pt-6 border-t border-violet-500/50 flex flex-col items-center justify-between gap-3 sm:flex-row">
-              <p className="text-violet-100 text-xs font-medium">(c) 2026 GIZANTARA B.O.G.A. Hak Cipta Dilindungi.</p>
+              <p className="text-violet-100 text-xs font-medium">(c) 2026 GIZANTARA GIZANTARA. Hak Cipta Dilindungi.</p>
               <div className="flex items-center gap-2">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-300 animate-pulse" />
                 <span className="text-violet-100 text-xs font-bold">Sistem Operasional Aktif</span>
@@ -159,7 +159,7 @@ export default function SekolahLayout({
         <SidebarInset>
           <div className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur md:hidden">
             <SidebarTrigger />
-            <div className="text-sm font-semibold text-foreground">B.O.G.A</div>
+            <div className="text-sm font-semibold text-foreground">GIZANTARA</div>
           </div>
           <div className="flex-1 h-full min-h-0 overflow-y-auto">{children}</div>
         </SidebarInset>

@@ -287,7 +287,7 @@ export default function PerformanceRanking({ type, selectedId, onSelectVendor, h
             Di Bawah Target
           </div>
         </div>
-        <p className="text-[9px] sm:text-[10px] font-bold text-slate-300 italic">B.O.G.A Live Audit Engine v2.1</p>
+        <p className="text-[9px] sm:text-[10px] font-bold text-slate-300 italic">GIZANTARA Live Audit Engine v2.1</p>
       </div>
     </div>
   );

@@ -324,7 +324,7 @@ export const vendorReviews: VendorReview[] = [
 ];
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// NEW DATA: 13-Langkah GIZANTARA B.O.G.A
+// NEW DATA: 13-Langkah GIZANTARA GIZANTARA
 // ═══════════════════════════════════════════════════════════════════════════════
 
 // ── Langkah 3: Vendor Commodities (Katalog + HET/PIHPS) ───────────────────
@@ -705,7 +705,7 @@ export const ledgerEntries: LedgerEntry[] = [
   },
   {
     id: "LE-007", timestamp: "2025-03-18T10:35:00",
-    type: "PAYMENT_VERIFIED", actorRole: "system", actorName: "Sistem OCR B.O.G.A",
+    type: "PAYMENT_VERIFIED", actorRole: "system", actorName: "Sistem OCR GIZANTARA",
     entityId: "PO-2026-0001", description: "OCR memverifikasi bukti transfer PO-2026-0001: MATCH 100%",
     dataSummary: { poAmount: 11600000, transferAmount: 11600000, status: "MATCH", confidence: 97 },
     hashPrev: "0xF6a7B8c9D0e1F2a3B4c5D6e7F8a9B0c1D2e3F4a5B6c7D8e9F0a1B2c3D4e5F6a7",
@@ -730,7 +730,7 @@ export const ledgerEntries: LedgerEntry[] = [
   },
   {
     id: "LE-010", timestamp: "2025-03-23T09:20:00",
-    type: "PAYMENT_VERIFIED", actorRole: "system", actorName: "Sistem OCR B.O.G.A",
+    type: "PAYMENT_VERIFIED", actorRole: "system", actorName: "Sistem OCR GIZANTARA",
     entityId: "PO-2026-0002", description: "OCR memverifikasi bukti transfer PO-2026-0002: MATCH 100%",
     dataSummary: { poAmount: 3530000, transferAmount: 3530000, status: "MATCH", confidence: 94 },
     hashPrev: "0xAB4c5D6e7F8a9B0c1D2e3F4a5B6c7D8e9F0a1B2c3D4e5F6a7B8c9D0e1F2a3B4c5",
@@ -1676,4 +1676,4 @@ export function getSPPGStudentSentiment(sppgId: number): SPPGStudentSentiment | 
     distribution
   };
 }
-
+

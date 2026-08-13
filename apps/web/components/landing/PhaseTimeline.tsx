@@ -16,7 +16,7 @@ const phasesData = [
     features: [
       "Ekstraksi OCR 99.8% akurat",
       "Validasi otomatis rekening bank & NIB",
-      "Pemerintah approve ke Whitelist B.O.G.A"
+      "Pemerintah approve ke Whitelist GIZANTARA"
     ],
     href: "/goverment/pengajuan",
     align: "left" as const,

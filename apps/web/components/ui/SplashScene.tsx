@@ -181,8 +181,8 @@ export const SplashScene: React.FC<SplashSceneProps> = ({ onLift }) => {
           initGeoShapes();
           loop();
           setPhase("on");
-          setTimeout(() => setPhase("split"), 1300);
-          setTimeout(() => setPhase("hint"), 2800);
+          setTimeout(() => setPhase("split"), 2200); // Perlambat bagian awal (slide-in teks & burst heksagon)
+          setTimeout(() => setPhase("hint"), 3250);  // Total durasi terhitung sejak mount adalah ~4 detik (750ms burst + 3250ms hint)
         }
       };
       requestRef.current = requestAnimationFrame(frame);
@@ -234,74 +234,84 @@ export const SplashScene: React.FC<SplashSceneProps> = ({ onLift }) => {
       <div className="absolute left-1/2 top-1/2 w-[700px] h-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.08),transparent_65%)] animate-pulse pointer-events-none z-[2]" />
       <div className="absolute -right-24 -bottom-24 w-[400px] h-[400px] rounded-full bg-[radial-gradient(circle,rgba(6,182,212,0.18),transparent_65%)] animate-pulse pointer-events-none z-[2]" />
 
-      {/* BOGA Title Row */}
-      <div className="relative z-[5] flex items-center justify-center overflow-visible">
-        {/* B.O. — flies left off-screen when split */}
-        <motion.div
-          animate={
-            phase === "burst"
-              ? { opacity: 0, y: 50, scale: 0.88, x: 0 }
-              : phase === "split"
-                ? { opacity: 0, x: "-50vw", scale: 1 }
-                : { opacity: 1, y: 0, scale: 1, x: 0 }
-          }
-          transition={{ duration: 0.9, type: "spring", stiffness: 80, damping: 18 }}
-          className="text-white font-sans text-[72px] md:text-[140px] font-black tracking-[-3px] md:tracking-[-4px] leading-none drop-shadow-2xl"
-          style={{ fontFamily: "var(--font-jakarta), sans-serif" }}
-        >
-          B.O.
-        </motion.div>
+      {/* GIZANTARA Title Container */}
+      <div className="relative z-[5] flex flex-col items-center justify-center overflow-visible gap-8">
+        {/* Title Row */}
+        <div className="flex items-center justify-center">
+          {/* GIZA — slides in from the left, perlambat di awal (easeIn / cubic-bezier) */}
+          <motion.div
+            initial={{ opacity: 0, x: "-30vw", scale: 0.85 }}
+            animate={
+              phase === "burst"
+                ? { opacity: 0, x: "-30vw", scale: 0.85 }
+                : { opacity: 1, x: 0, scale: 1 }
+            }
+            transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1] }} // Transisi masuk sangat smooth (easeOutExpo)
+            className="text-white font-sans text-[72px] md:text-[140px] font-black tracking-[-3px] md:tracking-[-4px] leading-none drop-shadow-2xl"
+            style={{ fontFamily: "var(--font-grotesk), sans-serif" }}
+          >
+            GIZA
+          </motion.div>
 
-        {/* G.A — flies right off-screen when split */}
-        <motion.div
-          animate={
-            phase === "burst"
-              ? { opacity: 0, y: 50, scale: 0.88, x: 0 }
-              : phase === "split"
-                ? { opacity: 0, x: "50vw", scale: 1 }
-                : { opacity: 1, y: 0, scale: 1, x: 0 }
-          }
-          transition={{ duration: 0.9, type: "spring", stiffness: 80, damping: 18 }}
-          className="text-white font-sans text-[72px] md:text-[140px] font-black tracking-[-3px] md:tracking-[-4px] leading-none drop-shadow-2xl"
-          style={{ fontFamily: "var(--font-jakarta), sans-serif" }}
-        >
-          G.A
-        </motion.div>
+          {/* NTARA — slides in from the right, perlambat di awal (easeIn / cubic-bezier) */}
+          <motion.div
+            initial={{ opacity: 0, x: "30vw", scale: 0.85 }}
+            animate={
+              phase === "burst"
+                ? { opacity: 0, x: "30vw", scale: 0.85 }
+                : { opacity: 1, x: 0, scale: 1 }
+            }
+            transition={{ duration: 2.0, ease: [0.16, 1, 0.3, 1] }} // Transisi masuk sangat smooth (easeOutExpo)
+            className="text-white font-sans text-[72px] md:text-[140px] font-black tracking-[-3px] md:tracking-[-4px] leading-none drop-shadow-2xl"
+            style={{ fontFamily: "var(--font-grotesk), sans-serif" }}
+          >
+            NTARA
+          </motion.div>
+        </div>
 
-        {/* Center reveal text — appears big when B.O.G.A splits */}
+        {/* Tagline — Gizi Nusantara Transparan (dipercepat respon akhirnya) */}
         <motion.div
+          initial={{ opacity: 0, y: 20, scale: 0.95 }}
           animate={
-            phase === "split"
-              ? { opacity: 1, scale: 1, y: 0 }
-              : { opacity: 0, scale: 0.7, y: 20 }
+            phase === "split" || phase === "hint"
+              ? { opacity: 1, y: 0, scale: 1 }
+              : { opacity: 0, y: 20, scale: 0.95 }
           }
-          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: phase === "split" ? 0.15 : 0 }}
-          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+          className="flex items-center gap-4 md:gap-8"
         >
-          <div className="flex items-center gap-4 md:gap-8">
-            <div className="w-[2px] h-12 md:h-24 bg-white/40" />
-            <div 
-              className="text-white font-sans text-[18px] md:text-[42px] font-black text-center uppercase whitespace-nowrap drop-shadow-lg"
-              style={{ fontFamily: "var(--font-jakarta), sans-serif", letterSpacing: "0.06em" }}
-            >
-              Blockchain Operasional<br className="md:hidden" /> Gizi Akuntabel
-            </div>
-            <div className="w-[2px] h-12 md:h-24 bg-white/40" />
+          <div className="w-[1.5px] h-6 md:h-12 bg-white/40 animate-pulse" />
+          <div 
+            className="text-white font-sans text-[18px] md:text-[38px] font-black text-center uppercase whitespace-nowrap drop-shadow-lg tracking-[0.08em]"
+            style={{ fontFamily: "var(--font-grotesk), sans-serif" }}
+          >
+            Gizi Nusantara Transparan
           </div>
+          <div className="w-[1.5px] h-6 md:h-12 bg-white/40 animate-pulse" />
         </motion.div>
       </div>
 
-      {/* Entry Hint */}
-      <motion.div
+      {/* Skip Button (Semantic <button>) */}
+      <button
         onClick={handleLift}
+        className="absolute top-6 right-6 z-[99] px-4 py-2 text-xs font-bold uppercase tracking-widest text-white/60 bg-white/5 border border-white/10 hover:bg-white/10 hover:text-white rounded-full transition-all duration-300 backdrop-blur-sm cursor-pointer"
+      >
+        Lewati Animasi ✕
+      </button>
+
+      {/* Entry Hint (Semantic <button>) */}
+      <motion.button
+        onClick={handleLift}
+        disabled={isLifted}
+        initial={{ opacity: 0 }}
         animate={{ opacity: phase === "hint" ? 1 : 0 }}
-        className="absolute bottom-10 flex flex-col items-center gap-2 cursor-pointer z-[5] group"
+        className="absolute bottom-10 flex flex-col items-center gap-2 bg-transparent border-0 outline-none cursor-pointer z-[5] group"
       >
         <span className="text-[10px] font-bold tracking-[2.5px] text-white/45 uppercase group-hover:text-white transition-colors duration-300 animate-pulse">
           Klik Untuk Masuk
         </span>
         <div className="w-5 h-5 border-r-2 border-b-2 border-white/30 rotate-45 animate-bounce group-hover:border-white transition-colors duration-300" />
-      </motion.div>
+      </motion.button>
 
     </div>
   );

@@ -36,7 +36,7 @@ export function TestimonialSection() {
           </div>
           <div>
             <p className="text-slate-500 text-sm md:text-base leading-relaxed font-medium md:max-w-md md:ml-auto">
-              Bergabung dengan jaringan mitra dan pengawas yang mengandalkan GIZANTARA B.O.G.A untuk verifikasi vendor, audit pengadaan, dan validasi logistik presisi.
+              Bergabung dengan jaringan mitra dan pengawas yang mengandalkan GIZANTARA GIZANTARA untuk verifikasi vendor, audit pengadaan, dan validasi logistik presisi.
             </p>
           </div>
         </div>

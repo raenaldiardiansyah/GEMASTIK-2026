@@ -49,7 +49,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
           {/* Mobile-only top bar */}
           <div className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur md:hidden">
             <SidebarTrigger />
-            <div className="text-sm font-semibold text-foreground">B.O.G.A · Vendor</div>
+            <div className="text-sm font-semibold text-foreground">GIZANTARA · Vendor</div>
           </div>
           
           <div className="flex-1 h-full min-h-0 overflow-y-auto">
@@ -64,7 +64,7 @@ export default function VendorLayout({ children }: { children: React.ReactNode }
                 </div>
                 <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground">Akses Terbatas</h2>
                 <p className="mb-8 max-w-md text-muted-foreground">
-                  Akun Anda sedang dalam tahap verifikasi oleh tim administrasi B.O.G.A. 
+                  Akun Anda sedang dalam tahap verifikasi oleh tim administrasi GIZANTARA. 
                   Silakan lengkapi profil Anda atau tunggu proses verifikasi selesai (estimasi 1x24 jam).
                 </p>
                 <Link 

@@ -52,7 +52,7 @@ export function LogistikNavbar({ onNavigate, activeTab = "Dashboard" }: Logistik
             B
           </div>
           <div className={scrolled ? "hidden lg:block transition-all" : "block transition-all"}>
-            <p className="text-sm font-bold text-white leading-none">B.O.G.A.</p>
+            <p className="text-sm font-bold text-white leading-none">GIZANTARA.</p>
             <p className="text-[10px] text-white/40 mt-0.5 uppercase tracking-widest font-black">Logistic Control</p>
           </div>
         </div>

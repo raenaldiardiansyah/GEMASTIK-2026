@@ -28,7 +28,7 @@ export function LandingFooter() {
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-center gap-3 mb-3">
               <div className="w-7 h-7 lg:w-8 lg:h-8 bg-gradient-to-br from-indigo-600 to-cyan-500 rounded-[10px] flex items-center justify-center text-white font-bold text-xs lg:text-sm">B</div>
-              <span className="font-semibold text-white text-sm tracking-[-0.01em]">B.O.G.A</span>
+              <span className="font-semibold text-white text-sm tracking-[-0.01em]">GIZANTARA</span>
             </div>
             <p className="text-slate-500 text-xs lg:text-sm leading-relaxed">Platform end-to-end traceability untuk program makan bergizi gratis.</p>
           </div>
@@ -52,7 +52,7 @@ export function LandingFooter() {
           </div>
         </div>
         <div className="mt-6 lg:mt-12 pt-4 lg:pt-6 border-t border-[#334155] flex flex-col items-center justify-between gap-2 sm:flex-row">
-          <p className="text-slate-500 text-xs lg:text-sm">(c) 2026 GIZANTARA B.O.G.A. Semua hak dilindungi.</p>
+          <p className="text-slate-500 text-xs lg:text-sm">(c) 2026 GIZANTARA GIZANTARA. Semua hak dilindungi.</p>
           <div className="flex items-center gap-4 text-xs lg:text-sm">
             {legalLinks.map((link) => (
               <Link key={link.label} href={link.href} className="text-slate-500 hover:text-white transition-colors">{link.label}</Link>

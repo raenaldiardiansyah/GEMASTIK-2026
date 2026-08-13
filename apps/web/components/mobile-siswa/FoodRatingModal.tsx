@@ -290,7 +290,7 @@ export const FoodRatingModal = ({ isOpen, onClose }: FoodRatingModalProps) => {
               </button>
               
               <p className="text-center mt-4 text-[9px] font-bold text-slate-400 uppercase tracking-widest">
-                Audit B.O.G.A · Transparansi Gizi Nasional
+                Audit GIZANTARA · Transparansi Gizi Nasional
               </p>
             </footer>
 

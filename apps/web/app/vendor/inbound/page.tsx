@@ -469,7 +469,7 @@ function AddInboundSheet({ open, onClose, vendorId, commodities, onAdded }: {
                   onChange={(val) => setForm(p => ({ ...p, origin_proof_url: val }))} 
                 />
                 <p className="text-[10px] text-slate-400 mt-3 ml-1 leading-relaxed italic">
-                  * Pastikan foto nota terlihat jelas untuk keperluan audit Zero-Trust B.O.G.A
+                  * Pastikan foto nota terlihat jelas untuk keperluan audit Zero-Trust GIZANTARA
                 </p>
               </div>
 

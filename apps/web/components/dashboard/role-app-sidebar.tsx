@@ -94,7 +94,7 @@ function RoleMark({ text }: { text: string }) {
 }
 
 export function RoleAppSidebar({
-  appName = "B.O.G.A",
+  appName = "GIZANTARA",
   roleLabel,
   homeHref,
   items,

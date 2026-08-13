@@ -1,5 +1,5 @@
 /**
- * B.O.G.A Professional Frontend Logger
+ * GIZANTARA Professional Frontend Logger
  * Memberikan visibilitas proses yang jelas & bergaya di konsol browser.
  */
 

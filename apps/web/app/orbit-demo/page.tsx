@@ -8,7 +8,7 @@ export default function OrbitHubDemo() {
       <div className="w-full max-w-[1200px] flex flex-col gap-12">
         <div className="text-center">
           <h1 className="text-white text-5xl font-black tracking-tighter mb-4">
-            B.O.G.A <span className="text-indigo-500">Orbit Hub</span>
+            GIZANTARA <span className="text-indigo-500">Orbit Hub</span>
           </h1>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
             High-fidelity interactive ecosystem visualization using Remotion interpolation 

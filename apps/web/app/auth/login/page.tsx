@@ -84,7 +84,7 @@ function RoleSelectionList({
           Selamat datang
         </h1>
         <p className="text-sm text-slate-500 mt-1.5">
-          Pilih peran Anda untuk masuk ke sistem B.O.G.A.
+          Pilih peran Anda untuk masuk ke sistem GIZANTARA.
         </p>
       </div>
 

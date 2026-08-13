@@ -100,7 +100,7 @@ export function LandingNavbar() {
               B
             </div>
             <span className="font-bold text-sm tracking-tight text-white">
-              B.O.G.A
+              GIZANTARA
             </span>
           </Link>
 
@@ -264,7 +264,7 @@ export function LandingNavbar() {
                     <div>
                       <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-[9px] font-extrabold uppercase tracking-widest mb-2.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                        EKOSISTEM B.O.G.A
+                        EKOSISTEM GIZANTARA
                       </div>
                       <h4 className="text-base font-extrabold text-white leading-snug mb-1.5">
                         6 Portal Terintegrasi MBG

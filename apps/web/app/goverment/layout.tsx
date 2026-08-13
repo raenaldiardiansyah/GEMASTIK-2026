@@ -15,7 +15,7 @@ export default function GovermentLayout({
         <SidebarInset>
           <div className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur md:hidden">
             <SidebarTrigger />
-            <div className="text-sm font-semibold text-foreground">B.O.G.A</div>
+            <div className="text-sm font-semibold text-foreground">GIZANTARA</div>
           </div>
           <div className="flex-1 h-full min-h-0 overflow-y-auto">{children}</div>
         </SidebarInset>

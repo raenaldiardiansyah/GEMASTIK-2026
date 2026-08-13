@@ -13,7 +13,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata = {
-  title: "GIZANTARA B.O.G.A — End-to-End Traceability Program MBG",
+  title: "GIZANTARA GIZANTARA — End-to-End Traceability Program MBG",
   description:
     "Platform end-to-end traceability untuk program Makan Bergizi Gratis: verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi.",
 };

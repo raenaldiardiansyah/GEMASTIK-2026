@@ -22,7 +22,7 @@ function Footer() {
               B
             </span>
             <div className="leading-tight">
-              <p className="text-sm font-semibold tracking-tight text-foreground">B.O.G.A</p>
+              <p className="text-sm font-semibold tracking-tight text-foreground">GIZANTARA</p>
               <p className="text-xs text-muted-foreground">Platform rantai pasok operasional MBG</p>
             </div>
           </div>
@@ -44,7 +44,7 @@ function Footer() {
         </div>
 
         <div className="mt-8 flex flex-col gap-2 border-t pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <span>(c) 2026 GIZANTARA B.O.G.A. Semua hak dilindungi.</span>
+          <span>(c) 2026 GIZANTARA GIZANTARA. Semua hak dilindungi.</span>
           <span className="flex items-center gap-4">
             <Link href="/privacy" className="transition-colors hover:text-foreground">Kebijakan Privasi</Link>
             <Link href="/terms" className="transition-colors hover:text-foreground">Syarat & Ketentuan</Link>

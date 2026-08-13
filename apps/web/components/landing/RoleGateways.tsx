@@ -259,7 +259,7 @@ export function RoleGateways() {
           centered 
           className="mb-6 lg:mb-8 [&_h2]:text-[clamp(1.5rem,4vw,3.5rem)] [&_h2]:text-slate-900" 
         />
-        <p className="hidden lg:block text-slate-600 text-lg leading-relaxed text-center max-w-[700px] mx-auto mb-8 font-medium">Setiap peran memiliki ruang kerja spesifik yang dirancang untuk menjaga integritas data dan efisiensi alur operasional B.O.G.A secara menyeluruh.</p>
+        <p className="hidden lg:block text-slate-600 text-lg leading-relaxed text-center max-w-[700px] mx-auto mb-8 font-medium">Setiap peran memiliki ruang kerja spesifik yang dirancang untuk menjaga integritas data dan efisiensi alur operasional GIZANTARA secara menyeluruh.</p>
         
         {/* Tailark Architectural Guideline Connector with Node Points */}
         <div className="relative w-full mb-8 hidden lg:block">

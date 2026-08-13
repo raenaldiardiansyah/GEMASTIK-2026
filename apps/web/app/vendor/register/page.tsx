@@ -178,7 +178,7 @@ function Step3({ data, set }: { data: FormData; set: (k: keyof FormData, v: stri
                     <FileText size={11} />
                 </div>
                 <p className="text-xs text-amber-700 leading-relaxed">
-                    Dokumen di-<strong>hash SHA-256</strong> & dicatat ke <strong>Ledger B.O.G.A</strong>.
+                    Dokumen di-<strong>hash SHA-256</strong> & dicatat ke <strong>Ledger GIZANTARA</strong>.
                     Paste URL dari Cloudflare R2 atau isi nanti via dashboard.
                 </p>
             </div>
@@ -298,7 +298,7 @@ export default function VendorRegisterPage() {
 
     const handleSubmit = async () => {
         setIsSubmitting(true);
-        const t = toast.loading("Mendaftarkan vendor ke B.O.G.A...");
+        const t = toast.loading("Mendaftarkan vendor ke GIZANTARA...");
         setTimeout(() => {
             toast.dismiss(t);
             toast.success("Simulasi: Pendaftaran berhasil! Menunggu verifikasi dokumen otomatis.");

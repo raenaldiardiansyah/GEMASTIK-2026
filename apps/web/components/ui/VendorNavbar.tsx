@@ -56,7 +56,7 @@ export function VendorNavbar({ onNavigate, activeTab = "Dashboard", variant = "d
             B
           </div>
           <div className={(scrolled || mobileMenuOpen) ? "hidden lg:block transition-all" : "block transition-all"}>
-            <p className={`text-sm font-bold leading-none transition-colors ${isLight && !scrolled && !mobileMenuOpen ? "text-amber-950" : "text-white"}`}>B.O.G.A.</p>
+            <p className={`text-sm font-bold leading-none transition-colors ${isLight && !scrolled && !mobileMenuOpen ? "text-amber-950" : "text-white"}`}>GIZANTARA.</p>
             <p className={`text-[10px] mt-0.5 uppercase tracking-widest font-black transition-colors ${isLight && !scrolled && !mobileMenuOpen ? "text-amber-900/40" : "text-white/40"}`}>Vendor Portal</p>
           </div>
         </div>

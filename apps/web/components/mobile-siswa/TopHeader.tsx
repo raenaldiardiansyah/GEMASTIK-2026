@@ -12,7 +12,7 @@ export const TopHeader = ({ onNotificationClick }: { onNotificationClick?: () =>
         </div>
         <div>
           <h1 className="text-lg font-black text-slate-900 tracking-tight leading-none">
-            B.O.G.A
+            GIZANTARA
           </h1>
           <p className="text-[10px] font-semibold text-slate-400 tracking-wider uppercase">
             Portal Siswa

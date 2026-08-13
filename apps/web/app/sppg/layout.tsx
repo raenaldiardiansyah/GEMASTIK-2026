@@ -25,7 +25,7 @@ export default function SppgLayout({ children }: { children: React.ReactNode }) 
           {/* Mobile-only top bar */}
           <div className="sticky top-0 z-20 flex h-12 items-center gap-3 border-b border-border bg-background/80 px-4 backdrop-blur md:hidden">
             <SidebarTrigger />
-            <div className="text-sm font-semibold text-foreground">B.O.G.A · Portal SPPG</div>
+            <div className="text-sm font-semibold text-foreground">GIZANTARA · Portal SPPG</div>
           </div>
           <div className="flex-1 h-full min-h-0 overflow-y-auto bg-background">
             {children}

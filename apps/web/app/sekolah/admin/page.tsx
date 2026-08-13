@@ -587,7 +587,7 @@ export default function SekolahAdminPage() {
                     </div>
                     <div className="flex-1">
                       <p className="text-xs text-slate-600 leading-relaxed font-medium">
-                        Setelah QR Code berhasil dipindai oleh pihak pengirim menggunakan aplikasi mereka, status serah terima pesanan (manifest) akan otomatis terverifikasi di dalam sistem audit B.O.G.A.
+                        Setelah QR Code berhasil dipindai oleh pihak pengirim menggunakan aplikasi mereka, status serah terima pesanan (manifest) akan otomatis terverifikasi di dalam sistem audit GIZANTARA.
                       </p>
                     </div>
                   </div>

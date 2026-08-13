@@ -27,7 +27,7 @@ interface Comment {
 }
 
 const generateComments = (schoolName: string): Comment[] => [
-  { id: 1, user: "Waka Kurikulum", avatar: "W", role: "Admin", time: "1 jam lalu", content: `Distribusi ke ${schoolName} lancar. B.O.G.A on-time 3 bulan.`, likes: 12 },
+  { id: 1, user: "Waka Kurikulum", avatar: "W", role: "Admin", time: "1 jam lalu", content: `Distribusi ke ${schoolName} lancar. GIZANTARA on-time 3 bulan.`, likes: 12 },
   { id: 2, user: "Siswa - Kelas 8B", avatar: "S", role: "Siswa", time: "3 jam lalu", content: "Makannya enak dan porsinya cukup! Minta tambah susu dong!", likes: 8 },
   { id: 3, user: "Operator MBG", avatar: "O", role: "Operator", time: "5 jam lalu", content: "Manifest pengiriman sudah di-upload. Status: DELIVERED", likes: 15 },
 ];

@@ -83,7 +83,7 @@ export default function SppgEvaluationPage() {
              Program Impact <ChevronRight size={10} /> Beneficiary Feedback
           </div>
           <h1 className="text-4xl font-black text-[#213555] tracking-tight">Kepuasan Sekolah & Siswa</h1>
-          <p className="text-slate-500 font-medium mt-1 text-sm">Dashboard monitoring hasil penilaian langsung dari penerima manfaat program B.O.G.A.</p>
+          <p className="text-slate-500 font-medium mt-1 text-sm">Dashboard monitoring hasil penilaian langsung dari penerima manfaat program GIZANTARA.</p>
         </div>
         <div className="flex gap-3">
            <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-black text-[10px] uppercase tracking-widest text-[#213555]">

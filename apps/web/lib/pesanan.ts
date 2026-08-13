@@ -1,5 +1,5 @@
 /**
- * Logic Utility for Order Management (B.O.G.A)
+ * Logic Utility for Order Management (GIZANTARA)
  * Berisi logika penentuan status pesanan dan kategori tab.
  * Status pembayaran mengikuti alur: Transfer Manual SPPG → OCR Validasi → Ledger Audit.
  */

@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "boga-sppg-api-collection",
-		"name": "B.O.G.A SPPG Module",
+		"name": "GIZANTARA SPPG Module",
 		"description": "Koleksi API untuk Satuan Pelayanan Pemenuhan Gizi (SPPG) meliputi melihat E-Katalog dan menerbitkan Purchase Order (PO)",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},

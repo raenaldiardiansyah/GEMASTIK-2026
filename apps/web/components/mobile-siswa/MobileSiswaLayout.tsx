@@ -96,7 +96,7 @@ export const MobileSiswaLayout = () => {
               className="w-full bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold cursor-pointer" 
               variant="default" 
               type="button"
-              onClick={() => toast.success("Simulasi: Menghubungkan ke admin/layanan pengaduan B.O.G.A")}
+              onClick={() => toast.success("Simulasi: Menghubungkan ke admin/layanan pengaduan GIZANTARA")}
             >
               <MessageSquare className="mr-2 size-4" />
               Hubungi Layanan Pengaduan

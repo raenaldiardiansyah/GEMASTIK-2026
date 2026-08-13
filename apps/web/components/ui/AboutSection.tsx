@@ -354,7 +354,7 @@ export const AboutSection = () => {
               className="flex flex-col gap-6"
             >
               <p className="text-xl md:text-2xl text-slate-600 leading-relaxed font-medium">
-                <span className="text-slate-900 font-bold">B.O.G.A</span> dibangun sebagai respon atas rentannya <span className="text-slate-900 font-bold">kebocoran anggaran</span> dan penurunan kualitas pada program gizi nasional.
+                <span className="text-slate-900 font-bold">GIZANTARA</span> dibangun sebagai respon atas rentannya <span className="text-slate-900 font-bold">kebocoran anggaran</span> dan penurunan kualitas pada program gizi nasional.
               </p>
               <p className="text-lg md:text-xl text-slate-500 leading-relaxed">
                 Kami menggunakan teknologi blockchain untuk menghadirkan ekosistem yang mengunci <span className="text-slate-900 font-bold">akuntabilitas setiap transaksi</span> — dari pencatatan supplier pertama hingga distribusi logistik terakhir.
@@ -383,9 +383,9 @@ export const AboutSection = () => {
                     {[
                       {
                         icon: Network,
-                        label: "B.O.G.A Network",
+                        label: "GIZANTARA Network",
                         title: "Intelligence Hub",
-                        desc: "Sistem saraf pusat B.O.G.A yang menghubungkan tata kelola, logistik, sekolah, dan penyedia layanan melalui buku besar digital terpadu secara real-time.",
+                        desc: "Sistem saraf pusat GIZANTARA yang menghubungkan tata kelola, logistik, sekolah, dan penyedia layanan melalui buku besar digital terpadu secara real-time.",
                         color: "#3b82f6",
                         isGradient: true
                       },
@@ -398,7 +398,7 @@ export const AboutSection = () => {
                             </div>
                           </div>
                         ),
-                        label: "B.O.G.A Ecosystem",
+                        label: "GIZANTARA Ecosystem",
                         title: "The Platform",
                         desc: "Platform manajemen gizi dan logistik end-to-end yang menjamin akuntabilitas 100% dari tahap pengadaan hingga distribusi ke tangan siswa.",
                         color: "#6366f1",
@@ -441,11 +441,11 @@ export const AboutSection = () => {
                       {current === 0 ? "Intelligence Hub" : "The Platform"}
                     </p>
                     <h3 className="text-4xl font-black text-slate-900 mb-5 tracking-tight">
-                      {current === 0 ? "B.O.G.A Network" : "B.O.G.A Ecosystem"}
+                      {current === 0 ? "GIZANTARA Network" : "GIZANTARA Ecosystem"}
                     </h3>
                     <p className="text-lg text-slate-500 leading-relaxed font-medium">
                       {current === 0
-                        ? "Sistem saraf pusat B.O.G.A yang menghubungkan tata kelola, logistik, sekolah, dan penyedia layanan melalui buku besar digital terpadu secara real-time."
+                        ? "Sistem saraf pusat GIZANTARA yang menghubungkan tata kelola, logistik, sekolah, dan penyedia layanan melalui buku besar digital terpadu secara real-time."
                         : "Platform manajemen gizi dan logistik end-to-end yang menjamin akuntabilitas 100% dari tahap pengadaan hingga distribusi ke tangan siswa."}
                     </p>
                   </motion.div>

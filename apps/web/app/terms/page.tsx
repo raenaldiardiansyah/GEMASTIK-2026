@@ -4,11 +4,11 @@ import { LandingFooter } from "@/components/landing/LandingFooter";
 const sections = [
   {
     title: "1. Status Demo",
-    body: "GIZANTARA B.O.G.A adalah platform simulasi untuk verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi. Akses ke sini tidak menjamin layanan produksi apa pun dan tidak terkait dengan pembayaran dana riil.",
+    body: "GIZANTARA GIZANTARA adalah platform simulasi untuk verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi. Akses ke sini tidak menjamin layanan produksi apa pun dan tidak terkait dengan pembayaran dana riil.",
   },
   {
     title: "2. Transfer Manual & OCR",
-    body: "Dalam alur B.O.G.A, pembayaran dilakukan secara manual oleh SPPG. Platform tidak mengunci, menahan, atau mencairkan dana secara otomatis; yang platform lakukan adalah memverifikasi bukti transfer melalui OCR dan mencatatnya di ledger audit.",
+    body: "Dalam alur GIZANTARA, pembayaran dilakukan secara manual oleh SPPG. Platform tidak mengunci, menahan, atau mencairkan dana secara otomatis; yang platform lakukan adalah memverifikasi bukti transfer melalui OCR dan mencatatnya di ledger audit.",
   },
   {
     title: "3. Tanggung Jawab Data",
@@ -31,13 +31,13 @@ export default function TermsPage() {
       <main className="min-h-svh px-4 pb-16 pt-28 md:px-6 md:pt-32">
         <div className="mx-auto max-w-3xl">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-400">
-            B.O.G.A • Legal
+            GIZANTARA • Legal
           </p>
           <h1 className="mt-4 text-3xl font-semibold tracking-tight text-white md:text-5xl">
             Syarat & Ketentuan
           </h1>
           <p className="mt-4 text-base text-slate-400">
-            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA B.O.G.A.
+            Sah per 12 Agustus 2026. Berlaku untuk situs demo GIZANTARA GIZANTARA.
           </p>
           <div className="mt-8 space-y-5">
             {sections.map((s) => (

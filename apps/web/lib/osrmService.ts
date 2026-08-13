@@ -1,5 +1,5 @@
 /**
- * OSRM Routing Service for B.O.G.A Logistics
+ * OSRM Routing Service for GIZANTARA Logistics
  * Ensures real-road following paths instead of straight lines.
  * Includes demo-safe hardcoded fallbacks to prevent Rate Limiting issues.
  */

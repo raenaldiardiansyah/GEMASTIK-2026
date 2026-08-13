@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "boga-vendor-api-collection",
-		"name": "B.O.G.A Vendor Module",
-		"description": "Koleksi API untuk proses Pendaftaran Vendor (Onboarding), Manajemen E-Katalog, dan Mutasi Stok (Inbound) B.O.G.A",
+		"name": "GIZANTARA Vendor Module",
+		"description": "Koleksi API untuk proses Pendaftaran Vendor (Onboarding), Manajemen E-Katalog, dan Mutasi Stok (Inbound) GIZANTARA",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
