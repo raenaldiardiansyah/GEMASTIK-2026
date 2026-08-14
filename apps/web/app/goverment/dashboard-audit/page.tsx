@@ -27,7 +27,7 @@ export default function DashboardAuditPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Dashboard Audit Komando & Pengawasan Ekosistem (BGN / KPK)"
-          description="Pusat pemantauan makro terpadu: Visualisasi operasional, agregasi AI Risk Index, status distribusi real-time, reputasi SBT, dan audit trail blockchain."
+          subtitle="Pusat pemantauan makro terpadu: Visualisasi operasional, agregasi AI Risk Index, status distribusi real-time, reputasi SBT, dan audit trail blockchain."
         />
       </div>
 

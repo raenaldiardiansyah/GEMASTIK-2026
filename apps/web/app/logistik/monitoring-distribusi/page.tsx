@@ -94,7 +94,7 @@ export default function MonitoringDistribusiPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Monitoring Distribusi Spasial & Haversine Geofencing"
-          description="Pelacakan armada pengiriman makanan matang real-time dengan validasi radius geofencing 50 meter saat serah terima."
+          subtitle="Pelacakan armada pengiriman makanan matang real-time dengan validasi radius geofencing 50 meter saat serah terima."
         />
       </div>
 

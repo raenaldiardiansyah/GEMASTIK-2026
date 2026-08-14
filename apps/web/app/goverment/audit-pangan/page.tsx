@@ -53,7 +53,7 @@ export default function AuditPanganPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Inspeksi Kualitas Pangan & AI Governance Risk Index"
-          description="Pengawasan independen kualitas gizi dan higiene makanan matang dengan pencatatan mutlak ke IPFS & blockchain."
+          subtitle="Pengawasan independen kualitas gizi dan higiene makanan matang dengan pencatatan mutlak ke IPFS & blockchain."
         />
       </div>
 

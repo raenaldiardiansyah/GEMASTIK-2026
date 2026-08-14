@@ -111,7 +111,7 @@ export default function VerifikasiSupplierPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Verifikasi Legalitas Supplier (AI OCR & Whitelisting)"
-          description="Otomatisasi validasi dokumen hukum supplier menggunakan OCR, AI Vision tamper-check, dan pendaftaran wallet on-chain."
+          subtitle="Otomatisasi validasi dokumen hukum supplier menggunakan OCR, AI Vision tamper-check, dan pendaftaran wallet on-chain."
         />
       </div>
 

@@ -84,7 +84,7 @@ export default function PengadaanPenerimaanPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Pengadaan & Penerimaan Barang (Audit Trail Digital)"
-          description="Pencatatan transaksi pengadaan bahan baku, validasi jumlah & kualitas QC, serta penyimpanan rekam jejak pada blockchain."
+          subtitle="Pencatatan transaksi pengadaan bahan baku, validasi jumlah & kualitas QC, serta penyimpanan rekam jejak pada blockchain."
         />
       </div>
 

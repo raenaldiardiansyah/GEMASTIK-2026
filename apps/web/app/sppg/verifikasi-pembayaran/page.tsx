@@ -104,7 +104,7 @@ export default function VerifikasiPembayaranPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Verifikasi Pembayaran & Auto-Reconciliation Escrow"
-          description="Pencocokan resi transfer perbankan secara otomatis menggunakan OCR & AI Validation Engine dengan DOKU Escrow Gateway."
+          subtitle="Pencocokan resi transfer perbankan secara otomatis menggunakan OCR & AI Validation Engine dengan DOKU Escrow Gateway."
         />
       </div>
 

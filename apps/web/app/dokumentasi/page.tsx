@@ -419,7 +419,7 @@ export default function DokumentasiManualPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Bab 9: Dokumentasi Cara Penggunaan (Manual Pengguna)"
-          description="Panduan operasional rinci alur kerja ekosistem B.O.G.A dari pendaftaran supplier, pengadaan, rekonsiliasi, audit pangan, hingga pengawasan investigasi."
+          subtitle="Panduan operasional rinci alur kerja ekosistem B.O.G.A dari pendaftaran supplier, pengadaan, rekonsiliasi, audit pangan, hingga pengawasan investigasi."
         />
       </div>
 

@@ -111,7 +111,7 @@ export default function DashboardReputasiPage() {
       <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
         <PageHeader
           title="Dashboard Reputasi On-Chain & Soulbound Token (SBT)"
-          description="Papan peringkat transparan performa entitas ekosistem MBG berbasis token kriptografi absolut yang tidak dapat dimanipulasi."
+          subtitle="Papan peringkat transparan performa entitas ekosistem MBG berbasis token kriptografi absolut yang tidak dapat dimanipulasi."
         />
       </div>
 
