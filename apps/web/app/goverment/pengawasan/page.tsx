@@ -59,6 +59,8 @@ interface ActiveDriver {
   arah: ArahPengiriman;
   status: string;
   manifest: string;
+  baseLat: number;
+  baseLng: number;
   lat: number;
   lng: number;
   eta: string;
@@ -76,8 +78,8 @@ const JENJANG_COLOR: Record<string, string> = {
 };
 
 const ARAH_COLOR: Record<ArahPengiriman, string> = {
-  vendor_ke_sppg:  "bg-amber-50 text-amber-600 border-amber-100",
-  sppg_ke_sekolah: "bg-emerald-50 text-emerald-600 border-emerald-100",
+  vendor_ke_sppg:  "bg-emerald-50 text-emerald-700 border-emerald-200",
+  sppg_ke_sekolah: "bg-teal-50 text-teal-700 border-teal-200",
 };
 
 const ARAH_LABEL: Record<ArahPengiriman, string> = {
@@ -87,94 +89,149 @@ const ARAH_LABEL: Record<ArahPengiriman, string> = {
 
 // ─── Main Page ───────────────────────────────────────────────────────────────
 
+const PRESET_DRIVERS: ActiveDriver[] = [
+  {
+    id: "TRK-003",
+    name: "Driver 3",
+    vendorId: 1,
+    sekolahId: 1,
+    sppgId: 1,
+    arah: "vendor_ke_sppg",
+    status: "Moving",
+    manifest: "680 Porsi Nasi Box",
+    baseLat: -6.8950,
+    baseLng: 107.6140,
+    lat: -6.8950,
+    lng: 107.6140,
+    eta: "14:45",
+    vendorName: "PT Agro Boga Nusantara",
+    schoolName: "SMAN 3 Bandung",
+    jenjang: "SMA",
+  },
+  {
+    id: "TRK-012",
+    name: "Driver 12",
+    vendorId: 1,
+    sekolahId: 6,
+    sppgId: 1,
+    arah: "vendor_ke_sppg",
+    status: "Moving",
+    manifest: "820 Porsi Nasi Box",
+    baseLat: -6.8990,
+    baseLng: 107.6220,
+    lat: -6.8990,
+    lng: 107.6220,
+    eta: "14:45",
+    vendorName: "PT Agro Boga Nusantara",
+    schoolName: "SMAN 20 Bandung",
+    jenjang: "SMA",
+  },
+  {
+    id: "SPG-001",
+    name: "Kurir SPPG 1",
+    vendorId: 1,
+    sekolahId: 1,
+    sppgId: 1,
+    arah: "sppg_ke_sekolah",
+    status: "Moving",
+    manifest: "680 Porsi — SPPG Dago Bandung",
+    baseLat: -6.8980,
+    baseLng: 107.6160,
+    lat: -6.8980,
+    lng: 107.6160,
+    eta: "07:15",
+    vendorName: "SPPG Dago Bandung",
+    schoolName: "SMAN 3 Bandung",
+    jenjang: "SMA",
+  },
+  {
+    id: "SPG-002",
+    name: "Kurir SPPG 2",
+    vendorId: 1,
+    sekolahId: 3,
+    sppgId: 1,
+    arah: "sppg_ke_sekolah",
+    status: "Moving",
+    manifest: "410 Porsi — SPPG Dago Bandung",
+    baseLat: -6.8900,
+    baseLng: 107.6140,
+    lat: -6.8900,
+    lng: 107.6140,
+    eta: "07:15",
+    vendorName: "SPPG Dago Bandung",
+    schoolName: "SDN 061 Cihampelas",
+    jenjang: "SD",
+  },
+  {
+    id: "SPG-003",
+    name: "Kurir SPPG 3",
+    vendorId: 1,
+    sekolahId: 6,
+    sppgId: 1,
+    arah: "sppg_ke_sekolah",
+    status: "Moving",
+    manifest: "820 Porsi — SPPG Dago Bandung",
+    baseLat: -6.9020,
+    baseLng: 107.6250,
+    lat: -6.9020,
+    lng: 107.6250,
+    eta: "07:15",
+    vendorName: "SPPG Dago Bandung",
+    schoolName: "SMPN 5 Bandung",
+    jenjang: "SMP",
+  },
+  {
+    id: "SPG-004",
+    name: "Kurir SPPG 4",
+    vendorId: 2,
+    sekolahId: 2,
+    sppgId: 2,
+    arah: "sppg_ke_sekolah",
+    status: "Moving",
+    manifest: "320 Porsi — SPPG Soekarno Hatta",
+    baseLat: -6.9200,
+    baseLng: 107.6220,
+    lat: -6.9200,
+    lng: 107.6220,
+    eta: "07:15",
+    vendorName: "SPPG Soekarno Hatta",
+    schoolName: "SMPN 2 Bandung",
+    jenjang: "SMP",
+  },
+];
+
 export default function PengawasanPage() {
   const [selectedDriverId, setSelectedDriverId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeDrivers, setActiveDrivers] = useState<ActiveDriver[]>([]);
+  const [activeDrivers, setActiveDrivers] = useState<ActiveDriver[]>(PRESET_DRIVERS);
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   // Filters
+  const [showFilters, setShowFilters] = useState(false);
   const [jenjangFilter, setJenjangFilter] = useState<JenjangFilter>("SEMUA");
   const [arahFilter, setArahFilter] = useState<ArahFilter>("SEMUA");
 
-  // Pagination
-  const PAGE_SIZE = 4;
+  // Pagination (Fixed 3 items per page for perfect single-screen fit)
+  const PAGE_SIZE = 3;
   const [page, setPage] = useState(0);
 
-  // ── Initial Data & Simulation Loop ──────────────────────────────────────
+  // ── Simulation Loop ──────────────────────────────────────────────────────
   useEffect(() => {
-    // Build driver list from on_transit deliveries
-    const initial: ActiveDriver[] = deliveryList
-      .filter((d) => d.status === "on_transit")
-      .map((delivery) => {
-        const vs = vendorSekolahList.find((vs) => vs.id === delivery.vendor_sekolah_id);
-        const vendor = vendorList.find((v) => v.id === vs?.vendor_id);
-        const sekolah = sekolahList.find((s) => s.id === vs?.sekolah_id);
-
-        // Determine which SPPG serves this school
-        const sppgRel = sppgSekolahList.find((ss) => ss.sekolah_id === vs?.sekolah_id);
-        const sppg = sppgList.find((sp) => sp.id === sppgRel?.sppg_id);
-
-        // Logistik vendors do sppg_ke_sekolah; supplier_bahan/katering typically vendor_ke_sppg
-        // Here: vs.is_primary && katering → sppg_ke_sekolah; logistik/supplier → vendor_ke_sppg
-        const arah: ArahPengiriman =
-          vendor?.kategori === "logistik" ? "sppg_ke_sekolah" : "vendor_ke_sppg";
-
-        return {
-          id: `TRK-${String(delivery.id).padStart(3, "0")}`,
-          name: `Driver ${delivery.id}`,
-          vendorId: vendor?.id || 1,
-          sekolahId: sekolah?.id || 1,
-          sppgId: sppg?.id,
-          arah,
-          status: "Moving",
-          manifest: `${delivery.porsi_dikirim} Porsi Nasi Box`,
-          lat: deterministicJitter((vendor?.lat || -6.8850), delivery.id, 0.02),
-          lng: deterministicJitter((vendor?.lng || 107.6130), delivery.id, 0.02),
-          eta: "14:45",
-          vendorName: vendor?.nama || "Unknown Vendor",
-          schoolName: sekolah?.nama || "Unknown School",
-          jenjang: sekolah?.jenjang || "SD",
-        };
-      });
-
-    // Add extra synthetic sppg_ke_sekolah drivers (from SPPG to sekolah via logistik vendor)
-    const sppgDrivers: ActiveDriver[] = sppgSekolahList.slice(0, 4).map((rel, i) => {
-      const sppg = sppgList.find((sp) => sp.id === rel.sppg_id)!;
-      const sekolah = sekolahList.find((s) => s.id === rel.sekolah_id)!;
-      return {
-        id: `SPG-${String(i + 1).padStart(3, "0")}`,
-        name: `Kurir SPPG ${i + 1}`,
-        vendorId: sppg.vendor_id,
-        sekolahId: sekolah.id,
-        sppgId: sppg.id,
-        arah: "sppg_ke_sekolah" as ArahPengiriman,
-        status: "Moving",
-        manifest: `${rel.porsi_per_hari} Porsi — ${sppg.nama}`,
-        lat: deterministicJitter(sppg.lat, i, 0.015),
-        lng: deterministicJitter(sppg.lng, i, 0.015),
-        eta: "07:15",
-        vendorName: sppg.nama,
-        schoolName: sekolah.nama,
-        jenjang: sekolah.jenjang,
-      };
-    });
-
-    setActiveDrivers([...initial, ...sppgDrivers]);
-
-    // Simulation: jitter positions every 2s (deterministic)
+    let t = 0;
     const interval = setInterval(() => {
+      t += 0.1;
       setActiveDrivers((prev) =>
-        prev.map((d) => {
-          const numId = parseInt(d.id.replace(/\D/g, ""), 10) || 1;
+        prev.map((d, idx) => {
+          const deltaLat = Math.sin(t + idx * 1.5) * 0.0004;
+          const deltaLng = Math.cos(t + idx * 1.5) * 0.0004;
           return {
             ...d,
-            lat: d.lat + deterministicJitter(0, numId, 0.0005),
-            lng: d.lng + deterministicJitter(0, numId, 0.0005),
+            lat: d.baseLat + deltaLat,
+            lng: d.baseLng + deltaLng,
           };
         })
       );
-    }, 2000);
+    }, 1500);
 
     return () => clearInterval(interval);
   }, []);
@@ -209,7 +266,7 @@ export default function PengawasanPage() {
     activeDrivers.filter((d) => j === "SEMUA" || d.jenjang === j).length;
 
   return (
-    <div className="flex h-full w-full gap-4 p-4 bg-[#f8faff] overflow-hidden relative">
+    <div className="flex h-[100dvh] max-h-[100dvh] w-full gap-3 p-3 bg-slate-50 overflow-hidden relative">
 
       {/* ── Sidebar: Unit Monitoring ── */}
       <motion.aside
@@ -248,86 +305,99 @@ export default function PengawasanPage() {
           </div>
 
           {!isSidebarCollapsed && (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-3">
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-2.5 shrink-0">
 
-              {/* Search */}
-              <div className="relative group">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-300 group-focus-within:text-indigo-500 transition-colors" />
-                <input
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Cari armada / sekolah..."
-                  className="w-full bg-slate-50/50 border border-slate-100 rounded-xl py-2.5 pl-9 pr-3 text-xs font-bold text-slate-700 placeholder:text-slate-300 focus:ring-2 focus:ring-indigo-500/20 outline-none transition-all"
-                />
-              </div>
-
-              {/* ── Filter: Jenjang ── */}
-              <div>
-                <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                  <School className="w-3 h-3" /> Jenjang Sekolah
-                </label>
-                <div className="relative">
-                  <select
-                    value={jenjangFilter}
-                    onChange={(e) => setJenjangFilter(e.target.value as JenjangFilter)}
-                    className="w-full appearance-none bg-slate-50 border border-slate-100 rounded-xl py-2 pl-3 pr-8 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 outline-none transition-all cursor-pointer"
-                  >
-                    <option value="SEMUA">Semua Jenjang ({activeDrivers.length})</option>
-                    <option value="SD">SD ({countByJenjang("SD")})</option>
-                    <option value="SMP">SMP ({countByJenjang("SMP")})</option>
-                    <option value="SMA">SMA ({countByJenjang("SMA")})</option>
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
+              {/* Search + Filter Button Row */}
+              <div className="flex items-center gap-1.5">
+                <div className="relative flex-1 group">
+                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 group-focus-within:text-indigo-600 transition-colors" />
+                  <input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Cari armada / rute..."
+                    className="w-full bg-slate-50 border border-slate-200/80 rounded-xl py-2 pl-8.5 pr-2.5 text-xs font-bold text-slate-700 placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400 outline-none transition-all"
+                  />
                 </div>
+
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`w-8 h-8 rounded-xl flex items-center justify-center border transition-all cursor-pointer ${
+                    showFilters || hasActiveFilters
+                      ? "bg-indigo-600 border-indigo-500 text-white shadow-xs"
+                      : "bg-slate-50 border-slate-200/80 text-slate-500 hover:bg-slate-100 hover:text-slate-800"
+                  }`}
+                  title="Filter Jenjang & Rute"
+                >
+                  <Filter className="w-3.5 h-3.5" />
+                </button>
               </div>
 
-              {/* ── Filter: Arah Pengiriman ── */}
-              <div>
-                <label className="text-[8px] font-black text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                  <ArrowRight className="w-3 h-3" /> Arah Pengiriman
-                </label>
-                <div className="relative">
-                  <select
-                    value={arahFilter}
-                    onChange={(e) => setArahFilter(e.target.value as ArahFilter)}
-                    className="w-full appearance-none bg-slate-50 border border-slate-100 rounded-xl py-2 pl-3 pr-8 text-xs font-bold text-slate-700 focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-300 outline-none transition-all cursor-pointer"
-                  >
-                    <option value="SEMUA">Semua Rute</option>
-                    <option value="vendor_ke_sppg">Vendor → SPPG</option>
-                    <option value="sppg_ke_sekolah">SPPG → Sekolah</option>
-                  </select>
-                  <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none" />
-                </div>
-              </div>
-
-              {/* Active filter badge + reset */}
+              {/* Collapsible Filter Panel */}
               <AnimatePresence>
-                {hasActiveFilters && (
+                {showFilters && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="flex items-center justify-between px-3 py-2 bg-indigo-50 rounded-xl border border-indigo-100"
+                    className="flex flex-col gap-2 p-2.5 bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden"
                   >
-                    <span className="text-[9px] font-black text-indigo-600">
-                      {filteredDrivers.length} dari {activeDrivers.length} armada
-                    </span>
-                    <button
-                      onClick={resetFilters}
-                      className="flex items-center gap-1 text-[8px] font-black text-indigo-400 hover:text-red-500 transition-colors"
-                    >
-                      <X className="w-3 h-3" /> Reset
-                    </button>
+                    {/* Filter: Jenjang */}
+                    <div>
+                      <label className="text-[8px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <School className="w-3 h-3 text-indigo-600" /> Jenjang Sekolah
+                      </label>
+                      <select
+                        value={jenjangFilter}
+                        onChange={(e) => setJenjangFilter(e.target.value as JenjangFilter)}
+                        className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-2 text-[11px] font-bold text-slate-700 outline-none cursor-pointer"
+                      >
+                        <option value="SEMUA">Semua Jenjang ({activeDrivers.length})</option>
+                        <option value="SD">SD ({countByJenjang("SD")})</option>
+                        <option value="SMP">SMP ({countByJenjang("SMP")})</option>
+                        <option value="SMA">SMA ({countByJenjang("SMA")})</option>
+                      </select>
+                    </div>
+
+                    {/* Filter: Arah Pengiriman */}
+                    <div>
+                      <label className="text-[8px] font-black text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1">
+                        <ArrowRight className="w-3 h-3 text-emerald-600" /> Rute Pengiriman
+                      </label>
+                      <select
+                        value={arahFilter}
+                        onChange={(e) => setArahFilter(e.target.value as ArahFilter)}
+                        className="w-full bg-white border border-slate-200 rounded-lg py-1.5 px-2 text-[11px] font-bold text-slate-700 outline-none cursor-pointer"
+                      >
+                        <option value="SEMUA">Semua Rute</option>
+                        <option value="vendor_ke_sppg">Vendor → SPPG</option>
+                        <option value="sppg_ke_sekolah">SPPG → Sekolah</option>
+                      </select>
+                    </div>
+
+                    {hasActiveFilters && (
+                      <button
+                        onClick={resetFilters}
+                        className="flex items-center justify-center gap-1 text-[9px] font-black text-red-500 hover:underline pt-1"
+                      >
+                        <X className="w-3 h-3" /> Reset Filter
+                      </button>
+                    )}
                   </motion.div>
                 )}
               </AnimatePresence>
 
+              {/* Active summary badge when filters are closed */}
+              {!showFilters && hasActiveFilters && (
+                <div className="flex items-center justify-between px-2 py-1 bg-indigo-50 rounded-lg border border-indigo-100 text-[9px] font-bold text-indigo-700">
+                  <span>Filter Aktif ({filteredDrivers.length} armada)</span>
+                  <button onClick={resetFilters} className="text-red-500 hover:underline font-black">Reset</button>
+                </div>
+              )}
+
               {/* Count label */}
-              <div className="flex items-center justify-between px-1">
-                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">
-                  Active • {filteredDrivers.length}
-                </p>
-                <Filter className="w-3 h-3 text-slate-300" />
+              <div className="flex items-center justify-between px-1 text-[9px] font-bold text-slate-400 uppercase tracking-wider">
+                <span>Armada Aktif: {filteredDrivers.length}</span>
+                <span className="font-mono text-emerald-600 font-black">LIVE GPS</span>
               </div>
             </motion.div>
           )}
@@ -429,37 +499,27 @@ export default function PengawasanPage() {
 
             {/* ── Pagination ── */}
             {!isSidebarCollapsed && totalPages > 1 && (
-              <div className="flex items-center justify-between pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between pt-2 pb-1 border-t border-slate-100 shrink-0">
                 <button
                   onClick={() => setPage((p) => Math.max(0, p - 1))}
                   disabled={page === 0}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-200/80 bg-white"
+                  title="Halaman Sebelumnya"
                 >
-                  <ChevronLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-3.5 h-3.5" />
                 </button>
 
-                <div className="flex items-center gap-1">
-                  {Array.from({ length: totalPages }).map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setPage(i)}
-                      className={`w-6 h-6 rounded-lg text-[9px] font-black transition-all ${
-                        i === page
-                          ? "bg-indigo-600 text-white shadow-sm shadow-indigo-500/30"
-                          : "text-slate-400 hover:bg-slate-100"
-                      }`}
-                    >
-                      {i + 1}
-                    </button>
-                  ))}
+                <div className="flex items-center gap-1 font-mono text-[10px] font-bold text-slate-600">
+                  <span>Halaman {page + 1} / {totalPages}</span>
                 </div>
 
                 <button
                   onClick={() => setPage((p) => Math.min(totalPages - 1, p + 1))}
                   disabled={page === totalPages - 1}
-                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:bg-indigo-50 hover:text-indigo-600 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-200/80 bg-white"
+                  title="Halaman Berikutnya"
                 >
-                  <ChevronRight className="w-4 h-4" />
+                  <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}
@@ -496,32 +556,51 @@ export default function PengawasanPage() {
           onExit={() => setSelectedDriverId(null)}
         />
 
-        {/* Floating Stats Overlay */}
+        {/* Floating Telemetry Trigger / Popover */}
         {!selectedDriverId && (
-          <div className="absolute bottom-10 right-10 flex gap-4 pointer-events-none">
-            <GlassCard className="px-6 py-4 flex items-center gap-6 pointer-events-auto shadow-2xl">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100">
-                  <Wifi className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Connection</p>
-                  <p className="text-sm font-black text-slate-800">100% Satlink</p>
-                </div>
+          <div className="absolute bottom-6 right-6 z-20 flex flex-col items-end pointer-events-auto">
+            <div className="relative group">
+              {/* Expandable Popover Card on Hover or Focus */}
+              <div className="absolute bottom-full right-0 mb-3 opacity-0 translate-y-2 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-out z-30">
+                <GlassCard className="px-5 py-3.5 flex items-center gap-5 shadow-2xl border border-slate-200/80 bg-white/95 backdrop-blur-xl rounded-2xl">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600 border border-emerald-100 shrink-0">
+                      <Wifi className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Koneksi Satelit</p>
+                      <p className="text-xs font-black text-slate-800 leading-none">100% Satlink</p>
+                    </div>
+                  </div>
+                  <div className="w-[1px] h-6 bg-slate-200" />
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100 shrink-0">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest leading-none mb-1">Waktu Sistem</p>
+                      <p className="text-xs font-black text-slate-800 leading-none whitespace-nowrap">
+                        {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} WIB
+                      </p>
+                    </div>
+                  </div>
+                </GlassCard>
               </div>
-              <div className="w-[1px] h-8 bg-slate-100" />
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-2xl bg-indigo-50 flex items-center justify-center text-indigo-600 border border-indigo-100">
-                  <Clock className="w-5 h-5" />
+
+              {/* Main Compact Icon Button */}
+              <button 
+                className="w-10 h-10 rounded-2xl bg-white/90 hover:bg-white backdrop-blur-xl border border-slate-200/90 shadow-xl flex items-center justify-center text-emerald-600 hover:scale-105 active:scale-95 transition-all group-hover:border-emerald-300 cursor-pointer"
+                title="Status Koneksi & Waktu Telemetri"
+              >
+                <div className="relative">
+                  <Wifi className="w-4 h-4 text-emerald-600" />
+                  <span className="absolute -top-1 -right-1 flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
                 </div>
-                <div>
-                  <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">System Time</p>
-                  <p className="text-sm font-black text-slate-800 whitespace-nowrap">
-                    {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })} WIB
-                  </p>
-                </div>
-              </div>
-            </GlassCard>
+              </button>
+            </div>
           </div>
         )}
       </motion.main>

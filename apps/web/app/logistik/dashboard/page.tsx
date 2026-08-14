@@ -101,39 +101,29 @@ export default function LogistikDashboardPage() {
       title="Dashboard Logistik: Vendor → SPPG → Sekolah"
       description={
         <>
-          Pemantauan rantai pasok harian, status serah-terima manifest, validasi geofencing, dan modul pemindai QR terintegrasi.
+          Pemantauan rantai pasok harian, status serah-terima manifest, validasi geofencing 50 meter, dan telemetri armada real-time.
         </>
-      }
-      actions={
-        <div className="flex flex-wrap items-center gap-2">
-          <Button asChild className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 px-4">
-            <Link href="/logistik/pantau">
-              Pantau Detail Rute
-              <Navigation className="w-4 h-4 ml-1.5" />
-            </Link>
-          </Button>
-        </div>
       }
     >
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Statistik Logistik">
+      <section className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" aria-label="Statistik Logistik">
         {[
-          { label: "Manifest Selesai", value: summary.delivered, icon: PackageCheck },
-          { label: "Dalam Pengiriman", value: summary.inTransit, icon: Truck },
-          { label: "Menunggu Pickup", value: summary.pending, icon: Factory },
-          { label: "Rute Dipantau", value: summary.routes, icon: Route },
+          { label: "Manifest Selesai", value: `${summary.delivered} Manifest`, icon: PackageCheck },
+          { label: "Dalam Pengiriman", value: `${summary.inTransit} Armada`, icon: Truck },
+          { label: "Menunggu Pickup", value: `${summary.pending} Pesanan`, icon: Factory },
+          { label: "Rute Dipantau", value: `${summary.routes} Lokasi`, icon: Route },
         ].map((m) => (
           <div
             key={m.label}
-            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all hover:border-emerald-500 hover:shadow-md"
+            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs transition-all hover:border-[#1E3A5F] hover:shadow-md flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between gap-3">
-              <p className="text-xs font-bold text-slate-600">{m.label}</p>
-              <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-800 border border-emerald-300 shadow-2xs">
+            <div className="flex items-start justify-between gap-2">
+              <p className="text-xs font-bold text-slate-500 leading-tight">{m.label}</p>
+              <div className="rounded-xl bg-emerald-50 p-2 text-emerald-800 border border-emerald-200 shadow-2xs shrink-0">
                 <m.icon className="size-4" aria-hidden />
               </div>
             </div>
-            <p className="mt-3 text-2xl font-black tracking-tight text-slate-900 tabular-nums">
+            <p className="mt-3 text-lg sm:text-xl font-black tracking-tight text-slate-900 tabular-nums truncate" title={String(m.value)}>
               {m.value}
             </p>
           </div>

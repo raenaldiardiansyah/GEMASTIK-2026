@@ -31,17 +31,21 @@ interface MapLibreLogistikProps {
     lng: number;
     zoom?: number;
   } | null;
+  hideControls?: boolean;
 }
 
-export default function MapLibreLogistik({ focusLocation }: MapLibreLogistikProps) {
+export default function MapLibreLogistik({ focusLocation, hideControls = false }: MapLibreLogistikProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
   const driverMarker = useRef<maplibregl.Marker | null>(null);
 
+  const isLoaded = useRef(false);
+
   useEffect(() => {
     if (
       map.current &&
+      isLoaded.current &&
       focusLocation &&
       typeof focusLocation.lat === "number" &&
       typeof focusLocation.lng === "number" &&
@@ -60,7 +64,7 @@ export default function MapLibreLogistik({ focusLocation }: MapLibreLogistikProp
       }
     }
   }, [focusLocation]);
-  
+
   const [mounted, setMounted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isScanOpen, setIsScanOpen] = useState(false);
@@ -99,20 +103,42 @@ export default function MapLibreLogistik({ focusLocation }: MapLibreLogistikProp
   useEffect(() => {
     if (!mounted || !mapContainer.current) return;
 
+    const initialCenter: [number, number] =
+      focusLocation && typeof focusLocation.lat === "number" && typeof focusLocation.lng === "number" && !isNaN(focusLocation.lat) && !isNaN(focusLocation.lng)
+        ? [focusLocation.lng, focusLocation.lat]
+        : [107.6191, -6.9175];
+
     map.current = new maplibregl.Map({
       container: mapContainer.current,
       style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-      center: [107.6191, -6.9175],
-      zoom: 12,
+      center: initialCenter,
+      zoom: focusLocation?.zoom || 14,
       pitch: 0,
       bearing: 0,
     });
 
     map.current.on('load', () => {
+      isLoaded.current = true;
       renderMarkers();
+
+      if (
+        focusLocation &&
+        typeof focusLocation.lat === "number" &&
+        typeof focusLocation.lng === "number" &&
+        !isNaN(focusLocation.lat) &&
+        !isNaN(focusLocation.lng)
+      ) {
+        map.current?.flyTo({
+          center: [focusLocation.lng, focusLocation.lat],
+          zoom: focusLocation.zoom || 15,
+          duration: 1500,
+          essential: true
+        });
+      }
     });
 
     return () => {
+      isLoaded.current = false;
       map.current?.remove();
     };
   }, [mounted]);
@@ -500,135 +526,138 @@ export default function MapLibreLogistik({ focusLocation }: MapLibreLogistikProp
   return (
     <div 
       className={`
-        relative w-full overflow-hidden rounded-3xl border border-white/20 shadow-2xl transition-all duration-700
-        ${isExpanded ? "fixed inset-8 z-[100] h-[calc(100vh-64px)]" : "h-[clamp(28rem,50vw,42rem)]"}
+        relative w-full h-full overflow-hidden rounded-3xl border border-white/20 shadow-2xl transition-all duration-700
       `}
     >
       <div ref={mapContainer} className="w-full h-full" />
 
-      {/* Top Controls (Ported from MapLogistikThemed) */}
-      <div className="absolute top-6 inset-x-6 z-[1000] flex items-start justify-between gap-4 pointer-events-none">
-        <div className="w-full max-w-[320px] pointer-events-auto">
-          <div className="relative">
-            <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-              <Search className="w-4 h-4 text-slate-400" />
+      {!hideControls && (
+        <>
+          {/* Top Controls (Ported from MapLogistikThemed) */}
+          <div className="absolute top-6 inset-x-6 z-20 flex items-start justify-between gap-4 pointer-events-none">
+            <div className="w-full max-w-[320px] pointer-events-auto">
+              <div className="relative">
+                <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                  <Search className="w-4 h-4 text-slate-400" />
+                </div>
+                <input 
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Cari armada..."
+                  className="w-full bg-white/90 backdrop-blur-xl border border-slate-200 rounded-2xl py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xl focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all"
+                />
+              </div>
             </div>
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Cari armada..."
-              className="w-full bg-white/90 backdrop-blur-xl border border-slate-200 rounded-2xl py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xl focus:ring-2 focus:ring-emerald-500/50 outline-none transition-all"
-            />
-          </div>
-        </div>
 
-        <div className="flex flex-col gap-3 pointer-events-auto">
-          <div className="flex gap-2">
-            <button 
-              onClick={() => setIsTripActive(!isTripActive)}
-              className={`h-10 px-3.5 rounded-xl backdrop-blur-md border shadow-2xl flex items-center gap-1.5 text-xs font-black transition-all ${
-                isTripActive 
-                  ? 'bg-emerald-600 border-emerald-400 text-white animate-pulse shadow-emerald-600/30' 
-                  : 'bg-white/90 border-white text-slate-800 hover:bg-white'
-              }`}
-              title="Mulai Animasi Pengiriman Live 3D (Seperti Portal Government)"
-            >
-              <TruckIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110" />
-              <span>{isTripActive ? "Stop Animasi" : "Simulasi Animasi 3D"}</span>
-            </button>
-            <button 
-              onClick={handleOpenScan}
-              className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur-md border border-white shadow-2xl flex items-center justify-center text-gray-700 hover:bg-white transition-all"
-              title="Scan QR"
-            >
-              <Camera className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={() => setIsDriverMode(!isDriverMode)}
-              className={`w-10 h-10 rounded-xl backdrop-blur-md border shadow-2xl flex items-center justify-center transition-all ${isDriverMode ? 'bg-emerald-600 border-emerald-400 text-white' : 'bg-white/90 border-white text-gray-700'}`}
-              title="Menu Sopir"
-            >
-              <Navigation className="w-5 h-5 rotate-45" />
-            </button>
-            <button 
-               onClick={toggle3D}
-               className={`w-10 h-10 rounded-xl backdrop-blur-md border shadow-2xl flex items-center justify-center transition-all ${is3D ? 'bg-indigo-600 text-white' : 'bg-white/90 border-white text-gray-700'}`}
-               title="Toggle 3D"
-            >
-              <Maximize2 className="w-5 h-5" />
-            </button>
+            <div className="flex flex-col gap-3 pointer-events-auto">
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setIsTripActive(!isTripActive)}
+                  className={`h-10 px-3.5 rounded-xl backdrop-blur-md border shadow-2xl flex items-center gap-1.5 text-xs font-black transition-all ${
+                    isTripActive 
+                      ? 'bg-emerald-600 border-emerald-400 text-white animate-pulse shadow-emerald-600/30' 
+                      : 'bg-white/90 border-white text-slate-800 hover:bg-white'
+                  }`}
+                  title="Mulai Animasi Pengiriman Live 3D (Seperti Portal Government)"
+                >
+                  <TruckIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110" />
+                  <span>{isTripActive ? "Stop Animasi" : "Simulasi Animasi 3D"}</span>
+                </button>
+                <button 
+                  onClick={handleOpenScan}
+                  className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur-md border border-white shadow-2xl flex items-center justify-center text-gray-700 hover:bg-white transition-all"
+                  title="Scan QR"
+                >
+                  <Camera className="w-5 h-5" />
+                </button>
+                <button 
+                  onClick={() => setIsDriverMode(!isDriverMode)}
+                  className={`w-10 h-10 rounded-xl backdrop-blur-md border shadow-2xl flex items-center justify-center transition-all ${isDriverMode ? 'bg-emerald-600 border-emerald-400 text-white' : 'bg-white/90 border-white text-gray-700'}`}
+                  title="Menu Sopir"
+                >
+                  <Navigation className="w-5 h-5 rotate-45" />
+                </button>
+                <button 
+                   onClick={toggle3D}
+                   className={`w-10 h-10 rounded-xl backdrop-blur-md border shadow-2xl flex items-center justify-center transition-all ${is3D ? 'bg-indigo-600 text-white' : 'bg-white/90 border-white text-gray-700'}`}
+                   title="Toggle 3D"
+                >
+                  <Maximize2 className="w-5 h-5" />
+                </button>
+              </div>
+              {(selectedVendorId || selectedSchoolId) && (
+                <button 
+                  onClick={() => { setSelectedVendorId(null); setSelectedSchoolId(null); }}
+                  className="w-10 h-10 self-end rounded-xl bg-red-500/90 backdrop-blur-md border border-red-400/50 text-white flex items-center justify-center shadow-2xl hover:bg-red-600 transition-all animate-in zoom-in"
+                  title="Reset View"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              )}
+            </div>
           </div>
-          {(selectedVendorId || selectedSchoolId) && (
-            <button 
-              onClick={() => { setSelectedVendorId(null); setSelectedSchoolId(null); }}
-              className="w-10 h-10 self-end rounded-xl bg-red-500/90 backdrop-blur-md border border-red-400/50 text-white flex items-center justify-center shadow-2xl hover:bg-red-600 transition-all animate-in zoom-in"
-              title="Reset View"
-            >
-              <X className="w-5 h-5" />
-            </button>
+
+          {isDriverMode && (
+             <div className="absolute top-20 right-6 z-20 w-64 pointer-events-auto">
+                <DriverControlPanel 
+                  isTripActive={isTripActive}
+                  onToggleTrip={setIsTripActive}
+                  destination={`${vendorList[0].nama} → ${sekolahList[0].nama}`}
+                />
+             </div>
           )}
-        </div>
-      </div>
 
-      {isDriverMode && (
-         <div className="absolute top-20 right-6 z-[1000] w-64 pointer-events-auto">
-            <DriverControlPanel 
-              isTripActive={isTripActive}
-              onToggleTrip={setIsTripActive}
-              destination={`${vendorList[0].nama} → ${sekolahList[0].nama}`}
-            />
-         </div>
-      )}
+          {/* Live HUD Tracking Overlay */}
+          {isTripActive && distRemaining > 0 && (
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+               <div className="bg-slate-900/90 backdrop-blur-xl border border-white/20 px-4 py-2 rounded-xl shadow-xl flex items-center gap-4 animate-in slide-in-from-bottom-2 duration-500">
+                  <div className="flex flex-col">
+                    <p className="text-[8px] font-bold text-white/50 uppercase tracking-wider">Jarak Sisa</p>
+                    <div className="flex items-baseline gap-1">
+                      <p className="text-sm font-black text-white tabular-nums">{distRemaining.toFixed(1)}</p>
+                      <p className="text-[10px] font-bold text-white/60">km</p>
+                    </div>
+                  </div>
+                  <div className="w-[1px] h-5 bg-white/20" />
+                  <div className="flex flex-col">
+                    <p className="text-[8px] font-bold text-white/50 uppercase tracking-wider">Estimasi</p>
+                    <div className="flex items-baseline gap-1">
+                      <p className="text-sm font-black text-emerald-400 tabular-nums">{eta}</p>
+                      <p className="text-[10px] font-bold text-emerald-500/80">min</p>
+                    </div>
+                  </div>
+                  <div className="w-[1px] h-5 bg-white/20" />
+                  <div className="flex flex-col">
+                    <p className="text-[8px] font-bold text-white/50 uppercase tracking-wider">Tujuan</p>
+                    <p className="text-xs font-bold text-white truncate max-w-[130px]">{sekolahList[0].nama}</p>
+                  </div>
+               </div>
+            </div>
+          )}
 
-      {/* Live HUD Tracking Overlay */}
-      {isTripActive && distRemaining > 0 && (
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2 z-[1000] pointer-events-none">
-           <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/20 px-8 py-4 rounded-3xl shadow-2xl flex items-center gap-10 animate-in slide-in-from-bottom-4 duration-700">
-              <div className="flex flex-col">
-                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Jarak Tersisa</p>
-                <div className="flex items-baseline gap-1">
-                  <p className="text-2xl font-black text-white tabular-nums">{distRemaining.toFixed(1)}</p>
-                  <p className="text-xs font-bold text-white/60">km</p>
+          <QRScannerModal 
+            isOpen={isScanOpen} 
+            onClose={() => setIsScanOpen(false)}
+            onScan={(data) => console.log("Scanned:", data)}
+          />
+
+          {!isExpanded && !isDriverMode && (
+            <div className="absolute bottom-6 right-6 z-10 pointer-events-none hidden md:block">
+              <div className="bg-slate-900/90 backdrop-blur-xl border border-white/20 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-3 pointer-events-auto">
+                <div className="flex flex-col items-center">
+                  <span className="text-[7px] font-bold text-white/50 uppercase tracking-wider">Fleet</span>
+                  <span className="text-xs font-black text-white">142</span>
+                </div>
+                <div className="w-[1px] h-4 bg-white/20" />
+                <div className="flex flex-col items-center">
+                  <span className="text-[7px] font-bold text-white/50 uppercase tracking-wider">SLA</span>
+                  <span className="text-xs font-black text-emerald-400">98%</span>
                 </div>
               </div>
-              <div className="w-[1px] h-8 bg-white/10" />
-              <div className="flex flex-col">
-                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Estimasi Tiba</p>
-                <div className="flex items-baseline gap-1">
-                  <p className="text-2xl font-black text-emerald-400 tabular-nums">{eta}</p>
-                  <p className="text-xs font-bold text-emerald-500/60">min</p>
-                </div>
-              </div>
-              <div className="w-[1px] h-8 bg-white/10" />
-              <div className="flex flex-col">
-                <p className="text-[9px] font-black text-white/40 uppercase tracking-widest mb-1">Tujuan</p>
-                <p className="text-sm font-black text-white truncate max-w-[120px] tracking-tight">{sekolahList[0].nama}</p>
-              </div>
-           </div>
-        </div>
-      )}
-
-      <QRScannerModal 
-        isOpen={isScanOpen} 
-        onClose={() => setIsScanOpen(false)}
-        onScan={(data) => console.log("Scanned:", data)}
-      />
-
-      {!isExpanded && !isDriverMode && (
-        <div className="absolute bottom-6 right-6 z-[500] pointer-events-none hidden md:block">
-          <div className="bg-slate-900/80 backdrop-blur-2xl border border-white/10 p-4 rounded-2xl shadow-2xl flex items-center gap-6 pointer-events-auto">
-            <div className="flex flex-col items-center">
-              <span className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">Fleet</span>
-              <span className="text-lg font-black text-white">142</span>
             </div>
-            <div className="w-[1px] h-6 bg-white/10" />
-            <div className="flex flex-col items-center">
-              <span className="text-[8px] font-black text-white/40 uppercase tracking-widest mb-1">SLA</span>
-              <span className="text-lg font-black text-emerald-400">98%</span>
-            </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
 
       <style jsx global>{`

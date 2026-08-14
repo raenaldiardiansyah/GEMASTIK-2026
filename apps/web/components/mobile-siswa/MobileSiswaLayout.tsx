@@ -200,7 +200,7 @@ export const MobileSiswaLayout = () => {
               <p className="text-xs text-slate-400">Kelola profil siswa dan data sekolah kamu.</p>
             </div>
 
-            <Card className="rounded-2xl border-slate-200 shadow-sm overflow-hidden divide-y divide-slate-100">
+            <Card className="rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden divide-y divide-slate-200">
               <button 
                 onClick={() => toast.info("Simulasi: Membuka detail profil siswa Raenaldi (SMAN 3 Bandung)")}
                 className="w-full text-left p-4 flex items-center gap-3 hover:bg-slate-50 transition-colors cursor-pointer"

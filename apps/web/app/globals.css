@@ -722,3 +722,50 @@ html {
   scrollbar-color: rgba(255, 255, 255, 0.25) #0f172a;
 }
 
+/* ─── Sidebar Transparent Scrollbars ───────────────────────── */
+[data-sidebar],
+[data-slot="sidebar"],
+[data-sidebar="content"],
+[data-slot="sidebar-content"],
+[data-sidebar="sidebar"],
+aside[data-slot="sidebar"],
+.sidebar-content-scroll {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+
+[data-sidebar]::-webkit-scrollbar,
+[data-slot="sidebar"]::-webkit-scrollbar,
+[data-sidebar="content"]::-webkit-scrollbar,
+[data-slot="sidebar-content"]::-webkit-scrollbar,
+[data-sidebar="sidebar"]::-webkit-scrollbar,
+[data-sidebar] *::-webkit-scrollbar,
+[data-slot="sidebar"] *::-webkit-scrollbar {
+  width: 0px !important;
+  height: 0px !important;
+  display: none !important;
+  background: transparent !important;
+}
+
+[data-sidebar]::-webkit-scrollbar-track,
+[data-slot="sidebar"]::-webkit-scrollbar-track,
+[data-sidebar="content"]::-webkit-scrollbar-track,
+[data-slot="sidebar-content"]::-webkit-scrollbar-track,
+[data-sidebar] *::-webkit-scrollbar-track,
+[data-slot="sidebar"] *::-webkit-scrollbar-track {
+  background: transparent !important;
+}
+
+/* ─── MapLibre Custom Supervision Popups ────────────────────── */
+.supervision-map-popup .maplibregl-popup-content {
+  background: transparent !important;
+  padding: 0 !important;
+  box-shadow: none !important;
+  border-radius: 10px !important;
+}
+
+.supervision-map-popup .maplibregl-popup-tip {
+  border-top-color: #0f172a !important;
+  border-bottom-color: #0f172a !important;
+}
+

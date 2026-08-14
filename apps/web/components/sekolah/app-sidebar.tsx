@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard } from "lucide-react";
+import { LayoutDashboard, MessageSquare, Users } from "lucide-react";
 
 import { RoleAppSidebar } from "@/components/dashboard/role-app-sidebar";
 
@@ -10,7 +10,9 @@ export function AppSidebar() {
       roleLabel="Portal Sekolah"
       homeHref="/sekolah/admin"
       items={[
-        { label: "Admin", href: "/sekolah/admin", icon: LayoutDashboard },
+        { label: "Admin Sekolah", href: "/sekolah/admin", icon: LayoutDashboard },
+        { label: "Feedback & Ulasan", href: "/sekolah/feedback", icon: MessageSquare },
+        { label: "Portal Siswa", href: "/sekolah/siswa", icon: Users },
       ]}
     />
   );

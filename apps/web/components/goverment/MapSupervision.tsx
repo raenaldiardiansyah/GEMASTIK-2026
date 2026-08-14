@@ -27,7 +27,21 @@ interface DriverUnit {
   manifest: string;
   lat: number;
   lng: number;
+  jenjang?: "SD" | "SMP" | "SMA";
 }
+
+const getJenjangTheme = (jenjang?: string) => {
+  if (jenjang === "SD") {
+    return { bg: "#0284c7", shadow: "rgba(2, 132, 199, 0.4)", label: "SD", hex: "#0284c7" };
+  }
+  if (jenjang === "SMP") {
+    return { bg: "#7c3aed", shadow: "rgba(124, 58, 237, 0.4)", label: "SMP", hex: "#7c3aed" };
+  }
+  if (jenjang === "SMA") {
+    return { bg: "#e11d48", shadow: "rgba(225, 29, 72, 0.4)", label: "SMA", hex: "#e11d48" };
+  }
+  return { bg: "#4f46e5", shadow: "rgba(79, 70, 229, 0.4)", label: "MBG", hex: "#4f46e5" };
+};
 
 interface MapSupervisionProps {
   activeDrivers: DriverUnit[];
@@ -96,6 +110,7 @@ export default function MapSupervision({
     m.on("load", () => {
       setMapReady(true);
       renderStaticMarkers();
+      renderDriverMarkers();
     });
 
     return () => {
@@ -112,13 +127,45 @@ export default function MapSupervision({
     staticMarkersRef.current = [];
 
     sekolahList.forEach((school) => {
+      const theme = getJenjangTheme(school.jenjang);
       const el = document.createElement("div");
+      el.style.cursor = "pointer";
       el.innerHTML = `
-        <div style="width:32px;height:32px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(0,0,0,0.1);border:2px solid #6366f1;">
-          <svg width="16" height="16" fill="#6366f1" viewBox="0 0 24 24">
+        <div style="width:34px;height:34px;background:white;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 12px rgba(0,0,0,0.15);border:2.5px solid ${theme.bg};transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+          <svg width="18" height="18" fill="${theme.bg}" viewBox="0 0 24 24">
             <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72L12 15l5-2.73v3.72z"/>
           </svg>
         </div>`;
+
+      const popup = new maplibregl.Popup({
+        offset: 20,
+        closeButton: false,
+        closeOnClick: false,
+        className: "supervision-map-popup",
+      }).setHTML(`
+        <div style="background:#0f172a;color:#ffffff;padding:8px 12px;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);min-width:140px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <span style="background:${theme.bg};color:#ffffff;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;">${school.jenjang}</span>
+            <span style="font-size:12px;font-weight:800;letter-spacing:-0.2px;color:#ffffff;">${school.nama}</span>
+          </div>
+          <div style="font-size:10px;color:#94a3b8;display:flex;align-items:center;gap:6px;">
+            <span>📍 ${school.kecamatan || "Bandung"}</span>
+            <span>•</span>
+            <span>👥 ${school.total_siswa || 0} Siswa</span>
+          </div>
+        </div>
+      `);
+
+      el.addEventListener("mouseenter", () => {
+        if (map.current) popup.setLngLat([school.lng, school.lat]).addTo(map.current);
+      });
+      el.addEventListener("mouseleave", () => {
+        popup.remove();
+      });
+      el.addEventListener("click", () => {
+        if (map.current) popup.setLngLat([school.lng, school.lat]).addTo(map.current);
+      });
+
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat([school.lng, school.lat])
         .addTo(map.current!);
@@ -127,12 +174,43 @@ export default function MapSupervision({
 
     vendorList.forEach((vendor) => {
       const el = document.createElement("div");
+      el.style.cursor = "pointer";
       el.innerHTML = `
-        <div style="width:28px;height:28px;background:#6366f1;border-radius:8px;display:flex;align-items:center;justify-content:center;border:2px solid white;box-shadow:0 4px 10px rgba(99,102,241,0.2);">
-          <svg width="14" height="14" fill="white" viewBox="0 0 24 24">
+        <div style="width:32px;height:32px;background:#6366f1;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2.5px solid white;box-shadow:0 4px 12px rgba(99,102,241,0.4);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
+          <svg width="16" height="16" fill="white" viewBox="0 0 24 24">
             <path d="M20 7h-4V5c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 5h4v2h-4V5z"/>
           </svg>
         </div>`;
+
+      const popup = new maplibregl.Popup({
+        offset: 20,
+        closeButton: false,
+        closeOnClick: false,
+        className: "supervision-map-popup",
+      }).setHTML(`
+        <div style="background:#0f172a;color:#ffffff;padding:8px 12px;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);min-width:140px;">
+          <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+            <span style="background:#10b981;color:#ffffff;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:0.5px;">${vendor.kategori || "Logistik"}</span>
+            <span style="font-size:12px;font-weight:800;letter-spacing:-0.2px;color:#ffffff;">${vendor.nama}</span>
+          </div>
+          <div style="font-size:10px;color:#94a3b8;display:flex;align-items:center;gap:6px;">
+            <span>⭐ ${vendor.rating || "4.8"} / 5.0</span>
+            <span>•</span>
+            <span>📍 ${vendor.alamat || "Bandung"}</span>
+          </div>
+        </div>
+      `);
+
+      el.addEventListener("mouseenter", () => {
+        if (map.current) popup.setLngLat([vendor.lng, vendor.lat]).addTo(map.current);
+      });
+      el.addEventListener("mouseleave", () => {
+        popup.remove();
+      });
+      el.addEventListener("click", () => {
+        if (map.current) popup.setLngLat([vendor.lng, vendor.lat]).addTo(map.current);
+      });
+
       const marker = new maplibregl.Marker({ element: el })
         .setLngLat([vendor.lng, vendor.lat])
         .addTo(map.current!);
@@ -141,8 +219,8 @@ export default function MapSupervision({
   };
 
   // ── Dynamic driver markers (updated when activeDrivers changes) ────────────
-  useEffect(() => {
-    if (!mapReady || !map.current) return;
+  const renderDriverMarkers = () => {
+    if (!map.current) return;
 
     const activeIds = new Set(activeDrivers.map((d) => d.id));
 
@@ -156,26 +234,64 @@ export default function MapSupervision({
 
     // Add / update
     activeDrivers.forEach((driver) => {
+      const sekolah = sekolahList.find((s) => s.id === driver.sekolahId);
+      const jenjang = driver.jenjang || sekolah?.jenjang || "SD";
+      const theme = getJenjangTheme(jenjang);
+
       if (driverMarkersRef.current[driver.id]) {
         driverMarkersRef.current[driver.id].setLngLat([driver.lng, driver.lat]);
       } else {
         const el = document.createElement("div");
+        el.style.cursor = "pointer";
         el.innerHTML = `
-          <div class="group cursor-pointer relative">
-            <div class="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-black/80 backdrop-blur-md text-white text-[8px] font-black px-2 py-1 rounded border border-white/20 whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">${driver.id}</div>
-            <div style="width:36px;height:36px;background:#6366f1;border-radius:12px;display:flex;align-items:center;justify-content:center;border:2px solid white;box-shadow:0 8px 20px rgba(99,102,241,0.4);">
+          <div style="position:relative;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
+            <div style="position:absolute;inset:0;border-radius:14px;background:${theme.bg};opacity:0.25;animation:ping 2s cubic-bezier(0,0,0.2,1) infinite;"></div>
+            <div style="position:relative;width:38px;height:38px;background:${theme.bg};border-radius:12px;display:flex;align-items:center;justify-content:center;border:2.5px solid #ffffff;box-shadow:0 4px 14px ${theme.shadow};transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.15)'" onmouseout="this.style.transform='scale(1)'">
               <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
                 <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1.5-7l1.96 2.5H15V11h1.5z"/>
               </svg>
             </div>
+            <div style="position:absolute;top:-4px;right:-4px;background:${theme.bg};color:#ffffff;font-size:8px;font-weight:900;padding:1px 5px;border-radius:6px;border:1.5px solid #ffffff;box-shadow:0 2px 4px rgba(0,0,0,0.3);letter-spacing:0.5px;z-index:20;">
+              ${theme.label}
+            </div>
           </div>`;
-        const marker = new maplibregl.Marker({ element: el, anchor: "center" })
+
+        const popup = new maplibregl.Popup({
+          offset: 22,
+          closeButton: false,
+          closeOnClick: false,
+          className: "supervision-map-popup",
+        }).setHTML(`
+          <div style="background:#0f172a;color:#ffffff;padding:8px 12px;border-radius:10px;box-shadow:0 10px 25px rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.15);min-width:140px;">
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:3px;">
+              <span style="background:${theme.bg};color:#ffffff;font-size:8px;font-weight:900;padding:2px 6px;border-radius:4px;letter-spacing:0.5px;">${theme.label}</span>
+              <span style="font-size:12px;font-weight:800;color:#ffffff;">${driver.id}</span>
+            </div>
+            <div style="font-size:10px;color:#94a3b8;">
+              <span>Tujuan: ${sekolah?.nama || "Sekolah"}</span>
+            </div>
+          </div>
+        `);
+
+        el.addEventListener("mouseenter", () => {
+          if (map.current) popup.setLngLat([driver.lng, driver.lat]).addTo(map.current);
+        });
+        el.addEventListener("mouseleave", () => {
+          popup.remove();
+        });
+
+        const marker = new maplibregl.Marker({ element: el })
           .setLngLat([driver.lng, driver.lat])
           .addTo(map.current!);
         el.onclick = () => onSelectDriver(driver.id);
         driverMarkersRef.current[driver.id] = marker;
       }
     });
+  };
+
+  useEffect(() => {
+    if (!mapReady || !map.current) return;
+    renderDriverMarkers();
   }, [activeDrivers, mapReady]);
 
   // ── Route source helpers ───────────────────────────────────────────────────
@@ -271,14 +387,18 @@ export default function MapSupervision({
     if (!map.current || !selectedDriverIdRef.current) return;
 
     // ── Create animated truck marker ──
+    const jenjang = driver.jenjang || school.jenjang || "SD";
+    const theme = getJenjangTheme(jenjang);
+
     truckMarkerRef.current?.remove();
     const el = document.createElement("div");
     el.innerHTML = `
       <div class="group relative">
-        <div class="absolute bottom-full mb-3 px-3 py-1 bg-black/80 backdrop-blur-md rounded-xl border border-white/20 shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
+        <div class="absolute bottom-full mb-3 px-3 py-1 bg-slate-900/90 backdrop-blur-md rounded-xl border border-white/20 shadow-2xl opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50 flex items-center gap-1.5">
           <p class="text-[9px] font-black text-white uppercase tracking-widest">${driver.id}</p>
+          <span class="text-[8px] font-bold" style="color:${theme.hex}">(${theme.label})</span>
         </div>
-        <div class="gov-truck-anim w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-2xl border-2 border-white shadow-2xl relative">
+        <div class="gov-truck-anim w-10 h-10 flex items-center justify-center rounded-2xl border-2 border-white shadow-2xl relative" style="background:${theme.bg};box-shadow:0 10px 25px ${theme.shadow};">
           <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
             <path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm12 0c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1.5-7l1.96 2.5H15V11h1.5z"/>
           </svg>

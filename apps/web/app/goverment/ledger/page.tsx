@@ -156,103 +156,128 @@ export default function GovernmentLedgerPage() {
   }, [blocks, searchQuery, selectedActionFilter]);
 
   return (
-    <div className="w-full min-h-screen bg-slate-100 text-slate-900 flex flex-col font-sans">
-      {/* Page Header */}
-      <div className="border-b border-slate-200 bg-white px-6 py-5 shadow-2xs">
-        <PageHeader
-          title="Blockchain Immutable Audit Ledger"
-          subtitle="Buku besar digital terenkripsi yang mencatat setiap alur verifikasi vendor, PO, OCR transfer manual, hingga serah terima geofencing secara transparan dan anti-tamper."
-        />
-      </div>
-
-      {/* KPI Bar - Zero Gap Bento Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-y md:divide-y-0 divide-slate-200 border-b border-slate-200 bg-white">
-        <div className="p-5 flex flex-col justify-center">
-          <div className="flex items-center gap-2 text-slate-600 mb-1">
-            <Database className="w-4 h-4 text-emerald-700" />
-            <span className="text-xs font-bold uppercase tracking-wider">Total Block Height</span>
+    <div className="w-full min-h-screen bg-slate-50 text-slate-900 flex flex-col font-sans">
+      {/* Top Header - Clean Light Canvas for contrast with sidebar */}
+      <div className="bg-white border-b border-slate-200 px-6 py-6 shadow-2xs">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <div>
+            <div className="flex items-center gap-2 mb-1.5">
+              <Badge className="bg-emerald-100 text-emerald-900 border-emerald-300 text-[10px] font-mono font-black px-2.5 py-0.5">
+                ● IMMUTABLE LEDGER ENGINE v2.6
+              </Badge>
+              <span className="text-slate-500 text-xs font-mono font-semibold">SHA-256 / Merkle Tree</span>
+            </div>
+            <h1 className="text-2xl font-black tracking-tight text-slate-900">
+              Blockchain Audit Ledger Program MBG
+            </h1>
+            <p className="text-xs text-slate-600 mt-1 max-w-3xl leading-relaxed font-medium">
+              Buku besar digital terenkripsi yang mencatat setiap alur verifikasi vendor, PO, OCR bukti transfer manual, hingga serah terima geofencing secara transparan dan anti-tamper.
+            </p>
           </div>
-          <span className="text-2xl font-black font-mono text-slate-900">#10,492</span>
-        </div>
-
-        <div className="p-5 flex flex-col justify-center">
-          <div className="flex items-center gap-2 text-slate-600 mb-1">
-            <ShieldCheck className="w-4 h-4 text-emerald-700" />
-            <span className="text-xs font-bold uppercase tracking-wider">Integritas Ledger</span>
+          <div className="flex items-center gap-2 shrink-0">
+            <div className="bg-slate-50 border border-slate-200 rounded-2xl px-4 py-2.5 text-right shadow-2xs">
+              <span className="text-[10px] uppercase tracking-widest text-slate-500 font-extrabold block">Status Konsensus</span>
+              <span className="text-xs font-mono font-black text-emerald-700 flex items-center justify-end gap-1.5 mt-0.5">
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Synchronized (Zero-Trust)
+              </span>
+            </div>
           </div>
-          <span className="text-2xl font-black font-mono text-emerald-700">100% Immutable</span>
-        </div>
-
-        <div className="p-5 flex flex-col justify-center">
-          <div className="flex items-center gap-2 text-slate-600 mb-1">
-            <Lock className="w-4 h-4 text-blue-700" />
-            <span className="text-xs font-bold uppercase tracking-wider">Algoritma Enkripsi</span>
-          </div>
-          <span className="text-lg font-black font-mono text-slate-900">SHA-256 + Merkle</span>
-        </div>
-
-        <div className="p-5 flex flex-col justify-center">
-          <div className="flex items-center gap-2 text-slate-600 mb-1">
-            <Clock className="w-4 h-4 text-cyan-700" />
-            <span className="text-xs font-bold uppercase tracking-wider">Konsensus Node</span>
-          </div>
-          <span className="text-xs font-black text-emerald-900 bg-emerald-100 px-2.5 py-1 rounded-md border border-emerald-300 w-fit">
-            ✓ Synchronized (Zero-Trust)
-          </span>
         </div>
       </div>
 
-      {/* Control Filter Bar */}
-      <div className="p-4 bg-white border-b border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4">
-        {/* Search */}
-        <div className="relative w-full sm:w-96">
-          <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Cari Hash, No. PO, atau Entitas..."
-            className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-4 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-600"
-          />
-        </div>
+      {/* KPI Bar - Clean 60-30-10 Bento Grid */}
+      <div className="bg-white border-b border-slate-200 shadow-2xs">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-y md:divide-y-0 divide-slate-200">
+          <div className="p-5 flex flex-col justify-center bg-white">
+            <div className="flex items-center gap-2 text-slate-500 mb-1">
+              <Database className="w-4 h-4 text-[#1E3A5F]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Total Block Height</span>
+            </div>
+            <span className="text-2xl font-black font-mono text-[#1E3A5F]">#10,492</span>
+          </div>
 
-        {/* Action Type Filter Buttons */}
-        <div className="flex items-center gap-2 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
-          <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0">
-            <Filter className="w-3.5 h-3.5" /> Filter:
-          </span>
-          {[
-            { id: "ALL", label: "Semua Block" },
-            { id: "OCR_PAYMENT_MATCH", label: "OCR Transfer" },
-            { id: "GEOFENCE_HANDOVER", label: "Geofence 50m" },
-            { id: "PO_CREATED", label: "PO SPPG" },
-            { id: "REGISTRATION_WHITELIST", label: "Whitelist Vendor" }
-          ].map((f) => (
-            <button
-              key={f.id}
-              onClick={() => setSelectedActionFilter(f.id)}
-              className={`px-3 py-1.5 rounded-lg text-[11px] font-black shrink-0 transition-colors ${
-                selectedActionFilter === f.id
-                  ? "bg-slate-900 text-white shadow-2xs"
-                  : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
-              }`}
-            >
-              {f.label}
-            </button>
-          ))}
+          <div className="p-5 flex flex-col justify-center bg-emerald-50/40">
+            <div className="flex items-center gap-2 text-slate-500 mb-1">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Integritas Ledger</span>
+            </div>
+            <span className="text-2xl font-black font-mono text-emerald-700">100% Immutable</span>
+          </div>
+
+          <div className="p-5 flex flex-col justify-center bg-white">
+            <div className="flex items-center gap-2 text-slate-500 mb-1">
+              <Lock className="w-4 h-4 text-[#1E3A5F]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Algoritma Enkripsi</span>
+            </div>
+            <span className="text-base font-black font-mono text-slate-800">SHA-256 + Ed25519</span>
+          </div>
+
+          <div className="p-5 flex flex-col justify-center bg-white">
+            <div className="flex items-center gap-2 text-slate-500 mb-1">
+              <Clock className="w-4 h-4 text-[#1E3A5F]" />
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-600">Terakhir Diperbarui</span>
+            </div>
+            <span className="text-xs font-bold font-mono text-slate-700">
+              14 Aug 2026, 06:12 WIB
+            </span>
+          </div>
         </div>
       </div>
 
-      {/* Main Content Area */}
-      <div className="flex-1 p-6 bg-slate-100">
+      {/* Main Content Workspace */}
+      <div className="max-w-7xl mx-auto w-full flex-1 p-4 md:p-6 space-y-5">
+        {/* Control Filter Bar */}
+        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-2xs flex flex-col sm:flex-row items-center justify-between gap-4">
+          {/* Search Bar */}
+          <div className="relative w-full sm:w-96">
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Cari Hash, No. PO, atau Entitas..."
+              className="w-full bg-slate-50 border border-slate-300 rounded-xl py-2 pl-9 pr-4 text-xs font-mono text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#1E3A5F] transition-all"
+            />
+          </div>
+
+          {/* Action Type Filter Buttons */}
+          <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0">
+            <span className="text-xs font-bold text-slate-500 flex items-center gap-1 shrink-0 mr-1">
+              <Filter className="w-3.5 h-3.5 text-slate-600" /> Filter:
+            </span>
+            {[
+              { id: "ALL", label: "Semua Block" },
+              { id: "OCR_PAYMENT_MATCH", label: "OCR Transfer" },
+              { id: "GEOFENCE_HANDOVER", label: "Geofence 50m" },
+              { id: "PO_CREATED", label: "PO SPPG" },
+              { id: "REGISTRATION_WHITELIST", label: "Whitelist Vendor" }
+            ].map((f) => {
+              const isActive = selectedActionFilter === f.id;
+              return (
+                <button
+                  key={f.id}
+                  onClick={() => setSelectedActionFilter(f.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold shrink-0 transition-all ${
+                    isActive
+                      ? "bg-[#1E3A5F] text-white shadow-xs"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200 border border-slate-200"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Block Table Container */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-2xs overflow-hidden">
-          
-          <div className="p-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">
-            <span className="text-xs font-black uppercase tracking-widest text-slate-700 flex items-center gap-2">
-              <Layers className="w-4 h-4 text-emerald-700" /> Rantai Blok Audit MBG ({filteredBlocks.length} Blok)
+          <div className="p-4 border-b border-slate-200 bg-slate-100/70 flex items-center justify-between">
+            <span className="text-xs font-black uppercase tracking-wider text-[#1E3A5F] flex items-center gap-2">
+              <Layers className="w-4 h-4 text-emerald-600" /> Rantai Blok Audit MBG ({filteredBlocks.length} Blok)
             </span>
             <Badge variant="outline" className="font-mono text-[10px] bg-white border-slate-300 text-slate-700">
-              Auto-Sync Ledger Engine v2.6
+              Simulasi Ledger Hash (SHA-256)
             </Badge>
           </div>
 
@@ -260,7 +285,7 @@ export default function GovernmentLedgerPage() {
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-slate-100/70 border-b border-slate-200 text-[11px] font-black uppercase text-slate-600 tracking-wider">
+                <tr className="bg-slate-50 border-b border-slate-200 text-[11px] font-black uppercase text-slate-600 tracking-wider">
                   <th className="p-4">Height</th>
                   <th className="p-4">Block Hash (SHA-256)</th>
                   <th className="p-4">Tipe Transaksi</th>
@@ -270,44 +295,44 @@ export default function GovernmentLedgerPage() {
                   <th className="p-4 text-right">Aksi</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-200 text-xs">
+              <tbody className="divide-y divide-slate-100 text-xs">
                 {filteredBlocks.map((block) => (
                   <tr
                     key={block.height}
-                    className="hover:bg-emerald-50/40 transition-colors group"
+                    className="hover:bg-emerald-50/30 transition-colors group"
                   >
-                    <td className="p-4 font-mono font-black text-emerald-800">
+                    <td className="p-4 font-mono font-black text-emerald-700">
                       #{block.height}
                     </td>
 
-                    <td className="p-4 font-mono font-bold text-slate-800 max-w-[200px] truncate" title={block.hash}>
+                    <td className="p-4 font-mono font-bold text-slate-800 max-w-[190px] truncate" title={block.hash}>
                       {block.hash.substring(0, 16)}...
                     </td>
 
                     <td className="p-4">
                       {block.actionType === "GEOFENCE_HANDOVER" && (
-                        <Badge className="bg-emerald-100 text-emerald-950 border-emerald-300 text-[10px] font-black">
-                          <Truck className="w-3 h-3 mr-1" /> Geofence Handover
+                        <Badge className="bg-emerald-50 text-emerald-800 border-emerald-300 text-[10px] font-bold">
+                          <Truck className="w-3 h-3 mr-1 text-emerald-600" /> Geofence Handover
                         </Badge>
                       )}
                       {block.actionType === "OCR_PAYMENT_MATCH" && (
-                        <Badge className="bg-cyan-100 text-cyan-950 border-cyan-300 text-[10px] font-black">
-                          <Receipt className="w-3 h-3 mr-1" /> OCR Payment Match
+                        <Badge className="bg-sky-50 text-sky-900 border-sky-300 text-[10px] font-bold">
+                          <Receipt className="w-3 h-3 mr-1 text-sky-600" /> OCR Payment Match
                         </Badge>
                       )}
                       {block.actionType === "DELIVERY_GENERATE" && (
-                        <Badge className="bg-blue-100 text-blue-950 border-blue-300 text-[10px] font-black">
-                          <FileText className="w-3 h-3 mr-1" /> Surat Jalan
+                        <Badge className="bg-slate-100 text-slate-800 border-slate-300 text-[10px] font-bold">
+                          <FileText className="w-3 h-3 mr-1 text-slate-600" /> Surat Jalan
                         </Badge>
                       )}
                       {block.actionType === "PO_CREATED" && (
-                        <Badge className="bg-amber-100 text-amber-950 border-amber-300 text-[10px] font-black">
-                          <Building2 className="w-3 h-3 mr-1" /> PO SPPG
+                        <Badge className="bg-amber-50 text-amber-900 border-amber-300 text-[10px] font-bold">
+                          <Building2 className="w-3 h-3 mr-1 text-amber-600" /> PO SPPG
                         </Badge>
                       )}
                       {block.actionType === "REGISTRATION_WHITELIST" && (
-                        <Badge className="bg-slate-100 text-slate-900 border-slate-300 text-[10px] font-black">
-                          <ShieldCheck className="w-3 h-3 mr-1" /> SBT Whitelist
+                        <Badge className="bg-emerald-100 text-emerald-950 border-emerald-300 text-[10px] font-bold">
+                          <ShieldCheck className="w-3 h-3 mr-1 text-emerald-700" /> SBT Whitelist
                         </Badge>
                       )}
                     </td>
@@ -329,7 +354,7 @@ export default function GovernmentLedgerPage() {
                         onClick={() => setSelectedBlock(block)}
                         variant="outline"
                         size="sm"
-                        className="h-8 text-[11px] font-black border-slate-300 hover:bg-slate-900 hover:text-white transition-colors"
+                        className="h-8 text-[11px] font-bold border-slate-300 text-slate-800 hover:bg-[#1E3A5F] hover:text-white hover:border-[#1E3A5F] transition-all"
                       >
                         Inspeksi Payload <ChevronRight className="w-3.5 h-3.5 ml-1" />
                       </Button>
@@ -339,7 +364,6 @@ export default function GovernmentLedgerPage() {
               </tbody>
             </table>
           </div>
-
         </div>
       </div>
 
@@ -354,14 +378,14 @@ export default function GovernmentLedgerPage() {
               className="bg-white rounded-2xl border border-slate-200 shadow-2xl max-w-2xl w-full overflow-hidden flex flex-col"
             >
               {/* Drawer Header */}
-              <div className="p-5 border-b border-slate-200 bg-slate-900 text-white flex items-center justify-between">
+              <div className="p-5 border-b border-slate-800 bg-[#1E3A5F] text-white flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-400 font-mono font-black">
                     #{selectedBlock.height}
                   </div>
                   <div>
                     <h3 className="font-black text-sm text-white">Inspeksi Block Audit Ledger</h3>
-                    <p className="text-[11px] text-slate-400 font-mono">Tipe: {selectedBlock.actionType}</p>
+                    <p className="text-[11px] text-slate-300 font-mono">Tipe: {selectedBlock.actionType}</p>
                   </div>
                 </div>
 
@@ -374,15 +398,15 @@ export default function GovernmentLedgerPage() {
               </div>
 
               {/* Drawer Body */}
-              <div className="p-6 space-y-5 overflow-y-auto max-h-[70vh] bg-slate-50">
+              <div className="p-6 space-y-4 overflow-y-auto max-h-[70vh] bg-slate-50">
                 {/* Hash Details */}
                 <div className="space-y-3">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1 shadow-2xs">
                     <span className="text-[10px] font-black uppercase text-slate-500 block">Current Block Hash (SHA-256)</span>
                     <span className="font-mono text-xs font-black text-emerald-700 break-all">{selectedBlock.hash}</span>
                   </div>
 
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1 shadow-2xs">
                     <span className="text-[10px] font-black uppercase text-slate-500 block">Previous Block Hash</span>
                     <span className="font-mono text-xs font-bold text-slate-600 break-all">{selectedBlock.previousHash}</span>
                   </div>
@@ -390,25 +414,25 @@ export default function GovernmentLedgerPage() {
 
                 {/* Merkle & Signature */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1 shadow-2xs">
                     <span className="text-[10px] font-black uppercase text-slate-500 block">Merkle Tree Root</span>
                     <span className="font-mono text-xs font-bold text-slate-800 break-all">{selectedBlock.merkleRoot}</span>
                   </div>
 
-                  <div className="p-3 bg-white rounded-xl border border-slate-200 space-y-1">
+                  <div className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-1 shadow-2xs">
                     <span className="text-[10px] font-black uppercase text-slate-500 block">Digital Signature (Ed25519)</span>
                     <span className="font-mono text-xs font-bold text-slate-800 break-all">{selectedBlock.signature}</span>
                   </div>
                 </div>
 
                 {/* Data Payload JSON Visualizer */}
-                <div className="p-4 bg-slate-900 rounded-xl text-white space-y-2">
+                <div className="p-4 bg-[#0F172A] rounded-xl text-white space-y-2 border border-slate-800">
                   <span className="text-[10px] font-mono font-black uppercase text-emerald-400 block tracking-widest">
                     // Immutable Data Payload:
                   </span>
-                  <div className="space-y-1 font-mono text-xs text-slate-300">
+                  <div className="space-y-1.5 font-mono text-xs text-slate-300">
                     {Object.entries(selectedBlock.dataPayload).map(([key, val]) => (
-                      <div key={key} className="flex justify-between border-b border-slate-800 pb-1">
+                      <div key={key} className="flex justify-between border-b border-slate-800/80 pb-1">
                         <span className="text-slate-400">{key}:</span>
                         <span className="text-emerald-300 font-bold">{val}</span>
                       </div>
@@ -419,13 +443,13 @@ export default function GovernmentLedgerPage() {
 
               {/* Drawer Footer */}
               <div className="p-4 border-t border-slate-200 bg-white flex items-center justify-between">
-                <span className="text-[11px] font-black text-emerald-800 flex items-center gap-1.5">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Block Terverifikasi Secara Kriptografis
+                <span className="text-[11px] font-bold text-emerald-700 flex items-center gap-1.5">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" /> Terverifikasi Kriptografis
                 </span>
 
                 <Button
                   onClick={() => setSelectedBlock(null)}
-                  className="bg-slate-900 hover:bg-slate-800 text-white font-black text-xs h-9 px-4 rounded-xl"
+                  className="bg-[#1E3A5F] hover:bg-slate-800 text-white font-bold text-xs h-9 px-4 rounded-xl shadow-xs"
                 >
                   Tutup Inspeksi
                 </Button>

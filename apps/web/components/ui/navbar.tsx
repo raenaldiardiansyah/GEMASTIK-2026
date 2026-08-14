@@ -47,6 +47,10 @@ const ROLE_PORTALS = [
     href: "/goverment/dashboard",
     links: [
       { label: "Dashboard", href: "/goverment/dashboard" },
+      { label: "Verifikasi Supplier", href: "/goverment/pengajuan" },
+      { label: "Audit Ledger", href: "/goverment/ledger" },
+      { label: "Audit Pangan", href: "/goverment/audit-pangan" },
+      { label: "Dashboard Reputasi", href: "/goverment/dashboard-reputasi" },
       { label: "Verifikasi", href: "/goverment/verifikasi" },
       { label: "Statistik", href: "/goverment/statistik" },
     ],
@@ -61,7 +65,8 @@ const ROLE_PORTALS = [
     links: [
       { label: "Dashboard", href: "/sppg/dashboard" },
       { label: "Bidding Vendor", href: "/sppg/bidding" },
-      { label: "Buat Tender", href: "/sppg/bidding" },
+      { label: "Audit Pengadaan", href: "/sppg/pengadaan" },
+      { label: "Verifikasi Pembayaran", href: "/sppg/verifikasi-pembayaran" },
     ],
   },
   {
@@ -73,6 +78,7 @@ const ROLE_PORTALS = [
     href: "/vendor/dashboard",
     links: [
       { label: "Dashboard", href: "/vendor/dashboard" },
+      { label: "Proposal Wizard (Anti-Overreport)", href: "/vendor/proposal-wizard" },
       { label: "Tender", href: "/vendor/tender" },
       { label: "Bids", href: "/vendor/bidding" },
     ],
@@ -86,7 +92,8 @@ const ROLE_PORTALS = [
     href: "/logistik/dashboard",
     links: [
       { label: "Dashboard", href: "/logistik/dashboard" },
-      { label: "Pantau", href: "/logistik/pantau" },
+      { label: "Pantau Rute", href: "/logistik/pantau" },
+      { label: "Monitoring Distribusi (Geofence)", href: "/logistik/monitoring-distribusi" },
       { label: "Riwayat", href: "/logistik/riwayat" },
     ],
   },
@@ -98,9 +105,9 @@ const ROLE_PORTALS = [
     icon: School,
     href: "/sekolah/admin",
     links: [
-      { label: "Admin", href: "/sekolah/admin" },
-      { label: "Siswa", href: "/sekolah/siswa" },
-      { label: "Dashboard", href: "/sekolah/admin" },
+      { label: "Admin Sekolah", href: "/sekolah/admin" },
+      { label: "Feedback & Ulasan", href: "/sekolah/feedback" },
+      { label: "Portal Siswa", href: "/sekolah/siswa" },
     ],
   },
 ] as const;

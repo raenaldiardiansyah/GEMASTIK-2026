@@ -128,63 +128,37 @@ export default function SppgDashboardClient() {
         title="E‑Katalog & PO Builder"
         description="Bangun Purchase Order (PO) dari katalog bahan pangan bersertifikasi. Alur 60-30-10 terintegrasi."
         actions={
-          <div className="flex flex-wrap items-center gap-2">
-            <Button variant="outline" asChild className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 hover:border-slate-400 font-extrabold text-xs shadow-xs">
-              <Link href="/sppg/bidding">
-                Bidding Vendor
-                <Gavel className="w-4 h-4 ml-1.5 text-cyan-700" />
-              </Link>
-            </Button>
+          <div className="flex items-center gap-2">
             <Button
-              variant="outline"
-              className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 hover:border-slate-400 font-extrabold text-xs shadow-xs"
-              disabled={paymentPending}
-              onClick={() => {
-                setPaymentPending(true);
-                toast.success("Dana dikunci (simulasi).", {
-                  description: "Menunggu verifikasi OCR bukti transfer SPPG.",
-                });
-              }}
-            >
-              <Lock className="w-4 h-4 mr-1.5 text-cyan-700" />
-              Upload Bukti Transfer
-            </Button>
-            <Button variant="outline" asChild className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs">
-              <Link href="/logistik/dashboard">
-                Buka Logistik
-                <ArrowRight className="w-4 h-4 ml-1.5 text-slate-600" />
-              </Link>
-            </Button>
-            <Button
-              className="rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold text-xs shadow-md shadow-cyan-600/25 px-4"
+              className="rounded-xl bg-[#1E3A5F] hover:bg-slate-800 text-white font-black text-xs shadow-xs px-4 h-10"
               disabled={cart.length === 0}
               onClick={() => setQrOpen(true)}
             >
-              <QrCode className="w-4 h-4 mr-1.5" />
-              QR PO ({cart.length})
+              <QrCode className="w-4 h-4 mr-1.5 text-emerald-400" />
+              Generate QR PO ({cart.length})
             </Button>
           </div>
         }
       >
-        <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5" aria-label="Ringkasan SPPG">
+        <section className="mt-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5" aria-label="Ringkasan SPPG">
           {[
             { label: "Sisa Anggaran (Simulasi)", value: currency(35_000_000), icon: Wallet },
             { label: "Guard Batas HET", value: "Aktif Terkunci", icon: BadgePercent },
-            { label: "Draft PO Aktif", value: String(cart.length), icon: ClipboardList },
-            { label: "Item Bahan Katalog", value: String(tenderMaterials.length), icon: PackagePlus },
+            { label: "Draft PO Aktif", value: `${cart.length} Item`, icon: ClipboardList },
+            { label: "Item Bahan Katalog", value: `${tenderMaterials.length} Komoditas`, icon: PackagePlus },
             { label: "Verifikasi Pembayaran", value: paymentPending ? "Menunggu OCR" : "Draft Siap", icon: Lock },
           ].map((m) => (
             <div
               key={m.label}
-              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all hover:border-cyan-500 hover:shadow-md"
+              className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-5 shadow-2xs transition-all hover:border-[#1E3A5F] hover:shadow-md flex flex-col justify-between"
             >
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-bold text-slate-600">{m.label}</p>
-                <div className="rounded-xl bg-cyan-100 p-2.5 text-cyan-800 border border-cyan-300 shadow-2xs">
+              <div className="flex items-start justify-between gap-2">
+                <p className="text-xs font-bold text-slate-500 leading-tight">{m.label}</p>
+                <div className="rounded-xl bg-cyan-50 p-2 text-cyan-800 border border-cyan-200 shadow-2xs shrink-0">
                   <m.icon className="size-4" aria-hidden />
                 </div>
               </div>
-              <p className="mt-3 text-2xl font-black tracking-tight text-slate-900 tabular-nums">
+              <p className="mt-3 text-lg sm:text-xl font-black tracking-tight text-slate-900 tabular-nums truncate" title={m.value}>
                 {m.value}
               </p>
             </div>
