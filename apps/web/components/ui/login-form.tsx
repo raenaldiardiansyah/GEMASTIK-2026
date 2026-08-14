@@ -303,7 +303,7 @@ export function LoginForm({
         return;
       }
 
-      // Ã¢â€â‚¬Ã¢â€â‚¬ LOGIN MANUAL (MOCK) Ã¢â€â‚¬Ã¢â€â‚¬
+      // ─── LOGIN MANUAL (MOCK) ───
       if (!email || !password) {
         throw new Error("Email dan Password tidak boleh kosong!");
       }
@@ -446,7 +446,7 @@ export function LoginForm({
 
       {/* --- CONTENT (Scrollable Middle) --- */}
       <div className="flex-1 overflow-y-auto pr-1.5 custom-scrollbar min-h-0 space-y-3">
-        {/* Ã¢â€â‚¬Ã¢â€â‚¬ LOGIN fields Ã¢â€â‚¬Ã¢â€â‚¬ */}
+        {/* ─── LOGIN fields ─── */}
         {!isSignup && (
           <div className="grid gap-2">
             <div className="grid gap-1">
@@ -488,7 +488,7 @@ export function LoginForm({
           </div>
         )}
 
-        {/* Ã¢â€â‚¬Ã¢â€â‚¬ SIGNUP fields Ã¢â€â‚¬Ã¢â€â‚¬ */}
+        {/* ─── SIGNUP fields ─── */}
         {isSignup && (
           <div className="grid gap-2">
             {/* Vendor Multi-step Signup */}
@@ -600,7 +600,7 @@ export function LoginForm({
                         onChange={(e) => setBankName(e.target.value)}
                         className="flex h-10 w-full rounded-lg border border-input bg-white px-3 py-1 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                       >
-                        <option value="">Ã¢â‚¬â€ Pilih Bank Ã¢â‚¬â€</option>
+                        <option value="">— Pilih Bank —</option>
                         {["Bank BJB", "Bank BRI", "Bank Mandiri", "Bank BNI", "Bank BCA", "Bank CIMB Niaga", "Bank Syariah Indonesia"].map(b => (
                           <option key={b} value={b}>{b}</option>
                         ))}
