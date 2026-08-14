@@ -997,10 +997,10 @@ export default function VendorKatalogPage() {
   }).length;
 
   return (
-    <div className="min-h-svh bg-slate-50" data-role="vendor">
+    <div className="min-h-svh bg-slate-50 w-full" data-role="vendor">
       {/* ── Sticky Header ── */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
+        <div className="w-full px-4 py-3 md:px-6 flex items-center justify-between gap-3">
           <div>
             <h1 className="text-base font-extrabold text-slate-800 leading-none">Manajemen Katalog Produk</h1>
             <p className="text-[11px] text-slate-400 mt-0.5">
@@ -1016,7 +1016,7 @@ export default function VendorKatalogPage() {
       </div>
 
       {/* ── Search & Filter Bar ── */}
-      <div className="max-w-2xl mx-auto px-4 pt-4 flex gap-2">
+      <div className="w-full px-4 md:px-6 pt-4 flex gap-2">
         <div className="relative flex-1">
           <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-300" />
           <input
@@ -1032,7 +1032,7 @@ export default function VendorKatalogPage() {
       </div>
 
       {/* ── Stats Strip ── */}
-      <div className="max-w-2xl mx-auto px-4 mt-3 grid grid-cols-3 gap-2">
+      <div className="w-full px-4 md:px-6 mt-3 grid grid-cols-1 sm:grid-cols-3 gap-2">
         {[
           { icon: Package, label: "Total Inventori", value: filteredItems.length, color: G },
           { icon: Layers, label: "Akumulasi Stok", value: filteredItems.reduce((a, b) => a + b.current_stock, 0).toLocaleString("id-ID"), color: "#1D4ED8" },
@@ -1047,9 +1047,9 @@ export default function VendorKatalogPage() {
       </div>
 
       {/* ── Product Grid ── */}
-      <div className="max-w-2xl mx-auto px-4 py-4 pb-24">
+      <div className="w-full px-4 md:px-6 py-4 pb-24">
         {loading ? (
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {[1, 2, 3, 4].map((i) => (
               <div key={i} className="h-56 rounded-3xl bg-slate-100 animate-pulse" />
             ))}
@@ -1070,7 +1070,7 @@ export default function VendorKatalogPage() {
             </button>
           </motion.div>
         ) : (
-          <motion.div layout className="grid grid-cols-2 gap-3">
+          <motion.div layout className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             <AnimatePresence>
               {filteredItems.map((item) => (
                 <ProductCard key={item.id} item={item} onDelete={() => handleDelete(item.id)} />

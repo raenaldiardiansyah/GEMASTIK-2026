@@ -48,7 +48,7 @@ const MANUAL_SECTIONS: ManualSection[] = [
     code: "9.1",
     title: "Registrasi dan Verifikasi Supplier",
     icon: UserCheck,
-    summary: "Panduan onboarding vendor bahan pangan, ekstraksi dokumen legalitas via OCR, validasi AI Vision, dan whitelisting dompet digital on-chain.",
+    summary: "Panduan onboarding vendor bahan pangan, ekstraksi dokumen legalitas via OCR, validasi AI Vision, dan pencatatan whitelist pada Immutable Ledger.",
     steps: [
       {
         nomor: "1",
@@ -91,10 +91,10 @@ const MANUAL_SECTIONS: ManualSection[] = [
       },
       {
         nomor: "4",
-        judul: "Otorisasi Whitelist Smart Contract",
+        judul: "Pencatatan Izin di Blockchain Ledger",
         aktor: "Otoritas BGN / Admin Sistem",
         inputData: "Hasil Pengecekan AI OCR",
-        aksiSistem: "Mendaftarkan Alamat Wallet Supplier ke Whitelist Smart Contract B.O.G.A.",
+        aksiSistem: "Mendaftarkan profil Supplier ke Whitelist Immutable Ledger B.O.G.A.",
         outputData: "Status Terverifikasi & Izin Akses Katalog",
         langkahDetail: [
           "Admin meninjau status hijau pada Validation Matrix.",
@@ -109,7 +109,7 @@ const MANUAL_SECTIONS: ManualSection[] = [
     code: "9.2",
     title: "Proses Pengadaan dan Audit Trail",
     icon: ShoppingBag,
-    summary: "Panduan penerbitan Purchase Order bahan baku oleh SPPG, validasi batas HET/PIHPS, dan pembekuan dana escrow multi-signature.",
+    summary: "Panduan penerbitan Purchase Order bahan baku oleh SPPG, validasi batas HET/PIHPS, dan peninjauan alokasi anggaran.",
     steps: [
       {
         nomor: "1",
@@ -140,7 +140,7 @@ const MANUAL_SECTIONS: ManualSection[] = [
       {
         nomor: "3",
         judul: "Pencatatan Audit Trail Blockchain",
-        aktor: "Backend Node.js & Smart Contract",
+        aktor: "Sistem Audit B.O.G.A & Blockchain Ledger",
         inputData: "Data Invoice & RAB Pengadaan",
         aksiSistem: "Mengenkripsi dan mempublikasikan Hash Transaksi ke jaringan blockchain B.O.G.A.",
         outputData: "Immutable Transaction Hash",
@@ -152,14 +152,14 @@ const MANUAL_SECTIONS: ManualSection[] = [
       },
       {
         nomor: "4",
-        judul: "Penguncian Escrow Multi-Sig",
-        aktor: "Sistem Payment Gateway DOKU",
+        judul: "Verifikasi Alokasi Anggaran Manual",
+        aktor: "Sistem Keuangan SPPG & Bank Nasional",
         inputData: "Alokasi Dana Anggaran SPPG",
-        aksiSistem: "Mengunci dana di akun Escrow Multi-Signature (QC, Admin, Auditor).",
-        outputData: "Saldo Escrow Locked",
+        aksiSistem: "Mengalokasikan dana sesuai nilai PO untuk persiapan transfer manual ke vendor.",
+        outputData: "Alokasi Anggaran Terkonfirmasi",
         langkahDetail: [
-          "Dana sebesar total nilai PO dipindahkan ke akun Escrow DOKU.",
-          "Pencairan dana membutuhkan 2 dari 3 otorisasi kunci digital."
+          "Dana sebesar total nilai PO dialokasikan oleh SPPG pada rekening giro resmi.",
+          "Transfer akhir membutuhkan persetujuan QC (Goods Received) dan validasi AI OCR bukti transfer."
         ]
       }
     ]
@@ -212,14 +212,14 @@ const MANUAL_SECTIONS: ManualSection[] = [
       },
       {
         nomor: "4",
-        judul: "Pencairan Escrow ke Rekening Vendor",
-        aktor: "Gateway DOKU & Smart Contract",
+        judul: "Transfer Manual & Validasi AI-OCR Bukti Transfer",
+        aktor: "Staf SPPG & Mesin TrOCR",
         inputData: "Status Reconciliation Valid",
-        aksiSistem: "Memicu Webhook instruksi transfer dana Escrow ke vendor.",
+        aksiSistem: "Memvalidasi resi transfer manual (mencegah manipulasi/fraud) dan mencatat lunas di Ledger.",
         outputData: "Status Pembayaran Lunas & Transaction Hash",
         langkahDetail: [
-          "Otoritas menekan tombol 'Cairkan Escrow ke Rekening Vendor'.",
-          "Dana ditransfer langsung dari DOKU Escrow ke rekening bank supplier.",
+          "Staf SPPG mentransfer dana manual ke vendor, lalu mengunggah bukti resinya.",
+          "Sistem AI-OCR TrOCR memindai resi untuk memastikan nominal sesuai 100% dengan PO.",
           "Status transaksi diperbarui di ledger blockchain."
         ]
       }
@@ -248,14 +248,14 @@ const MANUAL_SECTIONS: ManualSection[] = [
       {
         nomor: "2",
         judul: "Upload & Hashing ke IPFS",
-        aktor: "IPFS Network & Smart Contract",
+        aktor: "IPFS Network & Blockchain Ledger",
         inputData: "Berkas Laporan Inspeksi",
         aksiSistem: "Menyimpan berkas di IPFS terdistribusi dan mencetak Cryptographic Hash.",
         outputData: "Immutable IPFS Hash",
         langkahDetail: [
           "Klik tombol 'Finalisasi & Upload Hasil Audit ke IPFS'.",
           "Berkas dikunci secara permanen di IPFS.",
-          "Hash IPFS tercatat di Smart Contract audit trail."
+          "Hash IPFS tercatat di Blockchain Immutable Ledger."
         ]
       },
       {
@@ -280,7 +280,7 @@ const MANUAL_SECTIONS: ManualSection[] = [
         outputData: "Badge Sertifikasi / Surat Peringatan Digital",
         langkahDetail: [
           "Jika status Hijau: SPPG memperoleh +5 Poin Reputasi SBT.",
-          "Jika status Merah: Sistem membekukan sementara pencairan escrow."
+          "Jika status Merah: Sistem menahan rekomendasi pencatatan Ledger dan pembayaran berikutnya."
         ]
       }
     ]
@@ -335,11 +335,11 @@ const MANUAL_SECTIONS: ManualSection[] = [
         judul: "Eskalasi Real-Time ke Auditor",
         aktor: "Backend B.O.G.A & Auditor Dashboard",
         inputData: "Tiket Laporan Chatbot",
-        aksiSistem: "Mendorong laporan ke Feed Auditor sebagai pembotot pencairan escrow.",
+        aksiSistem: "Mendorong laporan ke Feed Auditor sebagai pembobot peringatan sistem.",
         outputData: "Status Eskalasi Auditor & Update SBT",
         langkahDetail: [
           "Laporan langsung muncul di Dasbor Monitoring Auditor.",
-          "Menjadi faktor pembobot otomatis pencairan escrow tahap kedua."
+          "Menjadi faktor evaluasi kelayakan pencatatan Ledger audit pembayaran."
         ]
       }
     ]
@@ -392,7 +392,7 @@ const MANUAL_SECTIONS: ManualSection[] = [
         judul: "Eksekusi Action Plan & Sanksi",
         aktor: "Auditor / Otoritas Pengawas",
         inputData: "Keputusan Tindakan Sanksi",
-        aksiSistem: "Menerbitkan Peringatan, Pembekuan Escrow, atau Revoke Whitelist SBT.",
+        aksiSistem: "Menerbitkan Peringatan, Pembekuan Pembayaran, atau Pencabutan Whitelist Audit.",
         outputData: "Status Whitelist Suspended & Log Sanksi",
         langkahDetail: [
           "Tekan tombol 'Bekukan Whitelist' jika terbukti melanggar.",

@@ -91,43 +91,43 @@ export default function SppgBiddingPage() {
 
   return (
     <DashboardShell
-      badge={<Badge variant="outline">SPPG</Badge>}
+      badge={<Badge variant="outline" className="border-cyan-300 bg-cyan-100 text-cyan-950 font-extrabold px-3 py-1 text-xs shadow-2xs">SPPG · Bidding Engine</Badge>}
       title="Bidding Vendor"
-      description="Pilih vendor berdasarkan harga, kualitas, jarak, dan bobot penilaian."
+      description="Seleksi dan evaluasi proposal vendor berdasarkan harga, riwayat kualitas, jarak dapur, dan bobot SAW."
       actions={
-        <>
-          <Button variant="outline" asChild className="rounded-full">
+        <div className="flex items-center gap-2">
+          <Button variant="outline" asChild className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs">
             <Link href="/sppg/dashboard">
-              Kembali <ArrowRight data-icon="inline-end" />
+              Kembali
             </Link>
           </Button>
-          <Button className="rounded-full" onClick={() => setCreateOpen(true)}>
-            <Plus data-icon="inline-start" />
-            Buat Tender
+          <Button className="rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold text-xs shadow-md shadow-cyan-600/25 px-4" onClick={() => setCreateOpen(true)}>
+            <Plus className="w-4 h-4 mr-1.5" />
+            Buat Tender Baru
           </Button>
-        </>
+        </div>
       }
     >
-      <section className="grid gap-4 lg:grid-cols-[1fr_340px]">
-        <div className="rounded-3xl border border-border/70 bg-background/70">
-          <div className="flex flex-col gap-3 border-b border-border/60 p-5 sm:flex-row sm:items-end sm:justify-between">
+      <section className="grid gap-6 lg:grid-cols-[1fr_320px]">
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+          <div className="flex flex-col gap-4 border-b border-slate-200 bg-slate-100/60 p-5 sm:flex-row sm:items-center sm:justify-between">
             <div className="min-w-0">
-              <p className="text-sm font-semibold tracking-tight">Daftar tender</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Buat tender, terima bid, lalu tetapkan pemenang.
+              <p className="text-base font-black text-slate-900">Daftar Tender Pengadaan</p>
+              <p className="text-xs font-medium text-slate-600 mt-0.5">
+                Buka tender, terima penawaran harga, dan tetapkan pemenang.
               </p>
             </div>
 
-            <div className="grid w-full gap-2 sm:max-w-xl sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="sppg" className="text-xs text-muted-foreground">
-                  SPPG aktif (demo)
+            <div className="grid w-full gap-3 sm:max-w-md sm:grid-cols-2">
+              <div className="space-y-1">
+                <Label htmlFor="sppg" className="text-[11px] font-bold text-slate-600">
+                  SPPG Terpilih
                 </Label>
                 <select
                   id="sppg"
                   value={String(selectedSppgId)}
                   onChange={(e) => setSelectedSppgId(Number(e.target.value))}
-                  className="h-10 w-full rounded-2xl border border-input bg-background px-3 text-sm"
+                  className="h-10 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs font-bold text-slate-900 shadow-2xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500"
                 >
                   {sppgList.map((s) => (
                     <option key={s.id} value={String(s.id)}>
@@ -136,28 +136,28 @@ export default function SppgBiddingPage() {
                   ))}
                 </select>
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="search" className="text-xs text-muted-foreground">
-                  Cari
+              <div className="space-y-1">
+                <Label htmlFor="search" className="text-[11px] font-bold text-slate-600">
+                  Cari Tender
                 </Label>
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Search className="absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-slate-400" />
                   <Input
                     id="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="ID, judul, kategori..."
-                    className="h-10 rounded-2xl pl-9"
+                    placeholder="Judul / komoditas..."
+                    className="h-10 rounded-xl border-slate-300 bg-white pl-8 text-xs font-semibold text-slate-900 shadow-2xs"
                   />
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="divide-y divide-border/60">
+          <div className="divide-y divide-slate-200">
             {tenders.length === 0 ? (
-              <div className="p-6 text-sm text-muted-foreground">
-                Belum ada tender untuk SPPG ini.
+              <div className="p-12 text-center text-xs font-bold text-slate-400">
+                Belum ada tender pengadaan aktif untuk SPPG ini.
               </div>
             ) : (
               tenders.map((tender) => {
@@ -169,47 +169,52 @@ export default function SppgBiddingPage() {
                   <Link
                     key={tender.id}
                     href={`/sppg/bidding/${tender.id}`}
-                    className="group block p-5 transition hover:bg-muted/15"
+                    className="group block p-5 transition-colors hover:bg-cyan-50/40"
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-xs font-semibold text-muted-foreground">
-                          {tender.id}
-                        </p>
-                        <p className="mt-1 truncate text-base font-semibold tracking-tight">
-                          {tender.title}
-                        </p>
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono text-xs font-black text-cyan-900 bg-cyan-100 px-2.5 py-0.5 rounded-md border border-cyan-300">
+                            {tender.id}
+                          </span>
+                          <p className="truncate text-sm font-black text-slate-900 group-hover:text-cyan-700 transition-colors">
+                            {tender.title}
+                          </p>
+                        </div>
+                        <p className="mt-1.5 text-xs font-medium text-slate-500">
                           {sppg
-                            ? `${sppg.nama} • ${sppg.kecamatan}, ${sppg.kota}`
+                            ? `${sppg.nama} • Kec. ${sppg.kecamatan}, ${sppg.kota}`
                             : `SPPG #${tender.sppgId}`}
                         </p>
                       </div>
                       <Badge
-                        className="rounded-full"
-                        variant={tender.status === "OPEN" ? "default" : "secondary"}
+                        className={`rounded-lg px-2.5 py-0.5 text-[10px] font-extrabold ${
+                          tender.status === "OPEN" 
+                            ? "bg-emerald-100 text-emerald-900 border border-emerald-300" 
+                            : "bg-slate-100 text-slate-800 border border-slate-300"
+                        }`}
                       >
                         {tender.status}
                       </Badge>
                     </div>
 
-                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-                        <span className="inline-flex items-center gap-1">
-                          <CalendarClock className="size-3" /> {formatDate(tender.deadline)}
+                    <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between border-t border-slate-100 pt-3">
+                      <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
+                        <span className="inline-flex items-center gap-1 text-slate-700 font-bold">
+                          <CalendarClock className="size-3.5 text-cyan-700" /> {formatDate(tender.deadline)}
                         </span>
-                        <span>•</span>
-                        <span className="tabular-nums">
+                        <span className="text-slate-300">•</span>
+                        <span className="tabular-nums text-slate-900 font-black">
                           {tender.quantity.toLocaleString("id-ID")} {tender.unit}
                         </span>
-                        <span>•</span>
-                        <span>{tender.category}</span>
-                        <span>•</span>
-                        <span className="tabular-nums">{bidCount} bid</span>
+                        <span className="text-slate-300">•</span>
+                        <span className="text-slate-600 font-medium">{tender.category}</span>
+                        <span className="text-slate-300">•</span>
+                        <span className="tabular-nums font-extrabold text-cyan-900 bg-cyan-100 px-2.5 py-0.5 rounded border border-cyan-300">{bidCount} penawaran masuk</span>
                       </div>
 
-                      <div className="inline-flex items-center gap-2 text-sm font-semibold">
-                        Buka workspace <Gavel className="size-4 transition-transform group-hover:translate-x-0.5" />
+                      <div className="inline-flex items-center gap-1.5 text-xs font-black text-cyan-700 group-hover:underline">
+                        Evaluasi Vendor <Gavel className="size-3.5 transition-transform group-hover:scale-110" />
                       </div>
                     </div>
                   </Link>
@@ -219,25 +224,27 @@ export default function SppgBiddingPage() {
           </div>
         </div>
 
-        <aside className="rounded-3xl border border-border/70 bg-background/70 p-5">
-          <p className="flex items-center gap-2 text-sm font-semibold tracking-tight">
-            <Settings2 className="size-4 text-muted-foreground" /> Filter
-          </p>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Fokuskan list ke status tertentu.
-          </p>
+        <aside className="rounded-3xl border border-slate-200 bg-white p-5 shadow-xs h-fit space-y-4">
+          <div>
+            <p className="flex items-center gap-2 text-sm font-black text-slate-900">
+              <Settings2 className="size-4 text-cyan-700" /> Filter Status
+            </p>
+            <p className="mt-1 text-xs font-medium text-slate-500">
+              Saring daftar pengadaan sesuai tahap operasional.
+            </p>
+          </div>
 
-          <Separator className="my-4" />
+          <Separator className="bg-slate-200" />
 
-          <div className="space-y-2">
-            <Label htmlFor="status" className="text-xs text-muted-foreground">
-              Status
+          <div className="space-y-1.5">
+            <Label htmlFor="status" className="text-xs font-bold text-slate-700">
+              Status Tender
             </Label>
             <select
               id="status"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-              className="h-10 w-full rounded-2xl border border-input bg-background px-3 text-sm"
+              className="h-10 w-full rounded-xl border border-slate-300 bg-white px-3 text-xs font-bold text-slate-900 shadow-2xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-cyan-500"
             >
               <option value="ALL">Semua</option>
               <option value="OPEN">OPEN</option>

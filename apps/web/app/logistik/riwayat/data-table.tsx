@@ -75,15 +75,15 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between pb-2 gap-4">
+    <div className="space-y-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <Input
           placeholder="Cari nama vendor..."
           value={(table.getColumn("vendor")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("vendor")?.setFilterValue(event.target.value)
           }
-          className="max-w-sm"
+          className="h-10 max-w-sm rounded-xl border-slate-300 bg-white text-xs font-semibold text-slate-900 shadow-2xs focus:border-emerald-600"
         />
 
         {/* Coded custom dropdown checklist for Column Visibility */}
@@ -91,15 +91,15 @@ export function DataTable<TData, TValue>({
           <Button 
             variant="outline" 
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className="px-5"
+            className="h-10 px-4 rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs"
           >
             Filter Kolom
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-2 opacity-50"><path d="m6 9 6 6 6-6"/></svg>
           </Button>
 
           {isDropdownOpen && (
-            <div className="absolute right-0 top-full mt-3 w-56 rounded-[var(--radius-lg)] bg-surface border border-border shadow-elevated z-50 p-3 animate-in fade-in zoom-in-95">
-              <h4 className="px-3 mb-3 text-xs font-semibold uppercase tracking-widest text-muted-foreground">Tampilkan Kolom</h4>
+            <div className="absolute right-0 top-full mt-2 w-56 rounded-2xl bg-white border border-slate-200 shadow-xl z-50 p-3 animate-in fade-in zoom-in-95">
+              <h4 className="px-3 mb-2 text-xs font-black uppercase tracking-widest text-slate-500">Tampilkan Kolom</h4>
               <div className="space-y-1">
                 {table
                   .getAllColumns()
@@ -112,14 +112,14 @@ export function DataTable<TData, TValue>({
                     if (column.id === "status") nameDisplay = "Status Pengiriman"
 
                     return (
-                      <label key={column.id} className="flex items-center gap-3 px-3 py-2 hover:bg-muted/30 rounded-[var(--radius-md)] cursor-pointer transition-colors group">
+                      <label key={column.id} className="flex items-center gap-3 px-3 py-2 hover:bg-emerald-50 rounded-xl cursor-pointer transition-colors group">
                         <input
                           type="checkbox"
                           checked={column.getIsVisible()}
                           onChange={column.getToggleVisibilityHandler()}
-                          className="size-4 rounded border-border bg-surface accent-[var(--role-primary)] focus:ring-2 focus:ring-ring/35 transition-all"
+                          className="size-4 rounded border-slate-300 text-emerald-600 accent-emerald-600 focus:ring-2 focus:ring-emerald-500 transition-all"
                         />
-                        <span className="text-xs font-semibold text-muted-foreground group-hover:text-foreground transition-colors capitalize">{nameDisplay}</span>
+                        <span className="text-xs font-bold text-slate-700 group-hover:text-slate-900 transition-colors capitalize">{nameDisplay}</span>
                       </label>
                     )
                   })}
@@ -129,14 +129,14 @@ export function DataTable<TData, TValue>({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface shadow-card">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xs">
         <Table>
-          <TableHeader>
+          <TableHeader className="bg-slate-100/90 border-b border-slate-200">
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="hover:bg-transparent">
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id} className="py-2.5 px-6">
+                    <TableHead key={header.id} className="py-3 px-6 text-xs font-black text-slate-900">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -155,10 +155,10 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
-                  className="group"
+                  className="hover:bg-emerald-50/30 border-b border-slate-100 transition-colors"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="py-3 px-6 text-sm font-medium text-foreground">
+                    <TableCell key={cell.id} className="py-3.5 px-6 text-xs font-medium text-slate-800">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -166,7 +166,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-32 text-center text-sm font-medium text-muted-foreground">
+                <TableCell colSpan={columns.length} className="h-32 text-center text-xs font-bold text-slate-400">
                   Tidak ada data riwayat distribusi.
                 </TableCell>
               </TableRow>
@@ -175,13 +175,13 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-end space-x-2 py-3">
+      <div className="flex items-center justify-end space-x-2 pt-2">
         <Button
           variant="outline"
           size="sm"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
-          className="px-6"
+          className="h-9 px-5 rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs"
         >
           Sebelumnya
         </Button>
@@ -190,7 +190,7 @@ export function DataTable<TData, TValue>({
           size="sm"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
-          className="px-6"
+          className="h-9 px-5 rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs"
         >
           Berikutnya
         </Button>

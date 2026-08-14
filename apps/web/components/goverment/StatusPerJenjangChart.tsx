@@ -62,26 +62,26 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
   if (!data.length) return null
 
   return (
-    <section className="bg-surface rounded-[var(--radius-lg)] border border-border p-5 shadow-card">
-      <div className="flex flex-col gap-2 mb-4">
+    <section className="bg-surface rounded-xl border border-border p-3.5 sm:p-4 shadow-card">
+      <div className="flex flex-col gap-1.5 mb-3">
         <div className="flex items-center justify-between gap-2">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.18em] text-slate-800">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
               Status per Jenjang
             </p>
-            <p className="mt-0.5 text-sm font-bold text-slate-900">
+            <p className="mt-0.5 text-xs font-semibold text-slate-700">
               Breakdown distribusi pengiriman
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pt-1" aria-label="Legenda status">
+        <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1 pt-0.5" aria-label="Legenda status">
           {(Object.keys(SEG_CONFIG) as SegKey[]).map((key) => (
             <div key={key} className="flex items-center gap-1">
-              <span className="text-xs" style={{ color: SEG_CONFIG[key].color }} aria-hidden>
+              <span className="text-[10px]" style={{ color: SEG_CONFIG[key].color }} aria-hidden>
                 {SEG_CONFIG[key].shape}
               </span>
-              <span className="text-xs font-semibold text-slate-700">
+              <span className="text-[10px] font-semibold text-slate-600">
                 {SEG_CONFIG[key].label}
               </span>
             </div>
@@ -89,7 +89,7 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4" role="list" aria-label="Status pengiriman per jenjang">
+      <div className="flex flex-col gap-2.5" role="list" aria-label="Status pengiriman per jenjang">
         {data.map((row) => {
           const segs: { key: SegKey; count: number }[] = [
             { key: "gagal", count: row.gagal },
@@ -101,19 +101,19 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
           const completionOk = row.completionPct >= 80
 
           return (
-            <div key={row.jenjang} className="flex items-center gap-4" role="listitem">
-              <div className="flex items-center gap-2 w-16 shrink-0">
+            <div key={row.jenjang} className="flex items-center gap-3" role="listitem">
+              <div className="flex items-center gap-1.5 w-12 shrink-0">
                 <span
-                  className="w-2.5 h-2.5 rounded-full shrink-0"
+                  className="w-2 h-2 rounded-full shrink-0"
                   style={{ background: jenjangDot(row.jenjang) }}
                   aria-hidden
                 />
-                <span className="text-sm font-black text-slate-900">{row.jenjang}</span>
+                <span className="text-xs font-bold text-slate-900">{row.jenjang}</span>
               </div>
 
               {row.total > 0 ? (
                 <div
-                  className="flex-1 flex h-7 rounded-[var(--radius-md)] overflow-hidden gap-px bg-muted/30 border border-border"
+                  className="flex-1 flex h-5 rounded-md overflow-hidden gap-px bg-muted/30 border border-border"
                   role="img"
                   aria-label={`${row.jenjang}: ${row.delivered} terkirim, ${row.on_transit} on-transit, ${row.pending} pending, ${row.gagal} gagal dari ${row.total} total`}
                 >
@@ -134,7 +134,7 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
                         title={`${SEG_CONFIG[key].label}: ${count}`}
                       >
                         {pct > 14 && (
-                          <span className="text-xs font-black text-white drop-shadow-xs tabular-nums">
+                          <span className="text-[10px] font-black text-white drop-shadow-xs tabular-nums">
                             {count}
                           </span>
                         )}
@@ -143,21 +143,21 @@ export const StatusPerJenjangChart = memo(function StatusPerJenjangChart() {
                   })}
                 </div>
               ) : (
-                <div className="flex-1 h-7 rounded-[var(--radius-md)] bg-muted/20 border border-border flex items-center px-3">
-                  <span className="text-xs text-slate-700 font-bold">
+                <div className="flex-1 h-5 rounded-md bg-muted/20 border border-border flex items-center px-2">
+                  <span className="text-[10px] text-slate-600 font-medium">
                     Tidak ada data
                   </span>
                 </div>
               )}
 
-              <div className="w-24 shrink-0 text-right">
+              <div className="w-20 shrink-0 text-right">
                 <span
-                  className={`text-xs font-extrabold tabular-nums ${
+                  className={`text-[11px] font-bold tabular-nums ${
                     completionOk ? "text-emerald-700" : "text-red-700"
                   }`}
                   aria-label={`${row.completionPct}% selesai`}
                 >
-                  {completionOk ? "● " : "✕ "} {row.completionPct}% selesai
+                  {completionOk ? "● " : "✕ "} {row.completionPct}%
                 </span>
               </div>
             </div>

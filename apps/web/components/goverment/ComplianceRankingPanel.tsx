@@ -14,7 +14,7 @@ import { StatusBadge } from "@/components/ui/status-badge"
 function RadialArc({
   skor, skorPrev, kategori, trend, trendValue, color, onClick,
 }: Pick<ComplianceCategoryScore, "skor" | "skorPrev" | "kategori" | "trend" | "trendValue"> & { color: string; onClick: () => void }) {
-  const R = 30
+  const R = 24
   const CIRCUMFERENCE = 2 * Math.PI * R
   const offset = CIRCUMFERENCE - (skor / 100) * CIRCUMFERENCE
 
@@ -22,17 +22,17 @@ function RadialArc({
     <button
       onClick={onClick}
       aria-label={`Kepatuhan ${kategori}: ${skor}%. Klik untuk lihat detail audit`}
-      className="flex flex-col items-center gap-1.5 hover:scale-105 transition-transform group"
+      className="flex flex-col items-center gap-1 hover:scale-105 transition-transform group"
     >
       {/* SVG Arc */}
-      <div className="relative w-[76px] h-[76px]">
+      <div className="relative w-[60px] h-[60px]">
         <svg className="w-full h-full -rotate-90" aria-hidden>
-          <circle cx="38" cy="38" r={R} fill="transparent" stroke="hsl(var(--border))" strokeWidth={6} />
+          <circle cx="30" cy="30" r={R} fill="transparent" stroke="hsl(var(--border))" strokeWidth={5} />
           <motion.circle
-            cx="38" cy="38" r={R}
+            cx="30" cy="30" r={R}
             fill="transparent"
             stroke={color}
-            strokeWidth={6}
+            strokeWidth={5}
             strokeLinecap="round"
             strokeDasharray={CIRCUMFERENCE}
             initial={{ strokeDashoffset: CIRCUMFERENCE }}
@@ -40,18 +40,18 @@ function RadialArc({
             transition={{ duration: 0.8, ease: "easeOut" }}
           />
         </svg>
-        <span className="absolute inset-0 flex items-center justify-center text-[15px] font-black text-slate-900">
+        <span className="absolute inset-0 flex items-center justify-center text-xs font-black text-slate-900">
           {skor}%
         </span>
       </div>
 
       {/* Kategori */}
-      <p className="text-xs font-bold text-slate-800 uppercase tracking-widest">{kategori}</p>
+      <p className="text-[10px] font-bold text-slate-800 uppercase tracking-wider">{kategori}</p>
 
       {/* Delta anchor */}
       <p
         className={cn(
-          "text-xs font-bold flex items-center gap-0.5",
+          "text-[10px] font-bold flex items-center gap-0.5",
           trend === "up"
             ? "text-emerald-700"
             : trend === "down"
@@ -60,7 +60,7 @@ function RadialArc({
         )}
       >
         {trend === "up" ? <TrendingUp className="w-2.5 h-2.5" aria-hidden /> : trend === "down" ? <TrendingDown className="w-2.5 h-2.5" aria-hidden /> : null}
-        {trend !== "stable" && `${trend === "up" ? "+" : "-"}${trendValue}% vs bln lalu`}
+        {trend !== "stable" && `${trend === "up" ? "+" : "-"}${trendValue}%`}
       </p>
     </button>
   )
@@ -77,32 +77,34 @@ const RADIAL_COLORS = [
 export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
   const router = useRouter()
   const scores = useMemo(() => getComplianceScores(), [])
-  const vendors = useMemo(() => getVendorRanking(), [])
+  const vendors = useMemo(() => getVendorRanking().slice(0, 4), [])
   const [modalData, setModalData] = useState<ComplianceCategoryScore | null>(null)
 
   return (
     <>
-      <div className="bg-surface rounded-[var(--radius-lg)] border border-border p-5 shadow-card grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="bg-surface rounded-xl border border-border p-4 sm:p-4.5 shadow-card grid grid-cols-1 md:grid-cols-2 gap-4 h-full">
 
         {/* Left — RadialBar compliance */}
-        <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-900 mb-4">
-            Kepatuhan Sistem
-          </p>
-          <div className="flex justify-around items-start">
-            {scores.map((s, i) => (
-              <RadialArc
-                key={s.kategori}
-                {...s}
-                color={RADIAL_COLORS[i]}
-                onClick={() => setModalData(s)}
-              />
-            ))}
+        <div className="flex flex-col justify-between">
+          <div>
+            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-900 mb-3">
+              Kepatuhan Sistem
+            </p>
+            <div className="flex justify-around items-start">
+              {scores.map((s, i) => (
+                <RadialArc
+                  key={s.kategori}
+                  {...s}
+                  color={RADIAL_COLORS[i]}
+                  onClick={() => setModalData(s)}
+                />
+              ))}
+            </div>
           </div>
           <button
             onClick={() => setModalData(scores.find(s => s.skor < 95) || scores[0])}
             aria-label="Lihat detail audit kepatuhan"
-            className="mt-4 w-full py-2.5 rounded-[var(--radius-md)] bg-slate-100 hover:bg-slate-200 border border-slate-300 text-xs font-black uppercase tracking-widest text-slate-900 transition-colors shadow-xs"
+            className="mt-3 w-full py-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[10px] font-black uppercase tracking-wider text-slate-800 transition-colors shadow-xs"
           >
             Lihat Detail Audit
           </button>
@@ -110,12 +112,12 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
 
         {/* Right — Vendor Ranking */}
         <div>
-          <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-slate-900 mb-4">
-            Ranking Vendor On-Time Rate
-            <span className="ml-1.5 text-slate-600 normal-case font-medium">(terendah di atas)</span>
+          <p className="text-[11px] font-bold uppercase tracking-wide text-slate-900 mb-2.5">
+            Ranking Vendor On-Time
+            <span className="ml-1 text-slate-500 normal-case font-medium text-[10px]">(terendah di atas)</span>
           </p>
 
-          <div className="flex flex-col gap-2" role="list" aria-label="Ranking vendor berdasarkan on-time rate">
+          <div className="flex flex-col gap-1.5" role="list" aria-label="Ranking vendor berdasarkan on-time rate">
             {vendors.map((v) => {
               const barPct = (v.onTimeRate / 100) * 100
               const isLow = v.onTimeRate < 80
@@ -123,12 +125,12 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
 
               return (
                 <div key={v.id} className="group" role="listitem">
-                  <div className="flex items-center gap-2 mb-0.5">
+                  <div className="flex items-center gap-1.5 mb-0.5">
                     {/* Vendor name */}
                     <button
                       onClick={() => router.push(`/goverment/pengajuan?vendor=${v.id}`)}
                       aria-label={`Lihat detail vendor ${v.nama} di halaman pengajuan`}
-                      className="text-sm font-bold text-slate-900 hover:text-indigo-600 transition-colors text-left min-w-0 truncate flex-1"
+                      className="text-xs font-semibold text-slate-900 hover:text-indigo-600 transition-colors text-left min-w-0 truncate flex-1"
                     >
                       {v.nama}
                     </button>
@@ -138,7 +140,7 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
                     )}
                     {/* Rate at end of bar (no X axis needed) */}
                     <span
-                      className={cn("text-xs font-bold shrink-0 w-16 text-right tabular-nums", isLow ? "text-red-600 font-extrabold" : "text-slate-800")}
+                      className={cn("text-[11px] font-bold shrink-0 w-12 text-right tabular-nums", isLow ? "text-red-600 font-extrabold" : "text-slate-700")}
                       aria-label={`${v.onTimeRate}%`}
                     >
                       {isLow ? "✕ " : "● "}{v.onTimeRate}%
@@ -146,13 +148,13 @@ export const ComplianceRankingPanel = memo(function ComplianceRankingPanel() {
                     <button
                       onClick={() => router.push(`/goverment/pengajuan?vendor=${v.id}`)}
                       aria-label={`Navigasi ke pengajuan vendor ${v.nama}`}
-                      className="w-6 h-6 flex items-center justify-center text-muted-foreground hover:text-role-primary transition-colors opacity-0 group-hover:opacity-100"
+                      className="w-5 h-5 flex items-center justify-center text-muted-foreground hover:text-role-primary transition-colors opacity-0 group-hover:opacity-100"
                     >
-                      <ExternalLink className="w-3 h-3" aria-hidden />
+                      <ExternalLink className="w-2.5 h-2.5" aria-hidden />
                     </button>
                   </div>
                   {/* Bar — no X axis, no gridlines */}
-                  <div className="h-2 w-full bg-muted/30 rounded-full overflow-hidden" aria-hidden>
+                  <div className="h-1.5 w-full bg-muted/30 rounded-full overflow-hidden" aria-hidden>
                     <motion.div
                       initial={{ width: 0 }}
                       animate={{ width: `${barPct}%` }}

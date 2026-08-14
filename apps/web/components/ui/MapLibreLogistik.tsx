@@ -25,11 +25,41 @@ import { DriverControlPanel } from "./DriverPanel";
 
 const VENDOR_COLORS = ["#00e57a", "#00c8ff", "#7040e0", "#ff4d4d", "#facc15"];
 
-export default function MapLibreLogistik() {
+interface MapLibreLogistikProps {
+  focusLocation?: {
+    lat: number;
+    lng: number;
+    zoom?: number;
+  } | null;
+}
+
+export default function MapLibreLogistik({ focusLocation }: MapLibreLogistikProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const markers = useRef<maplibregl.Marker[]>([]);
   const driverMarker = useRef<maplibregl.Marker | null>(null);
+
+  useEffect(() => {
+    if (
+      map.current &&
+      focusLocation &&
+      typeof focusLocation.lat === "number" &&
+      typeof focusLocation.lng === "number" &&
+      !isNaN(focusLocation.lat) &&
+      !isNaN(focusLocation.lng)
+    ) {
+      try {
+        map.current.flyTo({
+          center: [focusLocation.lng, focusLocation.lat],
+          zoom: focusLocation.zoom || 15,
+          duration: 1500,
+          essential: true
+        });
+      } catch (err) {
+        console.warn("MapLibre flyTo caught:", err);
+      }
+    }
+  }, [focusLocation]);
   
   const [mounted, setMounted] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -44,9 +74,19 @@ export default function MapLibreLogistik() {
   const [distRemaining, setDistRemaining] = useState<number>(0);
   const [eta, setEta] = useState<number>(0);
 
-  // Driver animation state
   const [driverPos, setDriverPos] = useState<[number, number] | null>(null);
   const animationFrameRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleOpenScan = () => {
+    // If trip is active and remaining distance > 0.05 km (50 meters)
+    if (isTripActive && distRemaining > 0.05) {
+      toast.error(
+        `Kamera Terkunci! Armada berjarak ${(distRemaining * 1000).toFixed(0)}m dari lokasi sekolah (Wajib < 50m).`
+      );
+      return;
+    }
+    setIsScanOpen(true);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -486,7 +526,19 @@ export default function MapLibreLogistik() {
         <div className="flex flex-col gap-3 pointer-events-auto">
           <div className="flex gap-2">
             <button 
-              onClick={() => setIsScanOpen(true)}
+              onClick={() => setIsTripActive(!isTripActive)}
+              className={`h-10 px-3.5 rounded-xl backdrop-blur-md border shadow-2xl flex items-center gap-1.5 text-xs font-black transition-all ${
+                isTripActive 
+                  ? 'bg-emerald-600 border-emerald-400 text-white animate-pulse shadow-emerald-600/30' 
+                  : 'bg-white/90 border-white text-slate-800 hover:bg-white'
+              }`}
+              title="Mulai Animasi Pengiriman Live 3D (Seperti Portal Government)"
+            >
+              <TruckIcon className="w-4 h-4 text-emerald-600 group-hover:scale-110" />
+              <span>{isTripActive ? "Stop Animasi" : "Simulasi Animasi 3D"}</span>
+            </button>
+            <button 
+              onClick={handleOpenScan}
               className="w-10 h-10 rounded-xl bg-white/90 backdrop-blur-md border border-white shadow-2xl flex items-center justify-center text-gray-700 hover:bg-white transition-all"
               title="Scan QR"
             >

@@ -46,8 +46,8 @@ export function QRScannerModal({ isOpen, onClose, onScan }: QRScannerModalProps)
             }
           );
         } catch (err) {
-          console.error("Scanner Error:", err);
-          setError("Gagal mengakses kamera. Pastikan izin kamera diberikan.");
+          console.warn("Scanner camera notice:", err);
+          setError("Izin kamera ditolak atau kamera fisik tidak tersedia.");
         }
       };
 
@@ -56,11 +56,17 @@ export function QRScannerModal({ isOpen, onClose, onScan }: QRScannerModalProps)
       return () => {
         clearTimeout(timeout);
         if (scannerRef.current?.isScanning) {
-          scannerRef.current.stop().catch(console.error);
+          scannerRef.current.stop().catch(() => {});
         }
       };
     }
   }, [isOpen, scannedData, onScan]);
+
+  const handleSimulatedScan = () => {
+    const dummyCode = "MANIFEST-MBG-2026-SUBANG-0811";
+    setScannedData(dummyCode);
+    onScan(dummyCode);
+  };
 
   const resetScanner = () => {
     setScannedData(null);
@@ -82,12 +88,18 @@ export function QRScannerModal({ isOpen, onClose, onScan }: QRScannerModalProps)
 
         <div className="p-6">
           {!scannedData ? (
-             <div className="relative aspect-square w-full bg-black/40 rounded-2xl border-2 border-dashed border-white/10 flex items-center justify-center overflow-hidden">
+             <div className="relative aspect-square w-full bg-black/40 rounded-2xl border-2 border-dashed border-white/10 flex flex-col items-center justify-center overflow-hidden">
                 <div id={regionId} className="w-full h-full" />
                 {error && (
-                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-red-500/10 backdrop-blur-sm">
-                      <XCircle className="w-8 h-8 text-red-500 mb-2" />
-                      <p className="text-xs font-bold text-red-200">{error}</p>
+                   <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-slate-900/90 backdrop-blur-md z-20">
+                      <XCircle className="w-8 h-8 text-amber-400 mb-2" />
+                      <p className="text-xs font-bold text-slate-200 mb-4">{error}</p>
+                      <Button 
+                        onClick={handleSimulatedScan}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black px-4 py-2 rounded-xl shadow-md"
+                      >
+                        Gunakan Simulasi QR Scan (Demo Mode)
+                      </Button>
                    </div>
                 )}
              </div>

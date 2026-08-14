@@ -27,34 +27,27 @@ export function DashboardHeader() {
   const router = useRouter()
 
   return (
-    <div className="space-y-4">
-      <PageHeader
-        title={
-          <span className="inline-flex items-center gap-2.5">
-            <span className="size-6 inline-flex items-center justify-center rounded-xl bg-indigo-600 text-white shadow-xs">
-              <LayoutDashboard className="size-4" aria-hidden />
-            </span>
-            <span className="font-black text-xl sm:text-2xl tracking-tight text-slate-900">Dashboard Pemerintah</span>
-          </span>
-        }
-        subtitle={null}
-        actions={
-          <button
-            onClick={() => router.push("/goverment/notifikasi")}
-            aria-label="Lihat notifikasi (4 notifikasi belum dibaca)"
-            className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-surface border border-border text-slate-800 hover:bg-slate-100 hover:text-indigo-600 transition-all shadow-xs group"
-          >
-            <Bell className="w-5 h-5" />
-            <span className="absolute -top-1.5 -right-1.5 flex h-5 min-w-[20px] items-center justify-center rounded-full bg-red-600 px-1 text-[10px] font-black text-white shadow-sm ring-2 ring-white">
-              4
-            </span>
-          </button>
-        }
-      />
+    <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center lg:justify-between bg-surface border border-border rounded-xl p-3 shadow-xs">
+      {/* Left: Title */}
+      <div className="flex items-center gap-2">
+        <div className="size-7 inline-flex items-center justify-center rounded-lg bg-indigo-600 text-white shadow-xs">
+          <LayoutDashboard className="size-4" aria-hidden />
+        </div>
+        <div>
+          <h1 className="font-black text-base tracking-tight text-slate-900 leading-none">
+            Dashboard Pemerintah
+          </h1>
+          <p className="text-[10px] font-semibold text-slate-500 mt-0.5">
+            Pengawasan Rantai Pasok & Kepatuhan MBG
+          </p>
+        </div>
+      </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      {/* Right: Filters + Notification */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        {/* Periode */}
         <div
-          className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-1.5 py-1"
+          className="inline-flex items-center gap-0.5 rounded-full border border-border bg-slate-50 p-0.5"
           role="group"
           aria-label="Filter periode"
         >
@@ -68,8 +61,8 @@ export function DashboardHeader() {
                 onClick={() => setPeriode(val)}
                 aria-pressed={isActive}
                 className={cn(
-                  "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-                  isActive ? "bg-indigo-600 text-white" : "text-slate-800 font-semibold hover:bg-surface-raised"
+                  "rounded-full px-2.5 py-1 text-xs font-semibold transition-colors",
+                  isActive ? "bg-indigo-600 text-white shadow-xs" : "text-slate-700 hover:bg-slate-200/60"
                 )}
               >
                 {label}
@@ -78,19 +71,20 @@ export function DashboardHeader() {
           })}
         </div>
 
+        {/* SPPG Dropdown */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <button
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-surface px-4 py-2 text-sm font-medium text-foreground hover:bg-surface-raised transition-colors"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-800 hover:bg-slate-200/60 transition-colors"
               aria-label="Filter SPPG"
             >
-              <span className="max-w-[220px] truncate">
+              <span className="max-w-[140px] truncate">
                 {filter.sppgId ? "SPPG " + filter.sppgId : "Semua SPPG"}
               </span>
-              <ChevronDown className="size-4 text-muted-foreground" aria-hidden />
+              <ChevronDown className="size-3 text-slate-500" aria-hidden />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="start" className="text-sm">
+          <DropdownMenuContent align="start" className="text-xs">
             <DropdownMenuItem
               onClick={() => setSppgId(null)}
               className="font-semibold"
@@ -108,39 +102,36 @@ export function DashboardHeader() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Filter jenjang">
+        {/* Jenjang */}
+        <div
+          className="inline-flex items-center gap-0.5 rounded-full border border-border bg-slate-50 p-0.5"
+          role="group"
+          aria-label="Filter jenjang sekolah"
+        >
           <button
-            onClick={() => {
-              const all: JenjangFilter[] = ["SD", "SMP", "SMA"]
-              setJenjang(
-                filter.jenjang.length === all.length
-                  ? []
-                  : all
-              )
-            }}
-            aria-pressed={filter.jenjang.length > 0}
+            onClick={() => setJenjang([])}
+            aria-pressed={filter.jenjang.length === 0}
             className={cn(
-              "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+              "rounded-full px-2.5 py-1 text-xs font-semibold transition-colors",
               filter.jenjang.length === 0
-                ? "border-indigo-600 bg-indigo-100 text-indigo-700 font-semibold"
-                : "border-border bg-surface text-slate-800 font-semibold hover:bg-surface-raised"
+                ? "bg-indigo-600 text-white shadow-xs"
+                : "text-slate-700 hover:bg-slate-200/60"
             )}
           >
             Semua
           </button>
-
-          {"SD SMP SMA".split(" ").map((j) => {
-            const active = filter.jenjang.includes(j as any)
+          {(["SD", "SMP", "SMA"] as JenjangFilter[]).map((j) => {
+            const isActive = filter.jenjang.includes(j)
             return (
               <button
                 key={j}
-                onClick={() => toggleJenjang(j as any)}
-                aria-pressed={active}
+                onClick={() => toggleJenjang(j)}
+                aria-pressed={isActive}
                 className={cn(
-                  "rounded-full border px-4 py-2 text-sm font-medium transition-colors",
-                  active
-                    ? "border-indigo-600 bg-indigo-100 text-indigo-700 font-semibold"
-                    : "border-border bg-surface text-slate-800 font-semibold hover:bg-surface-raised"
+                  "rounded-full px-2 py-1 text-xs font-semibold transition-colors",
+                  isActive
+                    ? "bg-indigo-600 text-white shadow-xs"
+                    : "text-slate-700 hover:bg-slate-200/60"
                 )}
               >
                 {j}
@@ -148,8 +139,19 @@ export function DashboardHeader() {
             )
           })}
         </div>
-      </div>
 
+        {/* Notification Bell */}
+        <button
+          onClick={() => router.push("/goverment/notifikasi")}
+          aria-label="Lihat notifikasi (4 belum dibaca)"
+          className="relative flex items-center justify-center w-8 h-8 rounded-full bg-slate-50 border border-border text-slate-700 hover:bg-slate-200/60 hover:text-indigo-600 transition-all shadow-xs ml-1"
+        >
+          <Bell className="w-4 h-4" />
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-[16px] items-center justify-center rounded-full bg-red-600 px-0.5 text-[9px] font-black text-white shadow-sm ring-1 ring-white">
+            4
+          </span>
+        </button>
+      </div>
     </div>
   )
 }

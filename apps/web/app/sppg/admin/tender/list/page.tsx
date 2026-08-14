@@ -199,7 +199,7 @@ export default function TenderListPage() {
         </div>
         
         <div className="flex items-center gap-2">
-          <Button variant="outline" className="h-12 px-5 rounded-[18px] border-slate-100 font-bold text-slate-600 flex items-center gap-2">
+          <Button onClick={() => toast.info("Filter simulasi aktif: Mengurutkan dari terbaru")} variant="outline" className="h-12 px-5 rounded-[18px] border-slate-100 font-bold text-slate-600 flex items-center gap-2">
             <Filter size={18} />
             Filter
           </Button>
@@ -289,7 +289,7 @@ export default function TenderListPage() {
                                 <PenBox size={18} />
                               </Button>
                            </Link>
-                           <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full text-red-500 hover:bg-red-50">
+                           <Button onClick={(e) => { e.stopPropagation(); toast.success("Draft Master Plan berhasil dihapus (Simulasi)."); setContracts(prev => prev.filter(c => c.id !== contract.id)); }} variant="ghost" size="icon" className="w-10 h-10 rounded-full text-red-500 hover:bg-red-50">
                              <Trash2 size={18} />
                            </Button>
                         </div>

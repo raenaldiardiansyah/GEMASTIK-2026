@@ -79,78 +79,78 @@ export default function PengadaanPenerimaanPage() {
   );
 
   return (
-    <div className="w-full min-h-screen bg-background text-foreground flex flex-col">
+    <div className="w-full min-h-screen bg-slate-100 text-slate-900 flex flex-col">
       {/* Page Header */}
-      <div className="border-b border-border bg-card/50 backdrop-blur px-6 py-4">
+      <div className="border-b border-slate-200 bg-white px-6 py-5 shadow-2xs">
         <PageHeader
           title="Pengadaan & Penerimaan Barang (Audit Trail Digital)"
-          subtitle="Pencatatan transaksi pengadaan bahan baku, validasi jumlah & kualitas QC, serta penyimpanan rekam jejak pada blockchain."
+          subtitle="Pencatatan transaksi pengadaan bahan baku, validasi kuantitas & kualitas QC dapur SPPG, serta pencatatan hash ledger audit."
         />
       </div>
 
       {/* KPI Header Bar (Zero Gap Grid) */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-y md:divide-y-0 divide-border border-b border-border bg-muted/10">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-0 divide-x divide-y md:divide-y-0 divide-slate-200 border-b border-slate-200 bg-white">
         <div className="p-4 flex flex-col justify-center">
-          <span className="text-xs text-muted-foreground">Total Transaksi Pengadaan</span>
-          <span className="text-lg font-bold font-mono text-foreground">Rp 88.700.000</span>
+          <span className="text-xs font-bold text-slate-600">Total Transaksi Pengadaan</span>
+          <span className="text-xl font-black font-mono text-slate-900 mt-0.5">Rp 88.700.000</span>
         </div>
         <div className="p-4 flex flex-col justify-center">
-          <span className="text-xs text-muted-foreground">Status Penerimaan Barang</span>
-          <span className="text-lg font-bold font-mono text-emerald-500">2 Transaksi Sah</span>
+          <span className="text-xs font-bold text-slate-600">Status Penerimaan Bahan</span>
+          <span className="text-xl font-black font-mono text-emerald-700 mt-0.5">2 Transaksi Sah</span>
         </div>
         <div className="p-4 flex flex-col justify-center">
-          <span className="text-xs text-muted-foreground">Verifikasi Kualitas (QC)</span>
-          <span className="text-lg font-bold font-mono text-blue-500">100% Lolos QC</span>
+          <span className="text-xs font-bold text-slate-600">Verifikasi Kualitas (QC)</span>
+          <span className="text-xl font-black font-mono text-cyan-900 mt-0.5">100% Lolos QC</span>
         </div>
         <div className="p-4 flex flex-col justify-center">
-          <span className="text-xs text-muted-foreground">Audit Trail Blockchain</span>
-          <span className="text-xs font-semibold text-emerald-500 flex items-center gap-1 mt-1">
-            <Lock className="w-4 h-4" /> IMMUTABLE LEDGER
+          <span className="text-xs font-bold text-slate-600">Audit Trail Ledger</span>
+          <span className="text-xs font-black text-emerald-900 flex items-center gap-1.5 mt-1 bg-emerald-100 w-fit px-2.5 py-1 rounded-md border border-emerald-300">
+            <Lock className="w-3.5 h-3.5" /> IMMUTABLE LEDGER
           </span>
         </div>
       </div>
 
-      {/* Main Split Layout (Zero Gap Grid) */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-border">
+      {/* Main Split Layout */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-slate-200">
         
         {/* Left List (5 Cols) */}
-        <div className="lg:col-span-5 bg-card/20 flex flex-col">
-          <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between gap-3">
+        <div className="lg:col-span-5 bg-white flex flex-col">
+          <div className="p-4 border-b border-slate-200 bg-slate-100/60 flex items-center justify-between gap-3">
             <div className="relative flex-1">
-              <Search className="w-4 h-4 absolute left-3 top-2.5 text-muted-foreground" />
+              <Search className="w-3.5 h-3.5 absolute left-3 top-3 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Cari PO / Supplier..."
-                className="w-full pl-9 pr-3 py-1.5 bg-background border border-border rounded text-xs text-foreground focus:outline-none"
+                placeholder="Cari nomor PO / Supplier..."
+                className="w-full pl-8 pr-3 py-2 bg-white border border-slate-300 rounded-xl text-xs text-slate-900 font-bold focus:outline-none focus:ring-1 focus:ring-cyan-500 shadow-2xs"
               />
             </div>
-            <Button className="h-8 text-xs bg-primary text-primary-foreground flex items-center gap-1">
+            <Button className="h-9 text-xs bg-cyan-600 hover:bg-cyan-700 text-white font-black rounded-xl flex items-center gap-1 shadow-md shadow-cyan-600/20 px-3">
               <Plus className="w-3.5 h-3.5" /> Buat PO
             </Button>
           </div>
 
-          <div className="divide-y divide-border flex-1 overflow-y-auto">
+          <div className="divide-y divide-slate-200 flex-1 overflow-y-auto">
             {filteredOrders.map((order) => {
               const isSelected = activeOrder.id === order.id;
               return (
                 <div
                   key={order.id}
                   onClick={() => setActiveOrder(order)}
-                  className={`p-4 flex flex-col gap-2 cursor-pointer transition-colors ${
-                    isSelected ? "bg-primary/10 border-l-4 border-l-primary" : "hover:bg-muted/30"
+                  className={`p-4 flex flex-col gap-1.5 cursor-pointer transition-colors ${
+                    isSelected ? "bg-cyan-50/70 border-l-4 border-l-cyan-600" : "hover:bg-slate-50"
                   }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="font-mono font-bold text-xs text-primary">{order.poNumber}</span>
-                    <Badge variant={order.statusPenerimaan === "Diterima Sah" ? "default" : "outline"} className={order.statusPenerimaan === "Diterima Sah" ? "bg-emerald-600" : ""}>
+                    <span className="font-mono font-black text-xs text-cyan-900 bg-cyan-100 px-2 py-0.5 rounded border border-cyan-300">{order.poNumber}</span>
+                    <Badge variant={order.statusPenerimaan === "Diterima Sah" ? "default" : "outline"} className={`text-[10px] font-black ${order.statusPenerimaan === "Diterima Sah" ? "bg-emerald-600 text-white" : "border-slate-300 text-slate-700"}`}>
                       {order.statusPenerimaan}
                     </Badge>
                   </div>
-                  <h4 className="font-semibold text-sm text-foreground">{order.supplierNama}</h4>
-                  <div className="flex items-center justify-between text-xs text-muted-foreground font-mono pt-1">
-                    <span>Total: Rp {order.totalNilai.toLocaleString("id-ID")}</span>
+                  <h4 className="font-black text-sm text-slate-900 mt-1">{order.supplierNama}</h4>
+                  <div className="flex items-center justify-between text-xs text-slate-600 font-mono pt-1">
+                    <span className="font-bold text-slate-800">Total: Rp {order.totalNilai.toLocaleString("id-ID")}</span>
                     <span>{order.tanggalPO}</span>
                   </div>
                 </div>
@@ -160,76 +160,78 @@ export default function PengadaanPenerimaanPage() {
         </div>
 
         {/* Right Detail Panel (7 Cols) */}
-        <div className="lg:col-span-7 flex flex-col bg-background p-6 space-y-6">
-          <div className="p-5 rounded-lg border border-border bg-card/40 flex items-start justify-between">
+        <div className="lg:col-span-7 flex flex-col bg-slate-100/60 p-6 space-y-6">
+          <div className="p-5 rounded-2xl border border-slate-200 bg-white shadow-xs flex items-start justify-between">
             <div>
-              <span className="text-xs font-mono text-primary font-bold">{activeOrder.poNumber}</span>
-              <h3 className="text-lg font-bold text-foreground mt-1">{activeOrder.supplierNama}</h3>
-              <p className="text-xs text-muted-foreground mt-0.5">Transaksi Pengadaan Bahan Pangan Masuk</p>
+              <span className="text-xs font-mono text-cyan-900 font-black bg-cyan-100 px-2.5 py-1 rounded-md border border-cyan-300">{activeOrder.poNumber}</span>
+              <h3 className="text-xl font-black text-slate-900 mt-2.5">{activeOrder.supplierNama}</h3>
+              <p className="text-xs text-slate-600 mt-0.5 font-medium">Transaksi Penerimaan Bahan Pangan Masuk ke Dapur SPPG</p>
             </div>
-            <Badge className="bg-emerald-500/10 text-emerald-500 border-emerald-500/30 font-mono text-xs">
-              QC Passed
+            <Badge className="bg-emerald-100 text-emerald-950 border-emerald-300 font-black text-xs px-3 py-1">
+              ✓ QC Passed
             </Badge>
           </div>
 
           {/* Item List Table */}
           <div className="space-y-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground block">
-              Manifest Barang & Kualitas Penerimaan
+            <span className="text-xs font-black uppercase tracking-wider text-slate-700 block">
+              Manifest Bahan &amp; Hasil Uji Fisik QC
             </span>
 
-            <table className="w-full text-left border-collapse text-xs border border-border">
-              <thead>
-                <tr className="border-b border-border bg-muted/40 text-muted-foreground font-semibold">
-                  <th className="p-3">Nama Komoditas</th>
-                  <th className="p-3">Volume PO</th>
-                  <th className="p-3">Volume Diterima</th>
-                  <th className="p-3 text-right">Status QC</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                <tr className="hover:bg-muted/20">
-                  <td className="p-3 font-semibold">Beras Organik Premium (Subang)</td>
-                  <td className="p-3 font-mono">500 Kg</td>
-                  <td className="p-3 font-mono text-emerald-500 font-bold">500 Kg</td>
-                  <td className="p-3 text-right">
-                    <span className="text-emerald-500 font-semibold flex items-center justify-end gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Sesuai
-                    </span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-muted/20">
-                  <td className="p-3 font-semibold">Daging Ayam Broiler Segar</td>
-                  <td className="p-3 font-mono">250 Kg</td>
-                  <td className="p-3 font-mono text-emerald-500 font-bold">250 Kg</td>
-                  <td className="p-3 text-right">
-                    <span className="text-emerald-500 font-semibold flex items-center justify-end gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Sesuai
-                    </span>
-                  </td>
-                </tr>
-                <tr className="hover:bg-muted/20">
-                  <td className="p-3 font-semibold">Sayur Wortel & Buncis Segar</td>
-                  <td className="p-3 font-mono">150 Kg</td>
-                  <td className="p-3 font-mono text-emerald-500 font-bold">150 Kg</td>
-                  <td className="p-3 text-right">
-                    <span className="text-emerald-500 font-semibold flex items-center justify-end gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Sesuai
-                    </span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-xs">
+              <table className="w-full text-left border-collapse text-xs">
+                <thead>
+                  <tr className="border-b border-slate-200 bg-slate-100/90 text-slate-900 font-black">
+                    <th className="p-3.5">Nama Komoditas</th>
+                    <th className="p-3.5">Volume PO</th>
+                    <th className="p-3.5">Volume Diterima</th>
+                    <th className="p-3.5 text-right">Status QC</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  <tr className="hover:bg-cyan-50/30">
+                    <td className="p-3.5 font-black text-slate-900">Beras Organik Premium (Subang)</td>
+                    <td className="p-3.5 font-mono font-bold text-slate-700">500 Kg</td>
+                    <td className="p-3.5 font-mono text-emerald-800 font-black">500 Kg</td>
+                    <td className="p-3.5 text-right">
+                      <span className="text-emerald-800 font-black flex items-center justify-end gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Sesuai
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-cyan-50/30">
+                    <td className="p-3.5 font-black text-slate-900">Daging Ayam Broiler Segar</td>
+                    <td className="p-3.5 font-mono font-bold text-slate-700">250 Kg</td>
+                    <td className="p-3.5 font-mono text-emerald-800 font-black">250 Kg</td>
+                    <td className="p-3.5 text-right">
+                      <span className="text-emerald-800 font-black flex items-center justify-end gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Sesuai
+                      </span>
+                    </td>
+                  </tr>
+                  <tr className="hover:bg-cyan-50/30">
+                    <td className="p-3.5 font-black text-slate-900">Sayur Wortel &amp; Buncis Segar</td>
+                    <td className="p-3.5 font-mono font-bold text-slate-700">150 Kg</td>
+                    <td className="p-3.5 font-mono text-emerald-800 font-black">150 Kg</td>
+                    <td className="p-3.5 text-right">
+                      <span className="text-emerald-800 font-black flex items-center justify-end gap-1">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" /> Sesuai
+                      </span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           {/* Blockchain Audit Hash Box */}
-          <div className="p-4 rounded border border-emerald-500/30 bg-emerald-500/10 space-y-1">
-            <span className="text-[10px] font-mono text-emerald-500 uppercase tracking-wider block">
+          <div className="p-4 rounded-2xl border border-emerald-300 bg-emerald-100/70 space-y-1">
+            <span className="text-[10px] font-mono text-emerald-950 font-black uppercase tracking-wider block">
               BLOCKCHAIN AUDIT TRAIL RECORDED
             </span>
-            <div className="flex items-center justify-between text-xs font-mono text-emerald-500 font-bold">
+            <div className="flex items-center justify-between text-xs font-mono text-emerald-950 font-black">
               <span>Hash: {activeOrder.blockchainHash}</span>
-              <Lock className="w-4 h-4" />
+              <Lock className="w-4 h-4 text-emerald-800" />
             </div>
           </div>
 

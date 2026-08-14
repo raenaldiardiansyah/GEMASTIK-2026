@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
+import { toast } from "sonner";
 
 export default function SppgEvaluationPage() {
   const [search, setSearch] = useState("");
@@ -86,10 +87,10 @@ export default function SppgEvaluationPage() {
           <p className="text-slate-500 font-medium mt-1 text-sm">Dashboard monitoring hasil penilaian langsung dari penerima manfaat program GIZANTARA.</p>
         </div>
         <div className="flex gap-3">
-           <Button variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-black text-[10px] uppercase tracking-widest text-[#213555]">
+           <Button onClick={() => toast.success("Menyiapkan dokumen PDF...")} variant="outline" className="h-12 px-6 rounded-2xl border-slate-200 font-black text-[10px] uppercase tracking-widest text-[#213555]">
               <Download size={14} className="mr-2"/> Cetak Raport SPPG
            </Button>
-           <Button className="h-12 px-8 rounded-2xl bg-[#213555] hover:opacity-90 text-white font-black text-[10px] uppercase tracking-widest shadow-xl shadow-[#213555]/20">
+           <Button onClick={() => toast.info("Filter berdasarkan Kuartal 3 2026 diterapkan.")} className="h-12 px-8 rounded-2xl bg-[#213555] hover:opacity-90 text-white font-black text-[10px] uppercase tracking-widest shadow-xl shadow-[#213555]/20">
               <Calendar size={14} className="mr-2"/> Filter Periode
            </Button>
         </div>
@@ -158,7 +159,7 @@ export default function SppgEvaluationPage() {
                      ))}
                   </div>
                </div>
-               <Button variant="ghost" className="mt-6 w-full text-[10px] font-black uppercase text-[#213555] hover:bg-slate-50 h-10 rounded-xl">Lihat Statistik Menu Lengkap</Button>
+               <Button onClick={() => toast.info("Membuka detail analitik menu (Simulasi)")} variant="ghost" className="mt-6 w-full text-[10px] font-black uppercase text-[#213555] hover:bg-slate-50 h-10 rounded-xl">Lihat Statistik Menu Lengkap</Button>
             </div>
 
             <div className="bg-white rounded-[40px] border border-slate-100 shadow-sm p-8 flex flex-col justify-between">
@@ -181,7 +182,7 @@ export default function SppgEvaluationPage() {
                      ))}
                   </div>
                </div>
-               <Button className="mt-6 w-full h-12 rounded-2xl bg-[#213555] text-white font-black text-[10px] uppercase shadow-lg shadow-[#213555]/20">Tindak Lanjuti Masalah</Button>
+               <Button onClick={() => toast.success("Laporan dikirim ke instansi terkait untuk tindak lanjut.")} className="mt-6 w-full h-12 rounded-2xl bg-[#213555] text-white font-black text-[10px] uppercase shadow-lg shadow-[#213555]/20">Tindak Lanjuti Masalah</Button>
             </div>
          </div>
       </div>
@@ -249,7 +250,7 @@ export default function SppgEvaluationPage() {
                            </span>
                         </td>
                         <td className="px-8 py-6 text-right pr-10">
-                           <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-white hover:shadow-md text-[#213555]">
+                           <Button onClick={() => toast.info("Membuka profil evaluasi sekolah (Simulasi)")} variant="ghost" size="icon" className="w-10 h-10 rounded-full hover:bg-white hover:shadow-md text-[#213555]">
                               <ArrowUpRight size={18} />
                            </Button>
                         </td>

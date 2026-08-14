@@ -54,31 +54,31 @@ export const ComposedTrendChart = memo(function ComposedTrendChart() {
   const lastLabel = series[series.length - 1]?.label
 
   return (
-    <div className="rounded-xl border border-border bg-surface p-5 shadow-[var(--shadow-card)] h-full flex flex-col">
-      <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+    <div className="rounded-xl border border-border bg-surface p-3.5 sm:p-4 shadow-card flex flex-col h-full">
+      <div className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <p className="mb-1 text-xs font-bold uppercase tracking-wide text-slate-800">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
             Tren Distribusi
           </p>
-          <p className="text-sm font-semibold text-slate-700">
+          <p className="text-xs font-semibold text-slate-700">
             Porsi dikirim{" "}
             <span className="text-slate-500 font-medium">vs</span>{" "}
             pengeluaran
           </p>
         </div>
         {avgPrev > 0 && (
-          <div className="text-right">
-            <p className="text-xs font-semibold text-slate-600">Rata-rata periode lalu</p>
-            <p className="text-sm font-bold text-slate-900 tabular-nums">
+          <div className="text-left sm:text-right">
+            <p className="text-[10px] font-semibold text-slate-500">Rata-rata periode lalu</p>
+            <p className="text-xs font-bold text-slate-900 tabular-nums">
               {avgPrev.toLocaleString("id-ID")} porsi/hari
             </p>
           </div>
         )}
       </div>
 
-      <div className="w-full flex-1 min-h-[220px]">
+      <div className="w-full flex-1 min-h-[190px] h-[210px]">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={series} margin={{ left: 0, right: 0, top: 8, bottom: 0 }}>
+          <ComposedChart data={series} margin={{ left: 0, right: 0, top: 4, bottom: 0 }}>
           <defs>
             <linearGradient id="porsiGrad2" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="hsl(var(--status-info))" stopOpacity={0.16} />

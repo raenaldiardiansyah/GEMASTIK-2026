@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { use, useMemo, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -69,19 +69,21 @@ type BidExtras = {
 export default function SppgTenderDetailPage({
   params,
 }: {
-  params: { tenderId: string };
+  params: Promise<{ tenderId: string }>;
 }) {
+  const resolvedParams = use(params);
+  const tenderId = resolvedParams.tenderId;
   const snapshot = useBiddingSnapshot();
 
   const tender = useMemo(
-    () => snapshot.tenders.find((t) => t.id === params.tenderId) ?? null,
-    [params.tenderId, snapshot.tenders]
+    () => snapshot.tenders.find((t) => t.id === tenderId) ?? null,
+    [tenderId, snapshot.tenders]
   );
   const sppg = useMemo(() => (tender ? getTenderSppg(tender) : null), [tender]);
 
   const bidsForTender = useMemo(() => {
-    return snapshot.bids.filter((b) => b.tenderId === params.tenderId);
-  }, [params.tenderId, snapshot.bids]);
+    return snapshot.bids.filter((b) => b.tenderId === tenderId);
+  }, [tenderId, snapshot.bids]);
 
   const ranked = useMemo(() => {
     if (!tender) return [];
@@ -120,7 +122,7 @@ export default function SppgTenderDetailPage({
         }
       >
         <div className="rounded-3xl border border-border/70 bg-muted/20 p-6 text-sm text-muted-foreground">
-          ID tender: <span className="font-mono">{params.tenderId}</span>
+          ID tender: <span className="font-mono">{tenderId}</span>
         </div>
       </DashboardShell>
     );

@@ -488,10 +488,10 @@ export default function VendorPesananPage() {
   const filtered = activeTab === "all" ? pos : pos.filter(p => poTab(p) === activeTab);
 
   return (
-    <div className="min-h-svh bg-slate-50" data-role="vendor">
+    <div className="min-h-svh bg-slate-50 w-full" data-role="vendor">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="w-full px-4 py-3 md:px-6 flex items-center justify-between">
           <div>
             <h1 className="text-base font-extrabold text-slate-800 leading-none">Manajemen Pesanan & Logistik</h1>
             <p className="text-[11px] text-slate-400 mt-0.5">{counts.pending} pesanan baru memerlukan validasi Anda</p>
@@ -503,7 +503,7 @@ export default function VendorPesananPage() {
         </div>
 
         {/* Tabs */}
-        <div className="max-w-2xl mx-auto px-4 pb-3 flex gap-2 overflow-x-auto no-scrollbar">
+        <div className="w-full px-4 md:px-6 pb-3 flex gap-2 overflow-x-auto no-scrollbar">
           {tabs.map(t => {
             const active = activeTab === t.key;
             return (
@@ -522,7 +522,7 @@ export default function VendorPesananPage() {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4 pb-24">
+      <div className="w-full px-4 py-4 md:px-6 space-y-4 pb-24">
         {/* Vendor ID */}
         <div className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3 py-2 shadow-sm">
           <Tag size={13} className="text-slate-300 shrink-0" />

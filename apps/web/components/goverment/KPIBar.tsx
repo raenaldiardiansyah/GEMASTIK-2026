@@ -153,32 +153,32 @@ const KPICard = memo(function KPICard({
       aria-label={ariaLabel}
       disabled={!onClick}
       className={cn(
-        "flex-1 min-w-[160px] bg-white rounded-2xl border p-4 text-left flex flex-col gap-2 transition-all hover:shadow-lg",
+        "flex-1 min-w-[130px] bg-white rounded-lg border p-2.5 sm:p-3 text-left flex flex-col gap-1 transition-all hover:shadow-xs",
         borderClass,
         onClick ? "cursor-pointer" : "cursor-default"
       )}
     >
       {/* Label */}
-      <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-slate-700">{label}</p>
+      <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-slate-700 truncate">{label}</p>
 
       {/* Value + icon */}
-      <div className="flex items-center gap-2">
-        <div className={cn("w-7 h-7 rounded-lg flex items-center justify-center shrink-0", iconBg)} aria-hidden>
+      <div className="flex items-center gap-1.5">
+        <div className={cn("w-5 h-5 rounded-md flex items-center justify-center shrink-0", iconBg)} aria-hidden>
           {icon}
         </div>
-        <p className={cn("text-xl font-black tracking-tighter leading-none", urgent ? "text-red-600" : "text-gray-900")}>
+        <p className={cn("text-base font-black tracking-tight leading-none tabular-nums", urgent ? "text-red-600" : "text-gray-900")}>
           {value}
         </p>
       </div>
 
       {/* Sparkline */}
       <div className="w-full">
-        <Sparkline data={sparkData} color={sparkColor} targetLine={targetLine} height={28} />
+        <Sparkline data={sparkData} color={sparkColor} targetLine={targetLine} height={18} />
       </div>
 
       {/* Sub + delta */}
-      <div className="flex flex-col gap-0.5">
-        <span className="text-[10px] font-semibold text-slate-600 leading-tight">{sub}</span>
+      <div className="flex flex-col gap-0.5 mt-0.5">
+        <span className="text-[9px] font-semibold text-slate-500 leading-none truncate">{sub}</span>
         {delta}
       </div>
     </motion.button>

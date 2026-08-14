@@ -286,7 +286,7 @@ export default function DashboardReputasiPage() {
                 </div>
 
                 <div className="p-3 bg-muted/40 rounded border border-border space-y-1">
-                  <span className="text-muted-foreground block text-[10px]">SMART CONTRACT SBT TOKEN ID</span>
+                  <span className="text-muted-foreground block text-[10px]">BLOCKCHAIN SBT TOKEN ID</span>
                   <span className="font-bold text-emerald-500">{selectedVendor.sbtTokenId}</span>
                 </div>
 

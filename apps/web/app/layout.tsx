@@ -16,6 +16,11 @@ export const metadata = {
   title: "GIZANTARA — Penelusuran End-to-End Program MBG",
   description:
     "Platform end-to-end traceability untuk program Makan Bergizi Gratis: verifikasi vendor, pengadaan, audit pembayaran via OCR, distribusi geofencing, dan reputasi.",
+  icons: {
+    icon: "/icon.svg",
+    shortcut: "/icon.svg",
+    apple: "/icon.svg",
+  },
 };
 
 export default function RootLayout({

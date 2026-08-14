@@ -388,10 +388,10 @@ export default function VendorRiwayatPage() {
   const released   = events.filter(ev => ev.type === "PAYMENT_VERIFIED").reduce((s, e) => s + (e.amount ?? 0), 0);
 
   return (
-    <div className="min-h-svh bg-slate-50" data-role="vendor">
+    <div className="min-h-svh bg-slate-50 w-full" data-role="vendor">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-2xl mx-auto px-4 py-3">
+        <div className="w-full px-4 py-3 md:px-6">
           <div className="flex items-center justify-between mb-3">
             <div>
               <h1 className="text-base font-extrabold text-slate-800 leading-none">Riwayat Aktivitas</h1>
@@ -432,7 +432,7 @@ export default function VendorRiwayatPage() {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-5 pb-24">
+      <div className="w-full px-4 py-5 md:px-6 space-y-5 pb-24">
         {/* Stats strip */}
         <div className="grid grid-cols-3 gap-2">
           {[

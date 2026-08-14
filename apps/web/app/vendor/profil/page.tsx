@@ -203,10 +203,10 @@ export default function VendorProfilPage() {
   }
 
   return (
-    <div className="min-h-svh bg-slate-50 pb-20" data-role="vendor">
+    <div className="min-h-svh bg-slate-50 pb-20 w-full" data-role="vendor">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-slate-100">
-        <div className="max-w-2xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div className="w-full px-4 py-3 md:px-6 flex items-center justify-between">
           <div>
             <h1 className="text-base font-extrabold text-slate-800 leading-none">Profil Vendor</h1>
             <p className="text-[11px] text-slate-400 mt-0.5">Kelola data toko & rekening Anda</p>
@@ -236,7 +236,7 @@ export default function VendorProfilPage() {
         </div>
       </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-4 space-y-4">
+      <div className="w-full px-4 py-5 md:px-6 space-y-4">
 
         {/* ── Pending Status Banner ── */}
         <AnimatePresence>

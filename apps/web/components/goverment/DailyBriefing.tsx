@@ -41,16 +41,16 @@ export function DailyBriefing({ data }: { data: BriefingData }) {
           transition={{ duration: 0.3, ease: "easeOut" }}
           className="w-full"
         >
-          <div className="flex items-center gap-4 px-5 py-4 bg-role-surface border border-border rounded-[var(--radius-xl)] shadow-xs">
-            <div className="flex-shrink-0 w-10 h-10 rounded-[var(--radius-xl)] bg-role-primary flex items-center justify-center text-white shadow-card">
-              <Sun className="w-5 h-5" />
+          <div className="flex items-center gap-3 px-4 py-2.5 bg-role-surface border border-border rounded-xl shadow-xs">
+            <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-role-primary flex items-center justify-center text-white shadow-card">
+              <Sun className="w-4 h-4" />
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-black text-slate-800 uppercase tracking-wider mb-0.5">
+              <p className="text-[10px] font-black text-slate-800 uppercase tracking-wider mb-0.5">
                 Briefing Pagi
               </p>
-              <p className="text-sm font-bold text-slate-900 leading-relaxed">
+              <p className="text-xs font-bold text-slate-900 leading-snug">
                 Hari ini:{" "}
                 <span className="font-semibold tabular-nums">
                   {data.porsiHariIni.toLocaleString("id-ID")} porsi
@@ -59,34 +59,34 @@ export function DailyBriefing({ data }: { data: BriefingData }) {
                 {data.sengketaAktif > 0 ? (
                   <span className="inline-flex items-center gap-1 font-semibold text-status-danger">
                     <AlertCircle className="w-3 h-3" />
-                    {data.sengketaAktif} sengketa menunggu keputusan BGN
+                    {data.sengketaAktif} sengketa
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 font-semibold text-status-success">
                     <BadgeCheck className="w-3 h-3" />
-                    Tidak ada sengketa aktif
+                    Tidak ada sengketa
                   </span>
                 )}{" "}
                 —{" "}
                 <span className="font-semibold text-status-warning">
-                  {data.vendorMenunggu} vendor baru menunggu verifikasi SBT
+                  {data.vendorMenunggu} vendor baru
                 </span>
               </p>
             </div>
 
             <Button
               onClick={() => router.push(data.urgentHref)}
-              className="flex-shrink-0 h-9 px-4 gap-2 text-xs font-semibold uppercase tracking-wider"
+              className="flex-shrink-0 h-7.5 px-3 gap-1.5 text-[11px] font-semibold uppercase tracking-wider"
             >
-              Mulai Review
-              <ArrowRight className="w-3.5 h-3.5" />
+              Review
+              <ArrowRight className="w-3 h-3" />
             </Button>
 
             <button
               onClick={handleDismiss}
-              className="flex-shrink-0 w-7 h-7 rounded-[var(--radius-sm)] flex items-center justify-center text-muted hover:text-foreground hover:bg-muted-bg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              className="flex-shrink-0 w-6 h-6 rounded flex items-center justify-center text-muted hover:text-foreground hover:bg-muted-bg transition-colors"
             >
-              <X className="w-3.5 h-3.5" />
+              <X className="w-3 h-3" />
             </button>
           </div>
         </motion.div>

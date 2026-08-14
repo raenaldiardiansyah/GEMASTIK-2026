@@ -37,15 +37,15 @@ export const OnTimeRateChart = memo(function OnTimeRateChart() {
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-xl border bg-surface p-5 shadow-[var(--shadow-card)]",
+        "relative overflow-hidden rounded-xl border bg-surface p-3.5 sm:p-4 shadow-[var(--shadow-card)]",
         isBelowTarget ? "border-status-warning/30" : "border-border"
       )}
     >
       {/* Header */}
-      <div className="flex justify-between items-start mb-2">
+      <div className="flex justify-between items-start mb-1.5">
         <div>
-          <div className="flex items-center gap-2 mb-1">
-            <p className="text-xs font-bold uppercase tracking-wide text-slate-800">
+          <div className="flex items-center gap-1.5 mb-0.5">
+            <p className="text-[11px] font-bold uppercase tracking-wide text-slate-800">
               On-Time Rate
             </p>
             {isBelowTarget && (
@@ -55,28 +55,28 @@ export const OnTimeRateChart = memo(function OnTimeRateChart() {
                 aria-label="Lihat keterlambatan aktif di halaman verifikasi"
                 className="flex items-center justify-center p-1 rounded-md border border-status-warning/30 bg-status-warning-bg text-status-warning hover:bg-status-warning-bg/70 transition-colors shadow-xs"
               >
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3 h-3" />
               </button>
             )}
           </div>
-          <p className={cn("text-2xl font-bold tracking-tight tabular-nums", isBelowTarget ? "text-status-warning" : "text-status-success")}>
+          <p className={cn("text-xl font-black tracking-tight tabular-nums", isBelowTarget ? "text-status-warning" : "text-status-success")}>
             {current}%
           </p>
         </div>
         {/* Delta vs prev — anchoring */}
-        <div className="flex items-center gap-2 text-sm">
+        <div className="flex items-center gap-1.5 text-xs">
           {isDown
-            ? <TrendingDown className="w-4 h-4 text-status-danger" aria-hidden />
-            : <TrendingUp className="w-4 h-4 text-status-success" aria-hidden />}
+            ? <TrendingDown className="w-3.5 h-3.5 text-status-danger" aria-hidden />
+            : <TrendingUp className="w-3.5 h-3.5 text-status-success" aria-hidden />}
           <span className={cn("font-bold tabular-nums", isDown ? "text-status-danger" : "text-status-success")}>
             {isDown ? "" : "+"}{delta}%
           </span>
-          <span className="text-slate-600 font-medium">vs periode lalu ({prev}%)</span>
+          <span className="text-slate-500 font-medium">vs lalu ({prev}%)</span>
         </div>
       </div>
 
-      <ResponsiveContainer width="100%" height={140}>
-        <AreaChart data={series} margin={{ left: 8, right: 16, top: 10, bottom: 4 }}>
+      <ResponsiveContainer width="100%" height={95}>
+        <AreaChart data={series} margin={{ left: 4, right: 8, top: 6, bottom: 2 }}>
           <defs>
             <linearGradient id="onTimeGrad" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor={isBelowTarget ? "hsl(var(--status-warning))" : "hsl(var(--status-success))"} stopOpacity={0.15} />

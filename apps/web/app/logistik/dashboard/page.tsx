@@ -97,152 +97,165 @@ export default function LogistikDashboardPage() {
 
   return (
     <DashboardShell
-      badge={<Badge variant="outline">Logistik</Badge>}
+      badge={<Badge variant="outline" className="border-emerald-300 bg-emerald-100 text-emerald-950 font-extrabold px-3 py-1 text-xs shadow-2xs">Portal Logistik · Distribusi MBG</Badge>}
       title="Dashboard Logistik: Vendor → SPPG → Sekolah"
       description={
         <>
-          Ringkas untuk operasi harian. Scanner QR tetap tersedia di panel peta logistik (komponen
-          existing).
+          Pemantauan rantai pasok harian, status serah-terima manifest, validasi geofencing, dan modul pemindai QR terintegrasi.
         </>
       }
       actions={
-        <>
-          <Button asChild variant="outline" className="rounded-full">
-            <Link href="/sppg/bidding">
-              Lihat Tender SPPG
-              <ArrowRight data-icon="inline-end" />
-            </Link>
-          </Button>
-          <Button asChild className="rounded-full">
+        <div className="flex flex-wrap items-center gap-2">
+          <Button asChild className="rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-md shadow-emerald-600/25 px-4">
             <Link href="/logistik/pantau">
               Pantau Detail Rute
-              <Navigation data-icon="inline-end" />
+              <Navigation className="w-4 h-4 ml-1.5" />
             </Link>
           </Button>
-        </>
+        </div>
       }
     >
 
-      <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <KpiCard title="Manifest selesai" value={summary.delivered} icon={<PackageCheck className="size-4" />} />
-        <KpiCard title="Dalam pengiriman" value={summary.inTransit} icon={<Truck className="size-4" />} />
-        <KpiCard title="Menunggu pickup" value={summary.pending} icon={<Factory className="size-4" />} />
-        <KpiCard title="Rute dipantau" value={summary.routes} icon={<Route className="size-4" />} />
+      <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Statistik Logistik">
+        {[
+          { label: "Manifest Selesai", value: summary.delivered, icon: PackageCheck },
+          { label: "Dalam Pengiriman", value: summary.inTransit, icon: Truck },
+          { label: "Menunggu Pickup", value: summary.pending, icon: Factory },
+          { label: "Rute Dipantau", value: summary.routes, icon: Route },
+        ].map((m) => (
+          <div
+            key={m.label}
+            className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all hover:border-emerald-500 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-xs font-bold text-slate-600">{m.label}</p>
+              <div className="rounded-xl bg-emerald-100 p-2.5 text-emerald-800 border border-emerald-300 shadow-2xs">
+                <m.icon className="size-4" aria-hidden />
+              </div>
+            </div>
+            <p className="mt-3 text-2xl font-black tracking-tight text-slate-900 tabular-nums">
+              {m.value}
+            </p>
+          </div>
+        ))}
       </section>
 
       <section className="mt-6 grid gap-6 lg:grid-cols-3">
-          <Card className="gap-4 py-5 shadow-none lg:col-span-2 rounded-3xl">
-            <CardHeader>
-              <CardTitle>Alur Distribusi per Manifest</CardTitle>
-              <CardDescription>
-                Setiap baris menegaskan posisi operasional saat ini berdasarkan urutan{" "}
-                {"Vendor → SPPG → Sekolah"}.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-hidden rounded-lg border">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Manifest</TableHead>
-                      <TableHead>Vendor</TableHead>
-                      <TableHead>SPPG</TableHead>
-                      <TableHead>Sekolah</TableHead>
-                      <TableHead>Tahap Aktif</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {rows.map((row) => (
-                      <TableRow key={row.id}>
-                        <TableCell className="font-medium">
-                          MBG-{row.id.toString().padStart(5, "0")}
-                        </TableCell>
-                        <TableCell>{row.vendor}</TableCell>
-                        <TableCell>{row.sppg}</TableCell>
-                        <TableCell>{row.school}</TableCell>
-                        <TableCell>
-                          <div className="space-y-2">
-                            <div className="flex flex-wrap items-center gap-2 text-xs">
-                              <Badge variant={row.stage === "vendor" ? "default" : "outline"}>
-                                Vendor
-                              </Badge>
-                              <ArrowRight className="size-3 text-muted-foreground" />
-                              <Badge variant={row.stage === "sppg" ? "default" : "outline"}>
-                                SPPG
-                              </Badge>
-                              <ArrowRight className="size-3 text-muted-foreground" />
-                              <Badge variant={row.stage === "school" ? "default" : "outline"}>
-                                Sekolah
-                              </Badge>
-                            </div>
-                            <p className="text-xs text-muted-foreground">{stageLabel(row.status)}</p>
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden lg:col-span-2 flex flex-col">
+          <div className="p-5 border-b border-slate-200 bg-slate-100/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <p className="text-base font-black text-slate-900">Alur Distribusi per Manifest</p>
+              <p className="text-xs font-medium text-slate-600 mt-0.5">
+                Posisi operasional saat ini berdasarkan urutan Vendor → SPPG → Sekolah.
+              </p>
+            </div>
+          </div>
+          <div className="p-5 flex-1">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-2xs">
+              <Table>
+                <TableHeader className="bg-slate-100/90 border-b border-slate-200">
+                  <TableRow>
+                    <TableHead className="text-xs font-black text-slate-900">Manifest</TableHead>
+                    <TableHead className="text-xs font-black text-slate-900">Vendor</TableHead>
+                    <TableHead className="text-xs font-black text-slate-900">SPPG</TableHead>
+                    <TableHead className="text-xs font-black text-slate-900">Sekolah</TableHead>
+                    <TableHead className="text-xs font-black text-slate-900">Tahap Aktif</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.map((row) => (
+                    <TableRow key={row.id} className="hover:bg-emerald-50/40 border-b border-slate-100">
+                      <TableCell className="font-mono text-xs font-black text-emerald-950">
+                        MBG-{row.id.toString().padStart(5, "0")}
+                      </TableCell>
+                      <TableCell className="font-bold text-slate-900 text-xs">{row.vendor}</TableCell>
+                      <TableCell className="font-semibold text-slate-700 text-xs">{row.sppg}</TableCell>
+                      <TableCell className="font-semibold text-slate-700 text-xs">{row.school}</TableCell>
+                      <TableCell>
+                        <div className="space-y-1.5 py-1">
+                          <div className="flex flex-wrap items-center gap-1.5 text-xs">
+                            <Badge className={`rounded-md text-[10px] font-black ${row.stage === "vendor" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 border border-slate-300"}`}>
+                              Vendor
+                            </Badge>
+                            <ArrowRight className="size-3 text-slate-400" />
+                            <Badge className={`rounded-md text-[10px] font-black ${row.stage === "sppg" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 border border-slate-300"}`}>
+                              SPPG
+                            </Badge>
+                            <ArrowRight className="size-3 text-slate-400" />
+                            <Badge className={`rounded-md text-[10px] font-black ${row.stage === "school" ? "bg-emerald-600 text-white" : "bg-slate-100 text-slate-700 border border-slate-300"}`}>
+                              Sekolah
+                            </Badge>
                           </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
-          </Card>
+                          <p className="text-[11px] font-bold text-emerald-800">{stageLabel(row.status)}</p>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
 
-          <Card className="gap-4 py-5 shadow-none rounded-3xl">
-            <CardHeader>
-              <CardTitle>Scanner & Validasi</CardTitle>
-              <CardDescription>
-                Scanner QR tidak diganti. Tombol scan tetap tersedia di panel map logistik.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="rounded-xl border bg-muted/20 p-4 text-sm">
-                <p className="font-medium">Standar verifikasi</p>
-                <ol className="mt-2 list-decimal space-y-1 pl-5 text-muted-foreground">
-                  <li>Vendor menyerahkan manifest QR.</li>
-                  <li>Logistik scan QR di titik pickup SPPG.</li>
-                  <li>Konfirmasi tiba di sekolah memakai manifest yang sama.</li>
-                </ol>
-              </div>
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden flex flex-col justify-between">
+          <div className="p-5 border-b border-slate-200 bg-slate-100/60">
+            <p className="text-base font-black text-slate-900">Scanner & Validasi QR</p>
+            <p className="text-xs font-medium text-slate-600 mt-0.5">
+              Standar serah-terima fisik digital tanpa manipulasi lokasi.
+            </p>
+          </div>
+          <div className="p-5 space-y-4 flex-1">
+            <div className="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-4 text-xs space-y-2">
+              <p className="font-black text-emerald-950 uppercase tracking-wide">SOP Verifikasi QR Geofencing</p>
+              <ol className="list-decimal space-y-1 pl-4 text-emerald-900 font-medium leading-relaxed">
+                <li>Vendor menyerahkan manifest QR saat bahan siap dimuat.</li>
+                <li>Driver logistik scan QR di titik muat SPPG.</li>
+                <li>Konfirmasi tiba di sekolah melalui geofence radius 50m.</li>
+              </ol>
+            </div>
 
-              <Separator />
+            <div className="space-y-2.5 text-xs text-slate-600 pt-2 border-t border-slate-100">
+              <p className="flex items-center gap-2 font-semibold">
+                <ScanLine className="size-4 text-emerald-600 shrink-0" />
+                Gunakan modul pemindaian di halaman <strong>Pantau Rute</strong>.
+              </p>
+              <p className="flex items-center gap-2 font-semibold">
+                <School className="size-4 text-emerald-600 shrink-0" />
+                Pastikan nama sekolah penerima cocok dengan Surat Jalan.
+              </p>
+            </div>
+          </div>
+          <div className="p-5 border-t border-slate-100 bg-slate-50/50">
+            <Button asChild className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-black text-xs py-3 shadow-md shadow-emerald-600/25">
+              <Link href="/logistik/pantau">
+                Buka Monitoring Map &amp; Scanner
+                <ArrowRight className="w-4 h-4 ml-1.5" />
+              </Link>
+            </Button>
+          </div>
+        </div>
+      </section>
 
-              <div className="space-y-2 text-sm text-muted-foreground">
-                <p className="flex items-center gap-2">
-                  <ScanLine className="size-4" />
-                  Gunakan tombol <strong>Scan QR</strong> di modul peta untuk mulai pemindaian.
-                </p>
-                <p className="flex items-center gap-2">
-                  <School className="size-4" />
-                  Pastikan tujuan sekolah sesuai payload manifest vendor.
-                </p>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button asChild className="w-full rounded-full">
-                <Link href="/logistik/pantau">
-                  Buka Monitoring Map
-                  <ArrowRight data-icon="inline-end" />
-                </Link>
-              </Button>
-            </CardFooter>
-          </Card>
-        </section>
-
-        <section id="map-logistik" className="mt-6">
-          <Card className="gap-4 py-5 shadow-none">
-            <CardHeader>
-              <CardTitle>Mapping Logistik (Komponen Existing)</CardTitle>
-              <CardDescription>
-                Komponen `MapLibreLogistik` dipakai apa adanya untuk peta, tracking, driver mode, dan
-                scanning QR.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-hidden rounded-xl border">
-                <MapLibreLogistik />
-              </div>
-            </CardContent>
-          </Card>
-        </section>
+      <section id="map-logistik" className="mt-6">
+        <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+          <div className="p-5 border-b border-slate-200 bg-slate-100/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <p className="text-base font-black text-slate-900">Peta Armada Logistik &amp; Live Tracking</p>
+              <p className="text-xs font-medium text-slate-600 mt-0.5">
+                Visualisasi titik distribusi SPPG, kendaraan dalam perjalanan, serta rute tujuan sekolah.
+              </p>
+            </div>
+            <Badge className="bg-emerald-100 text-emerald-950 border border-emerald-300 font-extrabold text-xs w-fit">
+              ● Live GPS Connected
+            </Badge>
+          </div>
+          <div className="p-5">
+            <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-2xs">
+              <MapLibreLogistik />
+            </div>
+          </div>
+        </div>
+      </section>
     </DashboardShell>
   );
 }

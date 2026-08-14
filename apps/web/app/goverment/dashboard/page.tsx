@@ -47,7 +47,7 @@ function DashboardContent() {
 
   return (
     <div className="min-h-full bg-background text-foreground">
-      <div className="space-y-6 px-4 py-6 md:px-6 lg:px-8">
+      <div className="space-y-4 px-4 py-5 md:px-6">
         <DashboardHeader />
         <DailyBriefing
           data={{
@@ -60,33 +60,34 @@ function DashboardContent() {
         <AlertBanner alerts={ALERTS} />
         <KPIBar />
 
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
-          {/* Row 1: Utama */}
-          <div className="min-w-0 xl:col-span-8 h-full">
+        <div className="grid grid-cols-1 gap-4 md:gap-5 xl:grid-cols-12">
+          {/* Row 1: Tren Utama (8 cols) & Metrik Cepat (4 cols) */}
+          <div className="min-w-0 xl:col-span-8 flex flex-col">
             <ComposedTrendChart />
           </div>
-          <div className="min-w-0 xl:col-span-4 space-y-6">
+          <div className="min-w-0 xl:col-span-4 flex flex-col gap-4">
             <OnTimeRateChart />
             <StatusPerJenjangChart />
           </div>
 
-          {/* Row 2: Compliance Panel memakan porsi full agar tidak tabrakan/cramped */}
-          <div className="min-w-0 xl:col-span-12">
+          {/* Row 2: Kepatuhan Sistem (7 cols) & Feed Aktivitas (5 cols) Side-by-Side */}
+          <div className="min-w-0 xl:col-span-7 flex flex-col">
             <ComplianceRankingPanel />
           </div>
+          <div className="min-w-0 xl:col-span-5 flex flex-col">
+            <ActivityFeed items={activityItems} />
+          </div>
 
-          {/* Row 3: Tabel Status Sekolah (Full Width) */}
+          {/* Row 3: Tabel Status Sekolah Terkini */}
           <div className="min-w-0 xl:col-span-12">
             <SchoolStatusPanel />
           </div>
 
-          {/* Row 4: Log Aktivitas (Full Width, Atas Bawah) */}
+          {/* Row 4: Pola Distribusi Heatmap (Paling Bawah) */}
           <div className="min-w-0 xl:col-span-12">
-            <ActivityFeed items={activityItems} />
+            <DeliveryHeatmap />
           </div>
         </div>
-
-        <DeliveryHeatmap />
       </div>
     </div>
   )

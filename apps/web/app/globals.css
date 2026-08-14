@@ -305,22 +305,36 @@
 
 .role-sppg,
 [data-role="sppg"] {
-  --role-primary: var(--sppg-primary);
-  --role-primary-hover: var(--sppg-primary-hover);
-  --role-accent: var(--sppg-accent);
-  --role-surface: var(--sppg-surface);
-  --role-badge: var(--sppg-primary);
+  --role-primary: 191 95% 32%;
+  --role-primary-hover: 191 95% 26%;
+  --role-accent: 189 95% 85%;
+  --role-surface: 191 100% 95%;
+  --role-badge: 191 95% 32%;
 
-  --primary: var(--sppg-primary);
+  --primary: 191 95% 32%;
   --primary-foreground: 0 0% 100%;
-  --ring: var(--sppg-primary);
+  --ring: 191 95% 32%;
 
-  --sidebar: var(--surface);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-border: var(--border);
-  --sidebar-accent: var(--surface-raised);
-  --sidebar-accent-foreground: var(--foreground);
-  --sidebar-ring: var(--ring);
+  --background: 215 28% 95%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 214 32% 85%;
+  --surface: 0 0% 100%;
+  --surface-raised: 210 40% 96%;
+  --border: 214 32% 85%;
+  --input: 214 32% 85%;
+  --muted: 210 35% 91%;
+  --muted-foreground: 215 25% 35%;
+  --accent: 189 95% 85%;
+  --accent-foreground: 191 95% 20%;
+
+  --sidebar: 222 20% 11%;
+  --sidebar-foreground: 210 20% 95%;
+  --sidebar-border: 222 20% 18%;
+  --sidebar-accent: 222 20% 14%;
+  --sidebar-accent-foreground: 210 20% 95%;
+  --sidebar-ring: var(--sppg-primary);
 }
 
 .role-sekolah,
@@ -345,22 +359,36 @@
 
 .role-logistik,
 [data-role="logistics"] {
-  --role-primary: var(--logistics-primary);
-  --role-primary-hover: var(--logistics-primary-hover);
-  --role-accent: var(--logistics-accent);
-  --role-surface: var(--logistics-surface);
-  --role-badge: var(--logistics-badge);
+  --role-primary: 160 84% 31%;
+  --role-primary-hover: 160 84% 24%;
+  --role-accent: 156 70% 88%;
+  --role-surface: 160 60% 95%;
+  --role-badge: 160 84% 31%;
 
-  --primary: var(--logistics-primary);
+  --primary: 160 84% 31%;
   --primary-foreground: 0 0% 100%;
-  --ring: var(--logistics-primary);
+  --ring: 160 84% 31%;
 
-  --sidebar: var(--surface);
-  --sidebar-foreground: var(--foreground);
-  --sidebar-border: var(--border);
-  --sidebar-accent: var(--surface-raised);
-  --sidebar-accent-foreground: var(--foreground);
-  --sidebar-ring: var(--ring);
+  --background: 215 28% 95%;
+  --foreground: 222 47% 11%;
+  --card: 0 0% 100%;
+  --card-foreground: 222 47% 11%;
+  --card-border: 214 32% 85%;
+  --surface: 0 0% 100%;
+  --surface-raised: 210 40% 96%;
+  --border: 214 32% 85%;
+  --input: 214 32% 85%;
+  --muted: 210 35% 91%;
+  --muted-foreground: 215 25% 35%;
+  --accent: 156 70% 88%;
+  --accent-foreground: 160 90% 20%;
+
+  --sidebar: 222 20% 11%;
+  --sidebar-foreground: 210 20% 95%;
+  --sidebar-border: 222 20% 18%;
+  --sidebar-accent: 222 20% 14%;
+  --sidebar-accent-foreground: 210 20% 95%;
+  --sidebar-ring: var(--logistics-primary);
 }
 
 [data-role="student"] {

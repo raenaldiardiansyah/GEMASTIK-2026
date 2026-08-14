@@ -124,65 +124,67 @@ export default function SppgDashboardClient() {
   return (
     <>
       <DashboardShell
-        badge={<Badge variant="outline">SPPG</Badge>}
+        badge={<Badge variant="outline" className="border-cyan-300 bg-cyan-100 text-cyan-950 font-extrabold px-3 py-1 text-xs shadow-2xs">SPPG · Dapur Sentral</Badge>}
         title="E‑Katalog & PO Builder"
-        description="Bangun PO dari katalog bahan. UI demo: fokus pada orientasi, status, dan aksi."
+        description="Bangun Purchase Order (PO) dari katalog bahan pangan bersertifikasi. Alur 60-30-10 terintegrasi."
         actions={
-          <>
-            <Button variant="outline" asChild className="rounded-full">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="outline" asChild className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 hover:border-slate-400 font-extrabold text-xs shadow-xs">
               <Link href="/sppg/bidding">
                 Bidding Vendor
-                <Gavel data-icon="inline-end" />
+                <Gavel className="w-4 h-4 ml-1.5 text-cyan-700" />
               </Link>
             </Button>
             <Button
               variant="outline"
-              className="rounded-full"
+              className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 hover:border-slate-400 font-extrabold text-xs shadow-xs"
               disabled={paymentPending}
               onClick={() => {
                 setPaymentPending(true);
-                toast.success("Dana dikunci (demo).", {
-                  description: "Menunggu verifikasi OCR bukti transfer (simulasi).",
+                toast.success("Dana dikunci (simulasi).", {
+                  description: "Menunggu verifikasi OCR bukti transfer SPPG.",
                 });
               }}
             >
-              <Lock data-icon="inline-start" />
+              <Lock className="w-4 h-4 mr-1.5 text-cyan-700" />
               Upload Bukti Transfer
             </Button>
-            <Button variant="outline" asChild className="rounded-full">
+            <Button variant="outline" asChild className="rounded-xl border-slate-300 text-slate-800 hover:bg-slate-100 font-extrabold text-xs shadow-xs">
               <Link href="/logistik/dashboard">
                 Buka Logistik
-                <ArrowRight data-icon="inline-end" />
+                <ArrowRight className="w-4 h-4 ml-1.5 text-slate-600" />
               </Link>
             </Button>
             <Button
-              className="rounded-full"
+              className="rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold text-xs shadow-md shadow-cyan-600/25 px-4"
               disabled={cart.length === 0}
               onClick={() => setQrOpen(true)}
             >
-              <QrCode data-icon="inline-start" />
-              QR PO
+              <QrCode className="w-4 h-4 mr-1.5" />
+              QR PO ({cart.length})
             </Button>
-          </>
+          </div>
         }
       >
-        <section className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5" aria-label="Ringkasan SPPG">
+        <section className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-5" aria-label="Ringkasan SPPG">
           {[
-            { label: "Sisa anggaran (demo)", value: currency(35_000_000), icon: Wallet },
-            { label: "Guard HET (demo)", value: "Aktif", icon: BadgePercent },
-            { label: "Draft PO", value: String(cart.length), icon: ClipboardList },
-            { label: "Item katalog", value: String(tenderMaterials.length), icon: PackagePlus },
-            { label: "Status Pembayaran (simulasi)", value: paymentPending ? "Menunggu OCR" : "Draft", icon: Lock },
+            { label: "Sisa Anggaran (Simulasi)", value: currency(35_000_000), icon: Wallet },
+            { label: "Guard Batas HET", value: "Aktif Terkunci", icon: BadgePercent },
+            { label: "Draft PO Aktif", value: String(cart.length), icon: ClipboardList },
+            { label: "Item Bahan Katalog", value: String(tenderMaterials.length), icon: PackagePlus },
+            { label: "Verifikasi Pembayaran", value: paymentPending ? "Menunggu OCR" : "Draft Siap", icon: Lock },
           ].map((m) => (
             <div
               key={m.label}
-              className="rounded-3xl border border-border/70 bg-background/70 p-5 shadow-none backdrop-blur supports-[backdrop-filter]:bg-background/60"
+              className="rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all hover:border-cyan-500 hover:shadow-md"
             >
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-medium text-muted-foreground">{m.label}</p>
-                <m.icon className="size-4 text-muted-foreground" aria-hidden />
+                <p className="text-xs font-bold text-slate-600">{m.label}</p>
+                <div className="rounded-xl bg-cyan-100 p-2.5 text-cyan-800 border border-cyan-300 shadow-2xs">
+                  <m.icon className="size-4" aria-hidden />
+                </div>
               </div>
-              <p className="mt-2 text-2xl font-semibold tracking-tight text-foreground tabular-nums">
+              <p className="mt-3 text-2xl font-black tracking-tight text-slate-900 tabular-nums">
                 {m.value}
               </p>
             </div>
@@ -190,58 +192,56 @@ export default function SppgDashboardClient() {
         </section>
 
         <section className="mt-6 grid gap-6 lg:grid-cols-[1.6fr_1fr]">
-          <div className="rounded-3xl border border-border/70 bg-background/70 shadow-none">
-            <div className="flex flex-col gap-3 px-5 pt-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden">
+            <div className="flex flex-col gap-3 p-5 border-b border-slate-200 bg-slate-100/60 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-sm font-semibold tracking-tight">Katalog bahan</p>
-                <p className="mt-1 text-sm text-muted-foreground">
-                  Cari item, lalu masukkan ke keranjang PO.
+                <p className="text-base font-black text-slate-900">Katalog Bahan Pangan Terstandarisasi</p>
+                <p className="text-xs font-medium text-slate-600 mt-0.5">
+                  Pilih bahan pangan bergizi terverifikasi untuk menyusun Purchase Order.
                 </p>
               </div>
               <div className="w-full sm:max-w-xs">
-                <Label htmlFor="search" className="text-xs text-muted-foreground">
-                  Cari
-                </Label>
                 <Input
                   id="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Misal: beras, protein, ..."
-                  className="mt-2 h-10 rounded-2xl"
+                  placeholder="Cari beras, ayam, susu..."
+                  className="h-10 rounded-xl border-slate-300 bg-white text-xs font-semibold text-slate-900 shadow-2xs focus:border-cyan-600"
                 />
               </div>
             </div>
 
-            <div className="p-5 pt-4">
-              <div className="overflow-hidden rounded-2xl border border-border/70">
+            <div className="p-5">
+              <div className="overflow-hidden rounded-2xl border border-slate-200 shadow-2xs">
                 <Table>
-                  <TableHeader>
+                  <TableHeader className="bg-slate-100/90 border-b border-slate-200">
                     <TableRow>
-                      <TableHead>ID</TableHead>
-                      <TableHead>Nama</TableHead>
-                      <TableHead>Kategori</TableHead>
-                      <TableHead className="text-right">Harga</TableHead>
-                      <TableHead className="text-right">Aksi</TableHead>
+                      <TableHead className="text-xs font-black text-slate-900">ID</TableHead>
+                      <TableHead className="text-xs font-black text-slate-900">Nama Bahan</TableHead>
+                      <TableHead className="text-xs font-black text-slate-900">Kategori</TableHead>
+                      <TableHead className="text-right text-xs font-black text-slate-900">Harga Standar</TableHead>
+                      <TableHead className="text-right text-xs font-black text-slate-900">Aksi</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {items.map((m) => (
-                      <TableRow key={m.id}>
-                        <TableCell className="font-medium tabular-nums">{m.id}</TableCell>
-                        <TableCell className="font-semibold">{m.name}</TableCell>
+                      <TableRow key={m.id} className="hover:bg-cyan-50/40 border-b border-slate-100">
+                        <TableCell className="font-mono text-xs font-bold text-slate-500">{m.id}</TableCell>
+                        <TableCell className="font-extrabold text-slate-900 text-xs">{m.name}</TableCell>
                         <TableCell>
-                          <Badge variant="secondary" className="rounded-full">
+                          <Badge variant="secondary" className="rounded-lg bg-cyan-100 text-cyan-900 border border-cyan-300 font-extrabold text-[10px] px-2.5 py-0.5">
                             {m.type}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right tabular-nums">{currency(m.price)}</TableCell>
+                        <TableCell className="text-right font-black text-xs text-slate-900 tabular-nums">{currency(m.price)}</TableCell>
                         <TableCell className="text-right">
                           <Button
                             variant="outline"
-                            className="h-9 rounded-full"
+                            size="sm"
+                            className="h-8 rounded-lg border-cyan-300 text-cyan-800 bg-cyan-50/60 hover:bg-cyan-600 hover:text-white font-extrabold text-xs transition-all shadow-2xs"
                             onClick={() => addToCart(m.id)}
                           >
-                            Tambah
+                            + Keranjang
                           </Button>
                         </TableCell>
                       </TableRow>
@@ -252,45 +252,47 @@ export default function SppgDashboardClient() {
             </div>
           </div>
 
-          <aside className="rounded-3xl border border-border/70 bg-background/70 shadow-none">
-            <div className="px-5 pt-5">
-              <p className="text-sm font-semibold tracking-tight">Keranjang PO</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Quantity dan total dihitung otomatis.
+          <aside className="rounded-3xl border border-slate-200 bg-white shadow-xs overflow-hidden flex flex-col">
+            <div className="p-5 border-b border-slate-200 bg-slate-100/60">
+              <p className="text-base font-black text-slate-900">Keranjang Purchase Order</p>
+              <p className="text-xs font-medium text-slate-600 mt-0.5">
+                Kalkulasi volume logistik dan nominal anggaran otomatis.
               </p>
             </div>
 
-            <div className="px-5 pb-5 pt-4 space-y-4">
+            <div className="p-5 space-y-4 flex-1 flex flex-col">
               {cart.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-border/70 bg-muted/20 p-4 text-sm text-muted-foreground">
-                  Belum ada item. Tambahkan dari katalog.
+                <div className="flex-1 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+                  <ClipboardList className="w-9 h-9 text-slate-400 mb-2" />
+                  <p className="text-xs font-black text-slate-800">Keranjang PO Kosong</p>
+                  <p className="text-[11px] font-medium text-slate-500 mt-1">Pilih komoditas bahan dari katalog di sebelah kiri.</p>
                 </div>
               ) : (
-                <div className="space-y-3">
+                <div className="space-y-3 max-h-[340px] overflow-y-auto pr-1">
                   {cart.map((c) => (
                     <div
                       key={c.id}
-                      className="rounded-2xl border border-border/70 bg-background p-4"
+                      className="rounded-2xl border border-slate-200 bg-slate-50/80 p-4 shadow-2xs"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-semibold">{c.name}</p>
-                          <p className="mt-1 text-xs text-muted-foreground">{c.type}</p>
+                          <p className="truncate text-xs font-black text-slate-900">{c.name}</p>
+                          <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">{c.type}</p>
                         </div>
-                        <Badge variant="secondary" className="shrink-0 tabular-nums">
+                        <Badge variant="secondary" className="shrink-0 text-xs font-black text-cyan-950 bg-white border border-slate-300 shadow-2xs tabular-nums px-2.5 py-0.5">
                           {currency(c.price)}
                         </Badge>
                       </div>
-                      <div className="mt-3 flex items-center justify-between gap-3">
-                        <Label htmlFor={`qty-${c.id}`} className="text-xs text-muted-foreground">
-                          Qty
+                      <div className="mt-3 flex items-center justify-between gap-3 pt-2.5 border-t border-slate-200">
+                        <Label htmlFor={`qty-${c.id}`} className="text-xs font-bold text-slate-700">
+                          Kuantitas (kg / unit)
                         </Label>
                         <Input
                           id={`qty-${c.id}`}
                           type="number"
                           value={c.quantity}
                           onChange={(e) => updateQty(c.id, Number(e.target.value))}
-                          className="h-9 w-24 rounded-2xl text-right tabular-nums"
+                          className="h-8 w-20 rounded-lg text-right font-black text-xs bg-white border-slate-300 tabular-nums shadow-2xs"
                           min={0}
                         />
                       </div>
@@ -299,25 +301,21 @@ export default function SppgDashboardClient() {
                 </div>
               )}
 
-              <Separator />
+              <Separator className="bg-slate-200" />
 
-              <div className="flex items-start justify-between gap-3">
-                <p className="text-sm font-semibold">Total</p>
-                <p className="text-sm font-semibold tabular-nums">{currency(total)}</p>
+              <div className="flex items-center justify-between gap-3 bg-slate-100/90 p-4 rounded-xl border border-slate-200 shadow-2xs">
+                <span className="text-xs font-bold text-slate-700">Total Anggaran PO:</span>
+                <span className="text-lg font-black text-cyan-950 tabular-nums">{currency(total)}</span>
               </div>
 
               <Button
-                className="w-full rounded-full"
+                className="w-full rounded-xl bg-cyan-600 hover:bg-cyan-700 text-white font-black text-xs py-3 shadow-md shadow-cyan-600/25"
                 disabled={cart.length === 0}
                 onClick={() => setQrOpen(true)}
               >
-                <QrCode data-icon="inline-start" />
-                Generate QR PO (Demo)
+                <QrCode className="w-4 h-4 mr-1.5" />
+                Generate QR Purchase Order
               </Button>
-
-              <p className="text-xs text-muted-foreground">
-                QR menggunakan generator demo (QuickChart) untuk kebutuhan presentasi UI.
-              </p>
             </div>
           </aside>
         </section>

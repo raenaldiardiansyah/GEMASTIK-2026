@@ -202,7 +202,7 @@ export default function VerifikasiSupplierPage() {
               </div>
             </div>
 
-            {/* Smart Contract Whitelist Action */}
+            {/* Blockchain Ledger Whitelist Action */}
             <div className="pt-4 border-t border-border mt-4">
               <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded mb-3 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -220,7 +220,7 @@ export default function VerifikasiSupplierPage() {
                 className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium text-xs h-10 flex items-center justify-center gap-2"
               >
                 <Award className="w-4 h-4" />
-                {walletWhitelisted ? "Wallet Terdaftar di Smart Contract B.O.G.A" : "Otorisasi & Daftarkan Wallet ke Whitelist"}
+                {walletWhitelisted ? "Tercatat Resmi di Immutable Ledger B.O.G.A" : "Otorisasi & Daftarkan Wallet ke Whitelist"}
               </Button>
             </div>
           </div>

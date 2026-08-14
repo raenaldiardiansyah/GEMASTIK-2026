@@ -64,27 +64,27 @@ export function AlertBanner({ alerts }: AlertBannerProps) {
   }
 
   return (
-    <div className="flex flex-col gap-3" role="alert" aria-live="assertive">
+    <div className="flex flex-col gap-2" role="alert" aria-live="assertive">
       <AnimatePresence>
         {visible.map((alert) => {
           const cfg = severityClasses(alert.severity)
           return (
             <motion.div
               key={alert.id}
-              initial={{ opacity: 0, y: -8, height: 0 }}
+              initial={{ opacity: 0, y: -6, height: 0 }}
               animate={{ opacity: 1, y: 0, height: "auto" }}
-              exit={{ opacity: 0, y: -8, height: 0 }}
-              transition={{ duration: 0.18 }}
-              className={cn("overflow-hidden rounded-xl border", cfg.wrap)}
+              exit={{ opacity: 0, y: -6, height: 0 }}
+              transition={{ duration: 0.15 }}
+              className={cn("overflow-hidden rounded-lg border", cfg.wrap)}
             >
-              <div className="flex items-start gap-3 px-4 py-3">
-                <div className={cn("mt-1 h-2 w-2 shrink-0 rounded-full", cfg.strip)} aria-hidden />
+              <div className="flex items-center gap-2.5 px-3.5 py-1.5">
+                <div className={cn("h-2 w-2 shrink-0 rounded-full", cfg.strip)} aria-hidden />
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-bold text-slate-900 leading-relaxed">
+                  <p className="text-xs font-semibold text-slate-900 leading-snug">
                     {alert.message}
                     {alert.anchor ? (
-                      <span className="ml-1 text-slate-700 font-semibold">— {alert.anchor}</span>
+                      <span className="ml-1 text-slate-600 font-medium">— {alert.anchor}</span>
                     ) : null}
                   </p>
                 </div>
@@ -93,22 +93,22 @@ export function AlertBanner({ alerts }: AlertBannerProps) {
                   <button
                     onClick={() => router.push(alert.actionHref!)}
                     className={cn(
-                      "inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium transition-colors",
+                      "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold transition-colors shrink-0",
                       cfg.cta
                     )}
                     aria-label={alert.actionLabel ?? "Lihat detail"}
                   >
                     <span>{alert.actionLabel ?? "Lihat detail"}</span>
-                    <ArrowRight className="size-4" aria-hidden />
+                    <ArrowRight className="size-3" aria-hidden />
                   </button>
                 ) : null}
 
                 <button
                   onClick={() => setDismissed((prev) => [...prev, alert.id])}
-                  className="inline-flex size-9 items-center justify-center rounded-full text-current/60 hover:bg-surface-raised hover:text-current transition-colors"
+                  className="inline-flex size-6 items-center justify-center rounded-full text-current/60 hover:bg-surface-raised hover:text-current transition-colors shrink-0"
                   aria-label="Tutup alert"
                 >
-                  <X className="size-4" aria-hidden />
+                  <X className="size-3.5" aria-hidden />
                 </button>
               </div>
             </motion.div>

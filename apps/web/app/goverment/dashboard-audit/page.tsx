@@ -116,7 +116,7 @@ export default function DashboardAuditPage() {
 
             <div className="divide-y divide-border border border-border rounded-lg bg-card/10 overflow-hidden">
               <div className="p-3 flex items-center justify-between text-xs font-mono">
-                <span className="text-emerald-500 font-semibold">[BLOCK #98124] Escrow Payment Reconciled</span>
+                <span className="text-emerald-500 font-semibold">[BLOCK #98124] Bukti Transfer Valid via OCR</span>
                 <span className="text-muted-foreground">14 Aug 2026, 06:22:10 WIB</span>
               </div>
               <div className="p-3 flex items-center justify-between text-xs font-mono">
@@ -151,13 +151,16 @@ export default function DashboardAuditPage() {
               <Badge className="bg-amber-500/20 text-amber-500 border-amber-500/30 text-[10px]">
                 Review Logistik
               </Badge>
+              <div className="flex gap-4">
+                <div className="mt-1"><AlertTriangle className="w-5 h-5 text-amber-500" /></div>
+                <div>
+                  <h4 className="font-semibold text-slate-800">Distribusi Telat 45 Menit (PO-192)</h4>
+                  <p className="text-sm text-slate-500 mt-1">
+                    Armada tertahan di titik km 12. Sistem menahan rekomendasi pencatatan ledger.
+                  </p>
+                </div>
+              </div>
             </div>
-            <p className="text-xs text-foreground font-semibold">
-              Keterlambatan armada pengiriman 460 porsi ke SDN 164 Karang Pawulang.
-            </p>
-            <p className="text-[11px] text-muted-foreground">
-              Armada tertahan di titik km 12. Sistem menahan sementara escrow tahap 2.
-            </p>
           </div>
 
           {/* Anomaly Case Item 2 */}
