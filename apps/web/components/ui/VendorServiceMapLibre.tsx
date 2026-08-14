@@ -32,27 +32,7 @@ export default function VendorServiceMapLibre({ type, onExpand }: { type: "minim
     return () => setMounted(false);
   }, []);
 
-  useEffect(() => {
-    if (!mounted || !mapContainer.current) return;
 
-    const isMinimap = type === "minimap";
-
-    map.current = new maplibregl.Map({
-      container: mapContainer.current,
-      style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
-      center: [vendor.lng, vendor.lat],
-      zoom: isMinimap ? 11 : 13,
-      interactive: !isMinimap
-    });
-
-    map.current.on('load', () => {
-      renderContent();
-    });
-
-    return () => {
-      map.current?.remove();
-    };
-  }, [mounted]);
 
   const renderContent = () => {
     if (!map.current) return;
@@ -153,6 +133,28 @@ export default function VendorServiceMapLibre({ type, onExpand }: { type: "minim
       }
     }
   };
+
+  useEffect(() => {
+    if (!mounted || !mapContainer.current) return;
+
+    const isMinimap = type === "minimap";
+
+    map.current = new maplibregl.Map({
+      container: mapContainer.current,
+      style: 'https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json',
+      center: [vendor.lng, vendor.lat],
+      zoom: isMinimap ? 11 : 13,
+      interactive: !isMinimap
+    });
+
+    map.current.on('load', () => {
+      renderContent();
+    });
+
+    return () => {
+      map.current?.remove();
+    };
+  }, [mounted, type, vendor.lat, vendor.lng]);
 
   if (!mounted) return <div className="w-full h-full bg-muted-bg animate-pulse rounded-[var(--radius-lg)]" />;
 

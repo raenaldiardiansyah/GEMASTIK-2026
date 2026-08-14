@@ -176,6 +176,7 @@ function RoleSelectionList({
 
 export default function LoginPage() {
   const [role, setRole] = useState<RoleType | null>(null);
+  const [authMode, setAuthMode] = useState<AuthModeType>("login");
 
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 selection:bg-slate-200 overflow-hidden">
@@ -222,7 +223,15 @@ export default function LoginPage() {
               className="w-full md:w-1/2 border-t md:border-t-0 md:border-l border-slate-100 bg-slate-50/50 flex flex-col"
             >
               {/* @ts-ignore */}
-              <LoginForm role={role} onBack={() => setRole(null)} />
+              <LoginForm 
+                role={role} 
+                mode={authMode}
+                onModeChange={setAuthMode}
+                onBack={() => {
+                  setRole(null);
+                  setAuthMode("login"); // Reset to login when going back
+                }} 
+              />
             </motion.div>
           )}
         </AnimatePresence>

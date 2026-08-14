@@ -18,7 +18,8 @@ import {
   getVendorsBySekolah, 
   type Sekolah, 
   type Vendor 
-} from "../../lib/mbgdummydata";
+} from "@/lib/mbgdummydata";
+import { toast } from "sonner";
 import { QRScannerModal } from "./QRScannerModal";
 import { DriverControlPanel } from "./DriverPanel";
 
@@ -403,7 +404,7 @@ export default function MapLibreLogistik() {
                 map.current.removeSource('active-trip-route');
               }
               map.current?.easeTo({ pitch: 0, bearing: 0, duration: 1500 });
-              alert("Trip Berhasil: Paket telah tiba di tujuan!");
+              toast.success("Trip Berhasil: Paket telah tiba di tujuan!");
             }
           };
           

@@ -27,7 +27,7 @@ export default function BootOverlay() {
     if (!shouldShow) return;
 
     const reduceMotion = prefersReducedMotion();
-    setPhase("enter");
+    setTimeout(() => setPhase("enter"), 0);
 
     const enterMs = reduceMotion ? 10 : 820;
     const leaveMs = reduceMotion ? 10 : 260;
