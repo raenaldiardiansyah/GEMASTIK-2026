@@ -124,6 +124,15 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
   if (isSPPG) {
     return (
       <div className="w-full space-y-4 mt-8 pb-12 font-sans">
+        <style>{`
+          .no-scrollbar::-webkit-scrollbar {
+            display: none;
+          }
+          .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+        `}</style>
         {/* Layer 1: Alert / Status (Urgency first) */}
         <div className="bg-rose-50 border border-rose-200 p-5 rounded-xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
            <div className="flex items-start gap-4">
@@ -143,7 +152,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
 
         {/* Layer 1.5: Audit Form Toggle */}
         {isAuditing && (
-           <div className="p-6 border border-slate-200 rounded-xl bg-white space-y-6">
+           <div className="p-6 border border-slate-950 rounded-xl bg-white space-y-6">
               <div className="flex items-center justify-between border-b border-slate-100 pb-4">
                  <div>
                    <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Formulir Audit Resmi</h3>
@@ -201,7 +210,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
 
         {/* Layer 1.8: Trending Student Sentiments (Most frequent issues at the top as requested) */}
         {studentSentiment && studentSentiment.trendingKeywords.length > 0 && (
-           <div className="p-5 border border-slate-200 rounded-xl bg-white">
+           <div className="p-5 border border-slate-950 rounded-xl bg-white">
               <div className="flex items-center gap-2 mb-4">
                  <Flame className="w-4 h-4 text-orange-500 fill-orange-500" />
                  <span className="text-[11px] font-black uppercase tracking-widest text-slate-400">Sentimen Trending Siswa</span>
@@ -231,7 +240,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
 
         {/* Layer 2: Skor ringkasan dengan tren & Layer 3: Distribusi detail */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-           <div className="p-5 border border-slate-200 rounded-xl bg-white flex flex-col justify-center">
+           <div className="p-5 border border-slate-950 rounded-xl bg-white flex flex-col justify-center">
               <p className="text-[11px] font-black tracking-widest text-slate-400 uppercase">Skor Kepuasan Siswa</p>
               <div className="flex items-end gap-2 mt-3">
                  <span className="text-5xl font-black text-slate-800 tracking-tighter">4.7</span>
@@ -250,7 +259,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
               <p className="text-[11px] font-semibold text-slate-500 mt-4 border-t border-slate-100 pt-3">82% kepuasan net harian</p>
            </div>
 
-           <div className="p-5 border border-slate-200 rounded-xl bg-white flex flex-col justify-center">
+           <div className="p-5 border border-slate-950 rounded-xl bg-white flex flex-col justify-center">
               <p className="text-[11px] font-black tracking-widest text-slate-400 uppercase">Skor Resmi Unit</p>
               <div className="flex items-end gap-2 mt-3">
                  <span className="text-5xl font-black text-slate-800 tracking-tighter">4.8</span>
@@ -260,7 +269,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
               <p className="text-[11px] font-semibold text-slate-500 mt-4 border-t border-slate-100 pt-3">Berdasarkan audit kumulatif</p>
            </div>
 
-           <div className="p-5 border border-slate-200 rounded-xl bg-white">
+           <div className="p-5 border border-slate-950 rounded-xl bg-white">
               <div className="flex justify-between text-[11px] font-black tracking-widest text-slate-400 uppercase mb-4">
                  <span>Distribusi Penilaian</span>
                  <span>n = 85</span>
@@ -291,7 +300,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
              { label: "Uptime Dapur", value: "99.8%", trend: "Stabil", isUp: null, bars: [98, 99, 99.5, 99.8, 99.8] },
              { label: "Batch Error", value: "0.02%", trend: "↓ -0.01%", isUp: true, bars: [50, 40, 30, 20, 10] },
            ].map(m => (
-             <div key={m.label} className="p-4 border border-slate-200 rounded-xl bg-white">
+             <div key={m.label} className="p-4 border border-slate-950 rounded-xl bg-white">
                 <p className="text-[10px] font-black tracking-widest text-slate-400 uppercase">{m.label}</p>
                 <p className="text-xl font-black tracking-tight text-slate-800 mt-2">{m.value}</p>
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-100">
@@ -307,7 +316,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
         </div>
 
         {/* Layer 5: Ulasan & Feedback Siswa (DAL Styled) */}
-        <div className="border border-slate-200 rounded-xl bg-white flex flex-col mt-4">
+        <div className="border border-slate-950 rounded-xl bg-white flex flex-col mt-4">
           <div className="p-5 border-b border-slate-100 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div>
               <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Ulasan & Feedback Siswa</h3>
@@ -329,7 +338,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
             </div>
           </div>
 
-          <div className="max-h-[500px] overflow-y-auto p-5 space-y-3 custom-scrollbar">
+          <div className="max-h-[500px] overflow-y-auto p-5 space-y-3 no-scrollbar">
             <AnimatePresence mode="popLayout">
               {filteredReviews.length > 0 ? (
                 filteredReviews.map((review, i) => {
@@ -342,7 +351,7 @@ export default function EntityPerformanceDashboard({ type, entityId }: Dashboard
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0 }}
-                      className={`p-4 rounded-lg border flex flex-col md:flex-row gap-4 justify-between items-start ${isNeg ? "bg-rose-50/50 border-rose-200" : "bg-white border-slate-100"}`}
+                      className={`p-4 rounded-lg border flex flex-col md:flex-row gap-4 justify-between items-start ${isNeg ? "bg-rose-50/50 border-rose-300" : "bg-white border-slate-300"}`}
                     >
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-2">

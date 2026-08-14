@@ -233,9 +233,9 @@ const phasesData = [
   {
     step: 5,
     phaseTag: "FASE 05",
-    title: "Distribusi Geofence & Rating Siswa",
+    title: "Distribusi Geofence & Rating Guru",
     subtitle: "Validasi GPS <= 50m & Sentimen Ulasan",
-    description: "Kurir memindai QR di titik lokasi sekolah. Formula Haversine memverifikasi koordinat GPS ≤ 50m sebelum status distribusi berubah menjadi Verified. Siswa memberikan ulasan gizi yang dikelompokkan oleh sistem analisis.",
+    description: "Kurir memindai QR di titik lokasi sekolah. Formula Haversine memverifikasi koordinat GPS ≤ 50m sebelum status distribusi berubah menjadi Verified. Guru memberikan ulasan gizi yang dikelompokkan oleh sistem analisis.",
     features: [
       "Geofencing radius ketat ≤ 50 meter",
       "QR Scan titik serah terima sekolah",
@@ -265,7 +265,7 @@ const phasesData = [
         <div className="space-y-2 text-xs">
           <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between">
             <div>
-              <p className="text-[10px] text-slate-400">Ulasan & Rating Siswa:</p>
+              <p className="text-[10px] text-slate-400">Ulasan & Rating Guru:</p>
               <div className="flex items-center gap-1 text-amber-400 font-extrabold mt-0.5">
                 <Star className="w-3.5 h-3.5 fill-amber-400" />
                 <Star className="w-3.5 h-3.5 fill-amber-400" />
@@ -322,7 +322,7 @@ export function PhaseTimeline() {
       <div className="max-w-[1240px] mx-auto relative z-10">
         <SectionHeader 
           label="ALUR AUDIT ALUR KERJA" 
-          headline="5 Fase Operasional Dari Verifikasi Dokumen Hingga Ulasan Siswa." 
+          headline="5 Fase Operasional Dari Verifikasi Dokumen Hingga Ulasan Guru." 
           centered 
           className="mb-4 [&_h2]:text-[clamp(1.5rem,4vw,3.5rem)] [&_h2]:text-slate-900" 
         />

@@ -54,7 +54,7 @@ const portalLinks = [
     color: "from-violet-500/20 to-purple-500/10 text-violet-400 border-violet-500/30"
   },
   { 
-    label: "Portal Siswa", 
+    label: "Portal Guru", 
     href: "/sekolah/siswa", 
     icon: Users,
     desc: "Rating gizi menu harian & analisis sentimen ulasan.",

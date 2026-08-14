@@ -514,10 +514,10 @@ export default function SekolahAdminPage() {
                 <div className="lg:col-span-4 space-y-4"> 
                   {selectedSchool ? ( 
                     <SchoolDetailPanel 
-                      school={selectedSchool} 
-                      vendors={getVendorsBySekolah(selectedSchool.id)} 
-                      onClose={() => setSelectedSchool(null)} 
-                      readOnly={selectedSchool.id !== (loggedInSchool?.id ?? 0)} 
+                       school={selectedSchool} 
+                       vendors={getVendorsBySekolah(selectedSchool.id)} 
+                       onClose={() => setSelectedSchool(null)} 
+                       readOnly={selectedSchool.id !== (loggedInSchool?.id ?? 0)} 
                     /> 
                   ) : ( 
                     <Card className="shadow-xs border-violet-100 rounded-3xl overflow-hidden bg-white"> 
@@ -613,7 +613,12 @@ export default function SekolahAdminPage() {
                     <Button 
                       variant={activeMitraTab === "performa" ? "default" : "ghost"} 
                       size="sm"
-                      className={cn("rounded-lg text-xs font-bold transition-all", activeMitraTab === "performa" && "bg-violet-600 text-white shadow-xs")}
+                      className={cn(
+                        "rounded-lg text-xs font-bold transition-all", 
+                        activeMitraTab === "performa" 
+                          ? "bg-violet-600 text-white shadow-xs" 
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                      )}
                       onClick={() => setActiveMitraTab("performa")}
                     >
                       Audit Performa
@@ -621,7 +626,12 @@ export default function SekolahAdminPage() {
                     <Button 
                       variant={activeMitraTab === "ranking" ? "default" : "ghost"} 
                       size="sm"
-                      className={cn("rounded-lg text-xs font-bold transition-all", activeMitraTab === "ranking" && "bg-violet-600 text-white shadow-xs")}
+                      className={cn(
+                        "rounded-lg text-xs font-bold transition-all", 
+                        activeMitraTab === "ranking" 
+                          ? "bg-violet-600 text-white shadow-xs" 
+                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-200/50"
+                      )}
                       onClick={() => setActiveMitraTab("ranking")}
                     >
                       Leaderboard Ranking

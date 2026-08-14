@@ -38,7 +38,7 @@ export function VendorCard({
               className="inline-flex w-2.5 h-2.5 rounded-[4px] flex-shrink-0"
               style={{ background: color ?? "var(--role-primary)" }}
             />
-            <p className="font-semibold text-sm text-slate-900 truncate">
+            <p className="font-semibold text-sm text-slate-900 dark:text-white truncate">
               {vendor.nama}
             </p>
           </div>

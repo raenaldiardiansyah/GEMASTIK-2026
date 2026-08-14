@@ -42,14 +42,14 @@ export default function SekolahLayout({
 
   if (isAdmin) {
     return (
-      <div data-role="school" className="role-sekolah min-h-svh bg-violet-600 text-slate-900 flex flex-col">
+      <div data-role="school" className="role-sekolah min-h-svh bg-violet-950 text-slate-900 flex flex-col">
         {/* Navbar Atas Khusus Sekolah Admin (Gaya Landing Page - Light Theme 60-30-10) */}
         <header className="sticky top-0 z-50 w-full border-b border-violet-100 bg-white/95 backdrop-blur-md supports-[backdrop-filter]:bg-white/80 shadow-xs">
           <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-4">
               <Link href="/" className="flex items-center gap-2.5 group">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-violet-600 text-white font-black text-base shadow-md shadow-violet-500/25 group-hover:scale-105 transition-transform">
-                  B
+                  G
                 </div>
                 <div className="flex flex-col">
                   <span className="font-extrabold text-base tracking-tight text-slate-900 leading-none">
@@ -100,7 +100,7 @@ export default function SekolahLayout({
         {/* Footer Reveal (Layer 2) - Fixed at bottom, revealed when main scrolls up */}
         <footer 
           ref={footerRef}
-          className="fixed bottom-0 left-0 w-full h-auto z-0 bg-violet-600 text-white flex flex-col justify-end pt-10 pb-6 px-[clamp(1.5rem,5vw,4rem)]"
+          className="fixed bottom-0 left-0 w-full h-auto z-0 bg-violet-950 text-white flex flex-col justify-end pt-20 pb-12 px-[clamp(1.5rem,5vw,4rem)]"
         >
           <div className="max-w-[1200px] mx-auto w-full flex flex-col">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 content-center">

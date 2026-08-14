@@ -419,7 +419,7 @@ export function LoginForm({
               onChange={(v) => setSekolahArea(v as "admin" | "siswa")}
               options={[
                 { id: "admin", label: "Admin Sekolah", desc: "Kelola sekolah", icon: ShieldCheck },
-                { id: "siswa", label: "Siswa", desc: "Rating & menu", icon: GraduationCap },
+                { id: "siswa", label: "Guru", desc: "Rating & menu", icon: GraduationCap },
               ]}
             />
           )}

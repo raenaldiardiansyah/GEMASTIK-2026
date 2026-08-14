@@ -12,6 +12,7 @@ import {
   type Vendor 
 } from "../../lib/mbgdummydata";
 import { MapSearch } from "./MapSearch";
+import { Locate } from "lucide-react";
 
 interface MapLibreMapProps {
   selectedSchool: Sekolah | null;
@@ -320,13 +321,32 @@ export default function MapLibreMap({ selectedSchool, onSchoolSelect, userSchool
     });
   };
 
+  const handleRecenter = () => {
+    if (!map.current) return;
+    if (selectedSchool) {
+      map.current.flyTo({
+        center: [selectedSchool.lng, selectedSchool.lat],
+        zoom: 15,
+        essential: true,
+        duration: 1200
+      });
+    } else {
+      map.current.flyTo({
+        center: [107.6191, -6.9175],
+        zoom: 13,
+        essential: true,
+        duration: 1200
+      });
+    }
+  };
+
   if (!mounted) return <div className="w-full h-full bg-slate-50 animate-pulse" />;
 
   return (
     <div className="w-full h-full relative group">
       <div ref={mapContainer} className="w-full h-full" />
       
-      {/* 2D/3D Toggle Control */}
+      {/* Controls Overlay */}
       <div className="absolute top-4 right-4 z-10 flex flex-col gap-2">
         <button
           onClick={toggle3D}
@@ -347,6 +367,15 @@ export default function MapLibreMap({ selectedSchool, onSchoolSelect, userSchool
               2D Flat
             </>
           )}
+        </button>
+
+        {/* Pusatkan Map Button */}
+        <button
+          onClick={handleRecenter}
+          className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/80 text-slate-800 border border-slate-200 hover:bg-white shadow-xl backdrop-blur-md transition-all self-end cursor-pointer group"
+          title="Pusatkan Peta ke Lokasi Aktif"
+        >
+          <Locate className="w-4 h-4 text-violet-600 group-hover:scale-110 transition-transform" />
         </button>
       </div>
 
