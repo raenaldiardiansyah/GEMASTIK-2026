@@ -713,47 +713,52 @@ export default function VerifikasiSupplierPage() {
               </div>
             </div>
 
-            {/* Extracted OCR vs Central Database Cross-Match Matrix */}
-            <div className="bg-white rounded-3xl border border-slate-200 p-5 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-                <div>
-                  <h3 className="text-sm font-black text-slate-900 flex items-center gap-2">
-                    <Database className="w-4 h-4 text-emerald-600" />
-                    Cross-Check AI OCR vs Basis Data Pemerintah
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Membandingkan hasil bacaan optik ({currentDoc.jenis}) langsung ke API Kemenkumham AHU, DJP, & BPJPH.
-                  </p>
-                </div>
-                <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 text-[10px] font-bold">
-                  MATCH 100%
-                </Badge>
-              </div>
-
-              <div className="space-y-2.5">
-                {currentDoc.matchedApi.map((item, idx) => (
-                  <div key={idx} className="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider block">{item.namaField}</span>
-                      <p className="text-xs font-mono font-bold text-slate-900 flex items-center gap-1.5">
-                        <span className="text-[10px] bg-slate-200 px-1.5 py-0.5 rounded text-slate-600">Dokumen:</span> {item.ocrValue}
-                      </p>
-                      <p className="text-xs font-mono text-emerald-700 flex items-center gap-1.5">
-                        <span className="text-[10px] bg-emerald-100 px-1.5 py-0.5 rounded text-emerald-800 font-bold">Gov DB:</span> {item.govDbValue}
-                      </p>
-                    </div>
-
-                    <div className="shrink-0 flex items-center gap-1.5 bg-white px-2.5 py-1 rounded-xl border border-slate-200">
-                      <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                      <span className="text-xs font-bold text-emerald-700">Valid</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
           </div>
 
+        </div>
+
+        {/* ── Full Width Section: Extracted OCR vs Central Database Cross-Match Matrix ── */}
+        <div className="w-full bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-100 pb-4 gap-2">
+            <div>
+              <h3 className="text-base font-black text-slate-900 flex items-center gap-2">
+                <Database className="w-5 h-5 text-emerald-600" />
+                Cross-Check AI OCR vs Basis Data Pemerintah
+              </h3>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Membandingkan hasil bacaan optik ({currentDoc.jenis}) langsung ke API Kemenkumham AHU, DJP Pajak, BPJPH, & Dukcapil secara real-time.
+              </p>
+            </div>
+            <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 text-xs font-bold px-3 py-1 self-start sm:self-auto">
+              MATCH 100% TERVERIFIKASI
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {currentDoc.matchedApi.map((item, idx) => (
+              <div key={idx} className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between gap-3 transition-all hover:border-slate-300">
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-bold uppercase text-slate-400 tracking-wider block">{item.namaField}</span>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/70 px-2 py-0.5 rounded-md">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                      <span>Valid</span>
+                    </div>
+                  </div>
+                  <div className="space-y-1 pt-1">
+                    <p className="text-xs font-mono font-bold text-slate-900 flex items-center gap-1.5">
+                      <span className="text-[9px] bg-slate-200 px-1.5 py-0.5 rounded text-slate-600 font-bold shrink-0">Dokumen:</span>
+                      <span className="truncate">{item.ocrValue}</span>
+                    </p>
+                    <p className="text-xs font-mono text-emerald-700 flex items-center gap-1.5">
+                      <span className="text-[9px] bg-emerald-100 px-1.5 py-0.5 rounded text-emerald-800 font-bold shrink-0">Gov DB:</span>
+                      <span className="truncate">{item.govDbValue}</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
       </div>
