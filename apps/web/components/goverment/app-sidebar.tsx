@@ -31,9 +31,14 @@ export function AppSidebar() {
         },
         {
           label: "Audit & Transparansi",
-          href: "/goverment/ledger",
+          href: "/goverment/dashboard-audit",
           icon: ShieldCheck,
           children: [
+            {
+              label: "Dashboard Audit MBG",
+              href: "/goverment/dashboard-audit",
+              icon: BarChart3,
+            },
             {
               label: "Audit Ledger Blockchain",
               href: "/goverment/ledger",
