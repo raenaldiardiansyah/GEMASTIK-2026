@@ -53,13 +53,18 @@ export function AppSidebar() {
         },
         {
           label: "Verifikasi & Whitelist",
-          href: "/goverment/verifikasi",
+          href: "/goverment/verifikasi-supplier",
           icon: CheckCircle,
           children: [
             {
-              label: "Verifikasi Supplier",
-              href: "/goverment/pengajuan",
+              label: "Verifikasi Supplier (AI)",
+              href: "/goverment/verifikasi-supplier",
               icon: FileText,
+            },
+            {
+              label: "Pengajuan SBT Vendor",
+              href: "/goverment/pengajuan",
+              icon: Award,
             },
             {
               label: "Pengawasan Distribusi",
